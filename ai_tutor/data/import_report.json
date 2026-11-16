@@ -51,5 +51,17 @@
       "状态"
     ]
   },
-  "multiline_examples": 43
+  "multiline_examples": 43,
+  "source_files": [
+    {
+      "file": "course-knowledge.docx",
+      "sha256": "4f8593b4d1a785ac9fd3bbe0ba776933ece94dbe716a78d2f9cd5c1cf9a96597",
+      "size_bytes": 220050
+    },
+    {
+      "file": "knowledge-catalog.xlsx",
+      "sha256": "efd8d8f05a30a1f81519ebffdef251982263ea7f2fa716547929c5af6f3e91ad",
+      "size_bytes": 31816
+    }
+  ]
 }

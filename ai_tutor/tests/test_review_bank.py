@@ -18,14 +18,14 @@ def test_unique_question_ids_and_complete_coverage():
 
 def test_question_sources_and_references_resolve():
     topics = {item['id']: item for item in COURSE['knowledge']}
-    source_files = {path.name for path in (ROOT.parent / '成员一').glob('*.pdf')}
+    source_files = {path.name for path in (ROOT.parent / 'content/sources').glob('*.pdf')}
     for item in BANK['items']:
         assert item['prompt'].strip() and item['reference'].strip()
         assert item['knowledgeId'] in topics and item['sourceRefs']
         for ref in item['sourceRefs']:
             topic = topics[ref['knowledgeId']]
             assert topic['sources'] and ref['field'].strip()
-            if ref['field'].startswith('成员三/'):
+            if ref['field'].startswith('content/supplements/'):
                 assert (ROOT.parent / ref['field'].split(' ')[0]).is_file()
             else:
                 assert any(field in ref['field'] and value for field, value in topic['fields'].items())
