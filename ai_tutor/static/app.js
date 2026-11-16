@@ -7,6 +7,8 @@ import {RFileInput} from './r-file.js?v=structure-v1';
 
 const {codeBlock, renderTeachingBody} = createAnswerRenderer(status);
 const $ = id => document.getElementById(id);
+// Hash routes control scroll positions during back and forward navigation.
+history.scrollRestoration = 'manual';
 function syncViewportWidth() {
   document.documentElement.style.setProperty('--viewport-width', `${window.innerWidth}px`);
 }

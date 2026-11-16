@@ -46,6 +46,7 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     await page.goto(baseUrl + '/#/history');
     await page.reload();
     await ready();
+    check(await page.evaluate(() => history.scrollRestoration === 'manual'), 'hash router controls browser scroll restoration');
     // This suite runs in an isolated browser context, as do the other regression suites.
     await page.evaluate(async () => {
       const {learningStore} = await import('/static/learning-store.js?v=learning-v1');
