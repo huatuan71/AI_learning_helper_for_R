@@ -5,10 +5,10 @@
 ```text
 请为R语言AI助教实现跨平台PWA和可验证的离线资料下载、离线启动与更新能力，支持Android、iOS、macOS、Windows。
 
-仓库位于 E:\作业2\R语言及其应用\小组作业，项目位于 成员三/ai_tutor。
+仓库路径示例为 E:/projects/r-ai-tutor，项目位于 ai_tutor。
 你的专属分支为 codex/offline-pwa。
 
-先读取适用的AGENTS.md，以及 成员三/学习功能实施/00_协作约定.md。遵守共享导出接口、资源路径和文件归属。
+先读取适用的AGENTS.md，以及 docs/handoff/learning-plan/00-coordination.md。遵守共享导出接口、资源路径和文件归属。
 
 使用独立工作树。优先使用当前聊天已分配的工作树。需要自行创建时，可在仓库 .worktrees/offline-pwa 创建本分支工作树，并将 /.worktrees/ 加入本机 .git/info/exclude。
 

@@ -1,6 +1,6 @@
 # 模型配置与运行说明
 
-应用版本为1.2.1，适用于成员二、成员三、成员四及课堂使用者。当前应用入口位于仓库根目录的 `ai_tutor/`，统一启动与测试步骤见 [项目说明](../README.md)。
+应用版本为1.2.1，适用于成员二、成员三、成员四及课堂使用者。当前应用入口位于仓库根目录的 `ai_tutor/`，统一启动与测试步骤见 [项目说明](../../README.md)。
 
 ## 本机使用
 
@@ -67,14 +67,14 @@ Render的Root Directory使用仓库根目录 `.`。构建命令为 `python rende
 3. 环境变量APP_ENV使用production。Render提供的RENDER_EXTERNAL_URL用于公网来源检查。
 4. 等待构建和健康检查成功，检查首页、`/docs`、`/openapi.json`及`/api/health`。
 5. 通过正式HTTPS页面配置自己的Key，完成真实提问与搜索。
-6. 在本地运行下列命令，脚本先核验公网健康状态和首页，再生成发布信息及SVG二维码。
+6. 在本地的 `ai_tutor/` 目录运行下列命令，脚本先核验公网健康状态和首页，再生成发布信息及SVG二维码。
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-tools.txt
-.\.venv\Scripts\python.exe scripts/publish_info.py --url https://你的正式应用域名
+.\.venv\Scripts\python.exe scripts/publish_info.py --url https://your-app.onrender.com
 ```
 
-二维码生成位置为 `ai_tutor/output/release/qrcode.svg`，地址记录到成员三目录的 `发布信息.md`。
+二维码生成位置为 `ai_tutor/output/release/qrcode.svg`，地址记录到 `docs/deliverables/release.md`。
 Render免费实例空闲15分钟后休眠，唤醒约需1分钟，课堂演示前打开页面预热并检查配置状态。[部署说明](https://render.com/docs/deploy-fastapi)、[免费实例说明](https://render.com/docs/free)
 
 部署配置中的代理头信任参数适用于Render反向代理后的实例。本机启动脚本采用回环地址。公网验收需使用真实手机蜂窝网络、学校网络及两设备并发。

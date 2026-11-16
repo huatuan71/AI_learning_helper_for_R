@@ -40,7 +40,7 @@ npm run test:browser
 
 ```powershell
 npm run test:browser -- --suite pwa
-npm run test:browser -- --python '其他工作树/.venv/Scripts/python.exe'
+npm run test:browser -- --python 'E:/projects/r-ai-tutor/.worktrees/other-task/ai_tutor/.venv/Scripts/python.exe'
 npx playwright install webkit
 npm run test:browser -- --suite integration --browser webkit
 ```
@@ -53,10 +53,10 @@ npm run test:browser -- --suite integration --browser webkit
 & $python ./ai_tutor/scripts/import_data.py
 ```
 
-默认输入来自最近的 `成员一` 目录，输出写入应用的 `data/`。可显式指定资料目录、Word文件、Excel文件和输出目录。存在多个候选输入时，使用 `--docx` 和 `--xlsx` 明确指定源文件。
+默认输入来自最近的 `content/sources` 目录，输出写入应用的 `data/`。可显式指定资料目录、Word文件、Excel文件和输出目录。存在多个候选输入时，使用 `--docx` 和 `--xlsx` 明确指定源文件。
 
 ```powershell
-& $python ./ai_tutor/scripts/import_data.py --source-dir ./成员一 --output-dir ./ai_tutor/.tmp/course-check
+& $python ./ai_tutor/scripts/import_data.py --source-dir ./content/sources --output-dir ./ai_tutor/.tmp/course-check
 ```
 
 临时输出便于先检查生成结果。导入报告记录源文件摘要，导入脚本校验条目、引用、必需字段和关联关系。补充草稿及配套R案例保留各自的编写与核验记录。
@@ -65,14 +65,16 @@ npm run test:browser -- --suite integration --browser webkit
 
 | 位置 | 内容 |
 |---|---|
-| `成员一/` | 课程源资料、知识目录和内容审核材料 |
+| `content/sources/` | 课程源资料、知识目录和内容审核材料 |
 | `ai_tutor/app/` | 应用组装、接口、数据模型、课程规则和模型接入 |
 | `ai_tutor/static/` | 前端模块、样式、题库与离线资源 |
 | `ai_tutor/data/` | 随版本发布的课程快照和导入报告 |
 | `ai_tutor/scripts/` | 启动、导入、评估、接口文档和发布工具 |
 | `ai_tutor/tests/` | Python、算法和浏览器测试，通用fixture位于conftest.py，模拟响应位于support目录 |
 | `ai_tutor/docs/` | 功能说明、阶段性交接记录和归档验收证据 |
-| `成员三/知识库补充草稿/` | 补充知识条目，配套资源位于content_assets目录 |
+| `content/supplements/` | 补充知识条目，配套资源位于 `ai_tutor/content_assets/` 目录 |
+| `docs/deliverables/` | 接口、模型配置、调试、测试与发布交付文档 |
+| `docs/handoff/learning-plan/` | 学习功能分工与阶段计划 |
 
 依赖按用途分为三组，全部固定版本。
 
@@ -82,10 +84,10 @@ npm run test:browser -- --suite integration --browser webkit
 
 ## 部署
 
-仓库根目录的 `render.yaml` 使用 `python render_service.py build` 安装运行依赖，通过 `python render_service.py start` 启动服务。模型配置保存在进程内存中，部署使用单worker。发布步骤和验收记录见 [模型配置与运行说明](成员三/模型配置与运行说明.md)。
+仓库根目录的 `render.yaml` 使用 `python render_service.py build` 安装运行依赖，通过 `python render_service.py start` 启动服务。模型配置保存在进程内存中，部署使用单worker。发布步骤和验收记录见 [模型配置与运行说明](docs/deliverables/model-setup.md)。
 
 ## 并行开发
 
-每个任务使用独立分支和工作树，按文件范围分配职责。前端模块和离线清单一同提交，后端模型和调用方导入一同提交。集成分支汇总各任务后运行Python、算法及浏览器测试，应用统一放在根目录的 `ai_tutor/`，成员目录保存课程资料与交付材料。
+每个任务使用独立分支和工作树，按文件范围分配职责。前端模块和离线清单一同提交，后端模型和调用方导入一同提交。集成分支汇总各任务后运行Python、算法及浏览器测试，应用统一放在根目录的 `ai_tutor/`，课程资料、补充条目与交付材料分别位于 `content/sources/`、`content/supplements/` 和 `docs/deliverables/`。
 
 结构整理前已提交的截图和测试报告归档至 `ai_tutor/docs/evidence/learning-v1/`。新测试产物写入 `ai_tutor/output/`，Playwright结果和运行缓存由Git忽略规则管理。

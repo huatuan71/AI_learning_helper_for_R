@@ -5,10 +5,10 @@
 ```text
 请实现R语言AI助教的学习概览、自动复习界面、学习小结和难点收藏，并接入现有知识地图与问答记录。
 
-仓库位于 E:\作业2\R语言及其应用\小组作业，项目位于 成员三/ai_tutor。
+仓库路径示例为 E:/projects/r-ai-tutor，项目位于 ai_tutor。
 你的专属分支为 codex/learning-ui。
 
-先读取适用的AGENTS.md，以及 成员三/学习功能实施/00_协作约定.md。按其中的数据结构、模块接口、文件归属和交接要求实现。
+先读取适用的AGENTS.md，以及 docs/handoff/learning-plan/00-coordination.md。按其中的数据结构、模块接口、文件归属和交接要求实现。
 
 使用独立工作树。优先使用当前聊天已分配的工作树。需要自行创建时，可在仓库 .worktrees/learning-ui 创建本分支工作树，并将 /.worktrees/ 加入本机 .git/info/exclude。
 
