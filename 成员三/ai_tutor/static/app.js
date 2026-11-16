@@ -183,10 +183,35 @@ function setCode(value) {
   $('code-toggle').textContent = value ? '收起代码' : '添加代码';
   $('code-toggle').setAttribute('aria-expanded', String(value));
 }
+// A body-level floating layer can blur the page outside the navigation's backdrop root.
+document.body.append($('more-panel'));
+function positionMore() {
+  const panel = $('more-panel');
+  if (panel.hidden) return;
+  const trigger = $('more-toggle').getBoundingClientRect();
+  const top = document.querySelector('.nav-shell').getBoundingClientRect().bottom + 8;
+  const width = panel.getBoundingClientRect().width;
+  panel.style.left = Math.max(12, Math.min(trigger.right - width, innerWidth - width - 12)) + 'px';
+  panel.style.top = top + 'px';
+  panel.style.maxHeight = Math.max(0, innerHeight - top - 12) + 'px';
+}
+window.addEventListener('resize', positionMore);
+document.addEventListener('scroll', positionMore, {capture:true, passive:true});
 function setMore(value, focus = false) {
   $('more-panel').hidden = !value;
   $('more-toggle').setAttribute('aria-expanded', String(value));
+  if (value) positionMore();
   if (focus) (value ? $('more-panel').querySelector('a') : $('more-toggle')).focus();
+}
+let exportReturnFocus = null;
+function openExportDialog(trigger) {
+  exportReturnFocus = trigger?.closest('#more-panel') ? $('more-toggle') : trigger;
+  setMore(false);
+  $('export-format-archive').checked = true;
+  $('export-download').textContent = '导出完整档案';
+  $('export-feedback').textContent = '';
+  if (!$('export-dialog').open) $('export-dialog').showModal();
+  $('export-format-archive').focus();
 }
 function selectTopic(id) {
   activeId = id || null;
@@ -454,6 +479,7 @@ function route(focus = true) {
     view = 'home'; history.replaceState(null, '', '#/home');
   }
   const previousView = currentView;
+  const previousLearningTab = learningCenter?.tab;
   const changed = view !== previousView;
   const learning = view === 'chat' || view === 'review';
   const sequence=++routeSequence;
@@ -466,6 +492,8 @@ function route(focus = true) {
     });
     if (changed && view !== 'knowledge') mapUI.close(false);
     if (typeof mapUI.setActive === 'function') mapUI.setActive(view === 'knowledge');
+    document.documentElement.classList.toggle('learning-history', view === 'history');
+    history.scrollRestoration = view === 'history' ? 'manual' : 'auto';
     document.body.classList.toggle('learning', learning);
     document.body.classList.toggle('review-mode', view === 'review');
     document.body.dataset.view = view;
@@ -484,8 +512,10 @@ function route(focus = true) {
   const finish=()=>{
     if(sequence!==routeSequence)return;
     if (changed && view === 'knowledge') mapUI.center();
+    if (changed || (view === 'history' && previousLearningTab !== learningCenter?.tab)) {
+      window.scrollTo({top:0, left:0, behavior:'instant'});
+    }
     if (changed) {
-      window.scrollTo(0,0);
       if (focus) (learning ? $('workspace-title') : view === 'knowledge' ? $('map-title') : view === 'history' ? $('history-title') : $('main-content')).focus({preventScroll:true});
     }
     if (learning && pendingLatestScroll) scrollToLatest();
@@ -569,7 +599,7 @@ document.addEventListener('click', e => {
 });
 $('main-nav').addEventListener('click', e => { if (e.target.closest('a')) setNav(false); });
 
-$('history-export').onclick = () => $('export').click();
+$('history-export').onclick = event => openExportDialog(event.currentTarget);
 $('history-clear').onclick = () => $('clear').click();
 if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const observer = new IntersectionObserver(entries => entries.forEach(entry => {
@@ -583,7 +613,7 @@ $('cancel-request').onclick = () => requestController?.abort();
 $('code-toggle').onclick = () => { setCode(!codeOpen); if (codeOpen) $('code').focus(); };
 $('more-toggle').onclick = () => setMore($('more-panel').hidden);
 $('more-toggle').onkeydown = e => { if (e.key === 'ArrowDown') { e.preventDefault(); setMore(true,true); } };
-document.addEventListener('click', e => { if (!e.target.closest('.more-wrap')) setMore(false); });
+document.addEventListener('click', e => { if (!e.target.closest('.more-wrap,#more-panel')) setMore(false); });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if ($('main-nav').classList.contains('nav-open')) { setNav(false); $('nav-toggle').focus(); e.preventDefault(); }
@@ -606,17 +636,42 @@ $('clear').onclick = async () => {
   else if (currentView === 'history') $('history-title').focus();
   else $('more-toggle').focus();
 };
-$('export').onclick = async () => {
-  setMore(false);
-  if (learningCenter) {
-    try { await learningCenter.exportConversations(); }
-    catch (error) {status(error.message,true);}
-    return;
+$('export').onclick = event => openExportDialog(event.currentTarget);
+$('export-close').onclick = () => $('export-dialog').close();
+$('export-dialog').addEventListener('close', () => {
+  const target = exportReturnFocus?.isConnected ? exportReturnFocus : $('more-toggle');
+  target.focus({preventScroll:true});
+});
+$('export-options').onchange = () => {
+  $('export-download').textContent = $('export-format-archive').checked ? '导出完整档案' : '导出对话';
+};
+$('export-form').onsubmit = async event => {
+  event.preventDefault();
+  if ($('export-download').disabled) return;
+  const archive = $('export-format-archive').checked;
+  $('export-download').disabled = true;
+  $('export-options').disabled = true;
+  $('export-feedback').textContent = '';
+  try {
+    if (archive) {
+      if (!learningCenter?.data) throw Error('学习档案尚未就绪，请稍后重试。');
+      await learningCenter.exportArchive();
+    } else if (learningCenter?.data) {
+      await learningCenter.exportConversations();
+    } else {
+      const blob = new Blob([JSON.stringify({version:'1.2.1',records:records.map(safeRecord)},null,2)], {type:'application/json;charset=utf-8'});
+      const url = URL.createObjectURL(blob), link = el('a');
+      link.href = url; link.download = 'R语言学习记录.json'; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    }
+    $('export-dialog').close();
+    status(archive ? '完整学习档案已导出。' : '对话记录已导出。');
+  } catch (error) {
+    $('export-feedback').textContent = error.message || '导出失败，请重试。';
+  } finally {
+    $('export-download').disabled = false;
+    $('export-options').disabled = false;
   }
-  const blob = new Blob([JSON.stringify({version:'1.2.1',records:records.map(safeRecord)},null,2)], {type:'application/json;charset=utf-8'});
-  const url = URL.createObjectURL(blob), link = el('a');
-  link.href = url; link.download = 'R语言学习记录.json'; link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 document.querySelectorAll('[data-example]').forEach(b => {
   b.dataset.request = 'true'; b.onclick = () => { setCode(false); send(b.dataset.example,{useComposer:false}); };
@@ -630,7 +685,7 @@ renderRecords(); renderHistory(); route(false);
 async function startLearning() {
   try {
     const {LearningCenter} = await import('./learning-center.js?v=learning-v1');
-    learningCenter = new LearningCenter({units:UNITS, api:courseApi, codeBlock, notify:status,
+    learningCenter = new LearningCenter({units:UNITS, api:courseApi, codeBlock, notify:status, openExport:openExportDialog,
       openKnowledge:id => {navigate('knowledge');setTimeout(() => mapUI.select(id),120);},
       openConversation:id => {
         const all = learningCenter.data.conversations;

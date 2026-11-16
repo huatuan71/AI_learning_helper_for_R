@@ -8,7 +8,7 @@
 <a class="brand" href="#/home" aria-label="R语言学习助手首页">R<span> / 学习助手</span></a>
 <button id="nav-toggle" aria-label="导航菜单" aria-expanded="false" aria-controls="main-nav">导航 <span aria-hidden="true">☰</span></button>
 <nav id="main-nav" aria-label="主导航"><a href="#/home">首页</a><a href="#/knowledge">知识地图</a><a href="#/chat">AI问答</a><a href="#/review">代码纠错</a><a href="#/history">学习记录</a></nav>
-<span id="runtime-mode" class="mock-tag" aria-live="polite">模拟版</span><div class="more-wrap"><button id="more-toggle" aria-expanded="false" aria-controls="more-panel">更多 <span aria-hidden="true">···</span></button><div id="more-panel" class="popover" hidden><a href="/docs" target="_blank" rel="noopener">接口文档 ↗</a><button id="model-open">模型设置</button><button id="export">导出记录</button><button id="clear">清空记录</button><button id="version-open">当前版本说明</button></div></div>
+<span id="runtime-mode" class="mock-tag" aria-live="polite">模拟版</span><div class="more-wrap"><button id="more-toggle" aria-expanded="false" aria-controls="more-panel">更多 <span aria-hidden="true">···</span></button><div id="more-panel" class="popover" hidden><a href="/docs" target="_blank" rel="noopener">接口文档 ↗</a><button id="model-open">模型设置</button><button id="export">导出学习档案</button><button id="clear">清空记录</button><button id="version-open">当前版本说明</button></div></div>
 </div></header>
 <main id="main-content" tabindex="-1">
 <section id="home-view" class="view">
@@ -39,7 +39,7 @@ x &lt;- c(2, NA, 4)
 <nav id="learning-tabs" aria-label="学习记录页签"><a href="#/history" data-learning-tab="overview">概览</a><a href="#/history/review" data-learning-tab="review">复习</a><a href="#/history/summary" data-learning-tab="summary">小结</a><a href="#/history/records" data-learning-tab="records">记录</a></nav>
 <p id="learning-feedback" role="status" aria-live="polite"></p>
 <div id="learning-content"><p>正在读取学习档案…</p></div>
-<section id="learning-records" hidden aria-label="对话记录"><div class="history-actions"><button id="history-export">导出记录</button><button id="history-clear">清空记录</button></div><div id="history-list"></div></section>
+<section id="learning-records" hidden aria-label="对话记录"><div class="history-actions"><button id="history-export">导出学习档案</button><button id="history-clear">清空记录</button></div><div id="history-list"></div></section>
 <details id="learning-tools"><summary>设置与资料</summary><div id="learning-tools-content"></div></details>
 </section>
 <section id="layout" class="view" hidden aria-label="学习工作区">
@@ -49,6 +49,16 @@ x &lt;- c(2, NA, 4)
 </main>
 <dialog id="replace-file-dialog" aria-labelledby="replace-file-title"><h2 id="replace-file-title">替换编辑区内容</h2><p id="replace-file-message"></p><p>当前代码将被覆盖，取消可保留已有编辑。</p><div class="dialog-actions"><button id="replace-file-cancel">取消</button><button id="replace-file-confirm" class="primary">替换代码</button></div></dialog>
 <p id="status" role="status" hidden></p>
+<dialog id="export-dialog" aria-labelledby="export-title">
+<div class="dialog-heading"><h2 id="export-title">导出学习档案</h2><button id="export-close" type="button" aria-label="关闭导出面板">关闭</button></div>
+<form id="export-form">
+<fieldset id="export-options"><legend>导出内容</legend>
+<label class="export-option"><input id="export-format-archive" type="radio" name="export-format" value="archive" checked><span><strong>完整档案</strong><small>对话、学习事件、复习、作答、收藏与设置，用于备份和恢复。</small></span></label>
+<label class="export-option"><input id="export-format-conversations" type="radio" name="export-format" value="conversations"><span><strong>对话记录</strong><small>问题、回答、代码、引用与时间，方便查看或分享。</small></span></label>
+</fieldset>
+<p id="export-feedback" role="status" aria-live="polite"></p>
+<div class="dialog-actions"><button id="export-download" type="submit" class="primary">导出完整档案</button></div>
+</form></dialog>
 <dialog id="version-dialog" aria-labelledby="version-title"><div class="dialog-heading"><h2 id="version-title">当前版本说明</h2><button id="version-close" aria-label="关闭版本说明">关闭</button></div><p id="version-number">应用 1.2.1</p><ul><li>模拟模式使用课程资料与规则。</li><li>模型设置支持DeepSeek、通义千问和OpenAI。</li><li>搜索状态与来源按本轮实际结果展示。</li><li>代码分析与生成建议均标记未经运行验证。</li></ul><p class="muted">学习记录仅保存在当前浏览器，可通过“更多”导出或清空。</p></dialog>
 <dialog id="model-dialog" aria-labelledby="model-title">
 <div class="dialog-heading"><h2 id="model-title">模型设置</h2><button id="model-close" type="button" aria-label="关闭模型设置">关闭</button></div>

@@ -20,7 +20,7 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     await page.goto(baseUrl+'/#/chat');
     await page.evaluate(() => localStorage.removeItem('r-tutor-mock-v1'));
     await page.reload();
-    await page.waitForFunction(() => document.body.dataset.view === 'chat');
+    await page.waitForFunction(() => document.body.dataset.learningReady === 'true' && document.body.dataset.view === 'chat');
 
     const nav = await page.locator('.nav-shell').evaluate(node => {
       const box = node.getBoundingClientRect(), style = getComputedStyle(node);

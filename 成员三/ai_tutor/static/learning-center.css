@@ -1,3 +1,5 @@
+/* Keep long and short learning tabs centered in the same viewport. */
+html.learning-history { overflow-y:scroll; scroll-behavior:auto; }
 #history-view { max-width:1120px; padding-top:calc(var(--header) + 28px); padding-bottom:64px; }
 #history-view .page-heading { text-align:left; padding:0; margin:0 0 24px; }
 #history-view h1 { font-size:40px; margin:0; letter-spacing:-.04em; }
@@ -89,6 +91,7 @@ progress { accent-color:var(--blue); }
   .lc-row h3 { min-width:0; overflow-wrap:anywhere; }
 }
 @media print {
+  html.learning-history { overflow-y:visible; }
   body { background:white; }
   body[data-view=history] .app-header,body[data-view=history] .skip-link,#history-view>.page-heading,#learning-tabs,#learning-feedback,#learning-tools,.lc-summary-controls,.lc-no-print,#status { display:none!important; }
   #history-view { width:100%;max-width:none;padding:0; }

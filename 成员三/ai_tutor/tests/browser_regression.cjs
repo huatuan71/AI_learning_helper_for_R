@@ -8,7 +8,7 @@ async function main() {
   const browser = await chromium.launch({headless:true});
   const results = [];
   try {
-    for (const name of ['browser_check','browser_ai','browser_map_files','browser_glass_ui','browser_mobile_map','browser_scene_probe','browser_scene_motion','browser_offline']) {
+    for (const name of ['browser_check','browser_ai','browser_map_files','browser_glass_ui','browser_mobile_map','browser_scene_probe','browser_scene_motion','browser_offline','browser_learning_layout','browser_export_glass']) {
       const context = await browser.newContext({viewport:name==='browser_mobile_map'?{width:390,height:844}:{width:1440,height:1000},hasTouch:name==='browser_mobile_map',isMobile:name==='browser_mobile_map',timezoneId:'Asia/Shanghai'});
       const page = await context.newPage();
       page.setDefaultTimeout(15000);

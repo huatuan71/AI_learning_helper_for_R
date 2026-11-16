@@ -87,7 +87,7 @@ async function main() {
       }
       if (url.pathname === '/sw.js') {
         const script = (await fs.readFile(path.join(root, 'static/service-worker.js'), 'utf8'))
-          .replace("const RESOURCE_VERSION = 'learning-v1'", `const RESOURCE_VERSION = '${state.workerVersion}'`);
+          .replace(/const RESOURCE_VERSION = '[^']+'/, `const RESOURCE_VERSION = '${state.workerVersion}'`);
         res.writeHead(200, {'Content-Type': 'application/javascript', 'Service-Worker-Allowed': '/',
           'Cache-Control': 'no-store'});
         return res.end(script);

@@ -143,7 +143,8 @@ async function main() {
     const reopen = await context.newPage(); await reopen.goto(base+'/#/history'); await ready(reopen);
     check((await snapshot(reopen)).attempts.length===3,'new offline tab restores committed archive');
     const downloadPromise = reopen.waitForEvent('download');
-    await reopen.getByRole('button',{name:'导出完整档案',exact:true}).click();
+    await reopen.locator('#learning-tools-content').getByRole('button',{name:'导出学习档案',exact:true}).click();
+    await reopen.locator('#export-download').click();
     const download = await downloadPromise;
     const archivePath = output+'/'+engine+'-offline-archive.json';
     await download.saveAs(archivePath);

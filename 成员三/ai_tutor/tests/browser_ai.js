@@ -200,6 +200,8 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     check(true, 'successful request after cancel');
     const downloadPromise = page.waitForEvent('download');
     await page.locator('#more-toggle').click(); await page.locator('#export').click();
+    await page.locator('#export-format-conversations').check();
+    await page.locator('#export-download').click();
     const download = await downloadPromise;
     await download.saveAs('output/playwright/ai-records.json');
     const saved = await storage();

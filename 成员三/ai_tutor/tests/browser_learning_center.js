@@ -190,7 +190,7 @@ async function run(page,baseUrl,outputDir) {
   await page.getByLabel('开始日期',{exact:true}).fill('2001-01-01');
   check((await page.locator('#learning-content').textContent()).includes('请选择有效日期'),'invalid range receives feedback');
   await page.locator('#learning-tools>summary').click();
-  const archivePromise=page.waitForEvent('download');await page.getByRole('button',{name:'导出完整档案',exact:true}).click();
+  const archivePromise=page.waitForEvent('download');await page.locator('#learning-tools-content').getByRole('button',{name:'导出学习档案',exact:true}).click();await page.locator('#export-download').click();
   const archiveDownload=await archivePromise;await archiveDownload.saveAs(path.join(outputDir,'learning-archive.json'));
   const archive=JSON.parse(fs.readFileSync(path.join(outputDir,'learning-archive.json'),'utf8'));
   check(archive.app==='r-language-tutor'&&archive.data.attempts.length===2,'archive contains actual attempts');
@@ -271,7 +271,7 @@ async function run(page,baseUrl,outputDir) {
   check(await page.locator('#history-list .history-row').count()===30,'history list renders a first batch');
   for(let i=0;i<3;i++)await page.locator('#history-list').getByRole('button',{name:'显示更多',exact:true}).click();
   check(await page.locator('#history-list .history-row').count()===107,'history exposes every stored conversation');
-  const allPromise=page.waitForEvent('download');await page.locator('#history-export').click();
+  const allPromise=page.waitForEvent('download');await page.locator('#history-export').click();await page.locator('#export-format-conversations').check();await page.locator('#export-download').click();
   const allDownload=await allPromise;await allDownload.saveAs(path.join(outputDir,'learning-all-records.json'));
   check(JSON.parse(fs.readFileSync(path.join(outputDir,'learning-all-records.json'),'utf8')).records.length===107,'legacy export entry exports complete stored history');
   const openConcept=async id=>{
