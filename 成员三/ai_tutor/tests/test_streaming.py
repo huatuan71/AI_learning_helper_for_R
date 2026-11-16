@@ -6,63 +6,11 @@ import pytest
 
 from app.main import app
 from app.ai.providers import PROVIDERS
-from test_ai import clean_state, client, configure, install, teaching, wire, FAKE_KEY
+from support.provider_fakes import (
+    FAKE_KEY, ModelStream, configure, events, install, streamed_wire, teaching, wire,
+)
 
-
-class ModelStream(httpx.AsyncByteStream):
-    def __init__(self, provider, text, delay=0, size=128, finish=True):
-        self.provider = provider
-        self.text = text
-        self.delay = delay
-        self.size = size
-        self.finish = finish
-        self.closed = False
-
-    async def __aiter__(self):
-        for offset in range(0, len(self.text), self.size):
-            chunk = self.text[offset:offset + self.size]
-            if self.provider == 'openai':
-                event = {'type':'response.output_text.delta', 'delta':chunk}
-            elif self.provider == 'qwen':
-                event = {'output':{'choices':[{'message':{'content':chunk}, 'finish_reason':'null'}]}}
-            else:
-                event = {'choices':[{'delta':{'content':chunk}, 'finish_reason':None}]}
-            if self.delay:
-                await asyncio.sleep(self.delay)
-            encoded = ('data: ' + json.dumps(event, ensure_ascii=False) + '\n\n').encode()
-            for position in range(0, len(encoded), 11):
-                yield encoded[position:position + 11]
-        if not self.finish:
-            return
-        if self.provider == 'openai':
-            event = {'type':'response.completed', 'response':wire('openai', self.text)}
-        elif self.provider == 'qwen':
-            event = wire('qwen', '')
-        else:
-            event = {'choices':[{'delta':{}, 'finish_reason':'stop'}],
-                     'usage':{'prompt_tokens':10,'completion_tokens':5,'total_tokens':15}}
-        yield ('data: ' + json.dumps(event, ensure_ascii=False) + '\n\n').encode()
-        if self.provider == 'deepseek':
-            yield b'data: [DONE]\n\n'
-
-    async def aclose(self):
-        self.closed = True
-
-
-def streamed_wire(provider, text, **kwargs):
-    return httpx.Response(200, headers={'Content-Type':'text/event-stream'},
-                          stream=ModelStream(provider, text, **kwargs))
-
-
-def events(response):
-    items = []
-    for frame in response.text.split('\n\n'):
-        lines = frame.splitlines()
-        event = next((line[6:].strip() for line in lines if line.startswith('event:')), None)
-        data = '\n'.join(line[5:].lstrip() for line in lines if line.startswith('data:'))
-        if event and data:
-            items.append((event, json.loads(data)))
-    return items
+pytestmark = pytest.mark.usefixtures('clean_state')
 
 
 @pytest.mark.parametrize('provider', PROVIDERS)

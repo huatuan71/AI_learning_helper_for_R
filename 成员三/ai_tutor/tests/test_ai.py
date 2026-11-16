@@ -12,59 +12,9 @@ from app.ai.providers import ADAPTERS, PROVIDERS, CallBudget, safe_source
 from app.ai.schemas import AIError, ModelConfig
 from app.ai.sessions import Session, SessionStore
 
-FAKE_KEY = 'test-key-not-real-1234'
+from support.provider_fakes import FAKE_KEY, configure, install, teaching, wire
 
-
-def teaching(**updates):
-    body = {'answer': {'summary': '使用is.na判断缺失。', 'steps': ['先检查缺失值。'],
-            'issues': [], 'corrected_code': '', 'example_code': 'is.na(c(1, NA))',
-            'expected_output': '', 'follow_ups': ['如何计算均值？'], 'is_supplementary': False},
-            'knowledge_ids': ['K06']}
-    body.update(updates)
-    return body
-
-
-def wire(provider, text, sources=None, search=False, failed=False, usage=True):
-    sources = sources or []
-    if provider == 'openai':
-        output = [{'type': 'message', 'content': [{'type': 'output_text', 'text': text}]}]
-        if search:
-            output.insert(0, {'type': 'web_search_call', 'status': 'failed' if failed else 'completed',
-                              'action': {'type': 'search', 'sources': sources}})
-        return {'status': 'completed', 'output': output,
-                'usage': {'input_tokens': 10, 'output_tokens': 5, 'total_tokens': 15} if usage else {}}
-    choice = {'message': {'content': text}, 'finish_reason': 'stop'}
-    if provider == 'deepseek':
-        if search:
-            choice['message']['server_tool_calls'] = [{'calls': [
-                {'type': 'deepseek_web_search', 'status': 'failed' if failed else 'completed', 'sources': sources}]}]
-        return {'choices': [choice], 'usage': {'prompt_tokens': 10, 'completion_tokens': 5, 'total_tokens': 15} if usage else {}}
-    output = {'choices': [choice]}
-    if search:
-        output['search_info'] = {'search_results': sources}
-    return {'output': output, 'usage': {'input_tokens': 10, 'output_tokens': 5, 'total_tokens': 15} if usage else {}}
-
-
-@pytest.fixture(autouse=True)
-def clean_state(monkeypatch):
-    monkeypatch.setitem(app.state._state, 'sessions', SessionStore())
-    monkeypatch.setitem(app.state._state, 'ai_transport', httpx.MockTransport(
-        lambda request: httpx.Response(200, json=wire('deepseek', json.dumps(teaching())))))
-
-
-@pytest.fixture
-def client():
-    with TestClient(app) as connection:
-        yield connection
-
-
-def configure(client, provider='deepseek', mode='ai', **kwargs):
-    return client.put('/api/ai/config', json={'mode': mode, 'provider': provider,
-        'model': PROVIDERS[provider]['default_model'], 'api_key': FAKE_KEY, **kwargs})
-
-
-def install(monkeypatch, handler):
-    monkeypatch.setitem(app.state._state, 'ai_transport', httpx.MockTransport(handler))
+pytestmark = pytest.mark.usefixtures('clean_state')
 
 
 def test_catalog_and_config_lifecycle(client):

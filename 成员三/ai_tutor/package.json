@@ -1,0 +1,12 @@
+{
+  "name": "r-language-tutor",
+  "version": "1.2.1",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/learning_core_test.mjs",
+    "test:browser": "node scripts/test_browser.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.59.1"
+  }
+}

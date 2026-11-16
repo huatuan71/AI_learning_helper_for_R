@@ -12,8 +12,7 @@ import uvicorn
 
 from app.main import app
 from app.ai.sessions import SessionStore
-from test_ai import teaching, wire
-from test_streaming import streamed_wire
+from support.provider_fakes import streamed_wire, teaching, wire
 
 
 async def fake_upstream(request):

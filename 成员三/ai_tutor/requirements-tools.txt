@@ -1,0 +1,6 @@
+-r requirements.txt
+
+# Course imports and release QR generation
+et_xmlfile==2.0.0
+openpyxl==3.1.5
+qrcode==8.2

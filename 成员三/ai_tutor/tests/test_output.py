@@ -9,8 +9,11 @@ from app.ai.output import output_schema, parse_teaching
 from app.ai.schemas import ModelAnswer
 from app.ai.service import SYSTEM, messages_for
 from app.main import ChatRequest
-from test_ai import clean_state, client, configure, install, teaching, wire, FAKE_KEY
-from test_streaming import events, streamed_wire
+from support.provider_fakes import (
+    FAKE_KEY, configure, events, install, streamed_wire, teaching, wire,
+)
+
+pytestmark = pytest.mark.usefixtures('clean_state')
 
 
 def variant(name):
