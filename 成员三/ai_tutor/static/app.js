@@ -454,6 +454,7 @@ function route(focus = true) {
     view = 'home'; history.replaceState(null, '', '#/home');
   }
   const previousView = currentView;
+  const previousLearningTab = learningCenter?.tab;
   const changed = view !== previousView;
   const learning = view === 'chat' || view === 'review';
   const sequence=++routeSequence;
@@ -466,6 +467,7 @@ function route(focus = true) {
     });
     if (changed && view !== 'knowledge') mapUI.close(false);
     if (typeof mapUI.setActive === 'function') mapUI.setActive(view === 'knowledge');
+    document.documentElement.classList.toggle('learning-history', view === 'history');
     document.body.classList.toggle('learning', learning);
     document.body.classList.toggle('review-mode', view === 'review');
     document.body.dataset.view = view;
@@ -484,8 +486,10 @@ function route(focus = true) {
   const finish=()=>{
     if(sequence!==routeSequence)return;
     if (changed && view === 'knowledge') mapUI.center();
+    if (changed || (view === 'history' && previousLearningTab !== learningCenter?.tab)) {
+      window.scrollTo({top:0, left:0, behavior:'instant'});
+    }
     if (changed) {
-      window.scrollTo(0,0);
       if (focus) (learning ? $('workspace-title') : view === 'knowledge' ? $('map-title') : view === 'history' ? $('history-title') : $('main-content')).focus({preventScroll:true});
     }
     if (learning && pendingLatestScroll) scrollToLatest();
