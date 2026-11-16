@@ -1,6 +1,6 @@
 /* Read local text only. The existing review API receives JSON, never a File/FormData. */
 'use strict';
-class RFileInput {
+export class RFileInput {
   constructor() {
     this.$=id=>document.getElementById(id);this.sequence=0;this.pending=null;this.reading=false;this.locked=false;
     this.$('file-pick').onclick=()=>this.$('r-file').click();

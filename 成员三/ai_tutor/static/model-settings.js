@@ -1,6 +1,6 @@
 'use strict';
 
-window.ModelSettings = class ModelSettings {
+export class ModelSettings {
   constructor(notify) {
     this.notify = notify;
     this.config = {mode: 'mock'};
@@ -189,4 +189,6 @@ window.ModelSettings = class ModelSettings {
       this.updateFields();
     }
   }
-};
+}
+
+window.ModelSettings = ModelSettings;

@@ -58,8 +58,10 @@ function harness(html) {
 async function main() {
   const sourceCourse = JSON.parse(await fs.readFile(path.join(root, 'data/course.json'), 'utf8'));
   const html = await fs.readFile(path.join(root, 'static/index.html'), 'utf8');
+  const worker = await fs.readFile(path.join(root, 'static/service-worker.js'), 'utf8');
+  const resourceVersion = worker.match(/const RESOURCE_VERSION = '([^']+)'/)[1];
   const state = {fixtures: !integrated, failedPath: null, disconnect: false,
-    course: sourceCourse, workerVersion: 'learning-v1', slow: false};
+    course: sourceCourse, workerVersion: resourceVersion, extraAsset: false, slow: false};
   const hits = [];
   const missing = [];
   for (const file of handoff) {
@@ -86,11 +88,15 @@ async function main() {
         return res.end(harness(html));
       }
       if (url.pathname === '/sw.js') {
-        const script = (await fs.readFile(path.join(root, 'static/service-worker.js'), 'utf8'))
-          .replace("const RESOURCE_VERSION = 'learning-v1'", `const RESOURCE_VERSION = '${state.workerVersion}'`);
+        let script = worker.replace(/const RESOURCE_VERSION = '[^']+'/, `const RESOURCE_VERSION = '${state.workerVersion}'`);
+        if (state.extraAsset) script = script.replace('const ASSETS = [', "const ASSETS = [\n  '/static/update-fixture.js',");
         res.writeHead(200, {'Content-Type': 'application/javascript', 'Service-Worker-Allowed': '/',
           'Cache-Control': 'no-store'});
         return res.end(script);
+      }
+      if (url.pathname === '/static/update-fixture.js' && state.extraAsset) {
+        res.writeHead(200, {'Content-Type': 'application/javascript'});
+        return res.end('export const updatedPackage = true;');
       }
       if (url.pathname === '/offline-course.json') {
         res.writeHead(200, {'Content-Type': 'application/json', 'Cache-Control': 'no-store'});
@@ -154,7 +160,7 @@ async function main() {
     check(progress[0].completed === 0 && progress.at(-1).completed === complete.result.assetCount &&
       progress.every((item, index) => item.completed === index), 'per-resource progress is monotonic and complete');
     const first = await call(page, 'getOfflineStatus');
-    check(first.ready && first.knowledgeVersion === sourceCourse.version && first.resourceVersion === 'learning-v1' &&
+    check(first.ready && first.knowledgeVersion === sourceCourse.version && first.resourceVersion === resourceVersion &&
       /^[a-f0-9]{64}$/.test(first.bundleVersion) && first.reviewBankVersion, 'versions derive from verified downloaded bytes');
     const repeatedEvents = await page.evaluate(async () => {
       const offline = await import('/static/offline.js?v=learning-v1');
@@ -238,6 +244,7 @@ async function main() {
     check((await call(tab, 'getOfflineCourse')).version === state.course.version, 'other tab reads updated snapshot');
     await tab.close();
     state.workerVersion = 'learning-v2-test';
+    state.extraAsset = true;
     await page.evaluate(async () => {
       const registration = await navigator.serviceWorker.getRegistration();
       await registration.update();
@@ -246,9 +253,10 @@ async function main() {
       const offline = await import('/static/offline.js?v=learning-v1');
       return (await offline.getOfflineStatus()).updateAvailable;
     });
-    check((await call(page, 'getOfflineStatus')).ready, 'new worker keeps previous complete shell available');
+    check((await call(page, 'getOfflineStatus')).ready, 'new worker with added resources keeps the previous complete shell available');
     const upgraded = await save(page);
-    check(upgraded.ok && upgraded.result.resourceVersion === 'learning-v2-test', 'new resource version commits only after complete download');
+    check(upgraded.ok && upgraded.result.resourceVersion === 'learning-v2-test' &&
+      upgraded.result.assetCount === first.assetCount + 1, 'expanded resource manifest commits only after complete download');
     const networkStart = hits.length;
     const model = await page.evaluate(async () => {
       const config = await fetch('/api/ai/config');
@@ -294,7 +302,7 @@ async function main() {
         {headers: {'Content-Type': 'application/javascript'}}));
     });
     const rollback = await call(page, 'getOfflineStatus');
-    check(rollback.ready && rollback.resourceVersion === 'learning-v1', 'corrupt package hash rolls back to the previous verified version');
+    check(rollback.ready && rollback.resourceVersion === resourceVersion, 'corrupt package hash rolls back to the previous verified version');
     // Remove required data from every completed package to simulate eviction.
     await page.evaluate(async () => {
       for (const name of await caches.keys()) {

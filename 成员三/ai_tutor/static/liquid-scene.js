@@ -6,8 +6,8 @@
  */
 'use strict';
 
-const THREE = window.THREE;
-const StaticKnowledgeMap = window.KnowledgeMap;
+import * as THREE from './vendor/three/three.module.min.js';
+import {KnowledgeMap as StaticKnowledgeMap} from './knowledge-map.js?v=structure-v1';
 
 const CONFIG = Object.freeze({
   camera: {
@@ -173,7 +173,7 @@ const OCEAN_FRAGMENT = `
   }
 `;
 
-class LiquidKnowledgeScene extends StaticKnowledgeMap {
+export class LiquidKnowledgeScene extends StaticKnowledgeMap {
   constructor(options) {
     super(options);
     this.sceneReady = false;
