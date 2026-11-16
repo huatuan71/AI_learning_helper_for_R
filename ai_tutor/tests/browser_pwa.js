@@ -5,6 +5,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const http = require('node:http');
+const os = require('node:os');
 const path = require('node:path');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 
@@ -122,7 +123,8 @@ async function main() {
   const origin = `http://127.0.0.1:${server.address().port}`;
   const output = path.resolve(root, 'output/playwright');
   await fs.mkdir(output, {recursive: true});
-  const profile = await fs.mkdtemp(path.join(output, 'pwa-profile-'));
+  // Chromium adds hashed cache directories beneath this path on Windows.
+  const profile = await fs.mkdtemp(path.join(os.tmpdir(), 'r-tutor-pwa-'));
   const launchOptions = {headless: true, viewport: {width: 1440, height: 1000},
     args: ['--enable-unsafe-swiftshader', '--host-resolver-rules=MAP r-tutor.test 127.0.0.1']};
   if (process.env.PWA_BROWSER_CHANNEL) launchOptions.channel = process.env.PWA_BROWSER_CHANNEL;
@@ -154,7 +156,7 @@ async function main() {
     check(!incomplete.ok && !(await call(page, 'getOfflineStatus')).ready, 'missing resource rejects initial download');
     state.failedPath = null;
     const complete = await save(page);
-    check(complete.ok, 'complete whitelist downloads and verifies');
+    check(complete.ok, 'complete whitelist downloads and verifies' + (complete.message ? ' — ' + complete.message : ''));
     actualPersistence = complete.result.persistence;
     const progress = complete.progress;
     check(progress[0].completed === 0 && progress.at(-1).completed === complete.result.assetCount &&
@@ -320,6 +322,10 @@ async function main() {
   } finally {
     if (context) await context.close();
     await new Promise(resolve => server.close(resolve));
+    if (path.dirname(profile) !== path.resolve(os.tmpdir()) || !path.basename(profile).startsWith('r-tutor-pwa-')) {
+      throw Error('Unexpected browser profile cleanup path');
+    }
+    await fs.rm(profile, {recursive: true, force: true});
   }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

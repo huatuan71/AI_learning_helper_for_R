@@ -17,12 +17,18 @@ export class RFileInput {
     this.$('file-remove').onclick=()=>{this.sequence++;this.pending=null;this.reading=false;this.detach();this.feedback('已移除文件关联，编辑区代码已保留。');};
     this.$('code-clear').onclick=()=>{this.sequence++;this.pending=null;this.reading=false;this.detach();this.$('code').value='';this.count();this.feedback();};
     this.$('code').addEventListener('input',()=>this.count());
-    this.$('replace-file-cancel').onclick=()=>this.$('replace-file-dialog').close();
+    const dialog=this.$('replace-file-dialog');
+    const cancelReplacement=()=>{
+      if(this.pending)this.feedback('已取消替换，原编辑内容已保留。');
+      this.pending=null;
+    };
+    this.$('replace-file-cancel').onclick=()=>{cancelReplacement();dialog.close();};
+    dialog.addEventListener('cancel',cancelReplacement);
     this.$('replace-file-confirm').onclick=()=>{
       if(this.pending)this.apply(this.pending.file,this.pending.text);
       this.pending=null;this.$('replace-file-dialog').close();
     };
-    this.$('replace-file-dialog').addEventListener('close',()=>{if(this.pending)this.feedback('已取消替换，原编辑内容已保留。');this.pending=null;this.$('file-pick').focus();});
+    dialog.addEventListener('close',()=>{if(!dialog.open)this.$('file-pick').focus();});
     this.count();
   }
   feedback(message='',error=false) { const n=this.$('file-feedback');n.textContent=message;n.hidden=!message;n.classList.toggle('error',error); }

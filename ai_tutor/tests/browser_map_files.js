@@ -62,7 +62,9 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     await upload('replacement.r','print(2)');await page.locator('#replace-file-dialog').waitFor({state:'visible'});
     check(await page.locator('#code').inputValue()===original,'overwrite waits for confirmation');
     await page.locator('#replace-file-cancel').click();check(await page.locator('#code').inputValue()===original,'cancel preserves code');
-    await upload('replacement.r','print(2)');await page.locator('#replace-file-confirm').click();await feedback('已在本地读取');
+    await upload('replacement.r','print(2)');await page.locator('#replace-file-dialog').waitFor({state:'visible'});
+    await page.locator('#replace-file-dialog').evaluate(dialog=>dialog.dispatchEvent(new Event('close')));
+    await page.locator('#replace-file-confirm').click();await feedback('已在本地读取');
     check(await page.locator('#code').inputValue()==='print(2)','confirmed replacement');
     await page.locator('#code').fill('print(3)');await page.locator('#file-remove').click();
     check(await page.locator('#file-info').isHidden() && await page.locator('#code').inputValue()==='print(3)','remove preserves edited code');
