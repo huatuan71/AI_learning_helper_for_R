@@ -21,7 +21,7 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     await page.waitForFunction(view => document.body.dataset.view === view &&
       document.querySelector('#main-content').getAnimations().length === 0, view);
   };
-  const captureExport = async trigger => {
+  const captureExport = async (trigger, parse = JSON.parse) => {
     await page.evaluate(() => {
       window.__layoutOriginalURL = URL.createObjectURL;
       URL.createObjectURL = blob => {
@@ -31,7 +31,7 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     });
     try {
       const [download] = await Promise.all([page.waitForEvent('download'), trigger()]);
-      const data = await page.evaluate(async () => JSON.parse(await window.__layoutExport));
+      const data = parse(await page.evaluate(() => window.__layoutExport));
       return {name:download.suggestedFilename(), data};
     } finally {
       await page.evaluate(() => {
@@ -106,9 +106,16 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     });
     const recordsExport = await captureExport(() => page.locator('#history-export').click());
     check(JSON.stringify(menuExport.data) === JSON.stringify(recordsExport.data), 'more-menu and records-tab exports share the same conversation payload');
-    check(menuExport.data.records.length === 1 && menuExport.name === 'R语言学习记录.json', 'conversation export contains the saved conversation');
+    check(menuExport.data.records.length === 1 && menuExport.name === 'r-tutor-conversations.json', 'conversation export contains the saved conversation');
+    await page.locator('[data-learning-tab="summary"]').click();
+    await tabReady('summary');
+    await page.locator('#learning-report').waitFor();
+    const weeklyExport = await captureExport(() => page.getByRole('button', {name:'导出文本周报', exact:true}).click(), text => text);
+    check(/^r-tutor-weekly-report_\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}\.txt$/.test(weeklyExport.name), 'weekly report uses an ASCII filename');
+    check(weeklyExport.data.includes('学习小结'), 'weekly report retains Chinese learning content');
     await page.locator('#learning-tools').evaluate(node => { node.open = true; });
     const archiveExport = await captureExport(() => page.getByRole('button', {name:'导出完整档案', exact:true}).click());
+    check(archiveExport.name === 'r-tutor-learning-archive.json', 'full archive uses an ASCII filename');
     check(archiveExport.data.app === 'r-language-tutor' && archiveExport.data.schemaVersion === 1, 'full archive has the versioned restore format');
     check(archiveExport.data.data.conversations.length === 1 && archiveExport.data.data.events.length > 0 &&
       archiveExport.data.data.cards.length === 2 && Array.isArray(archiveExport.data.data.attempts) &&

@@ -1,5 +1,5 @@
 /* Update RESOURCE_VERSION with an incompatible shell release. Public resources only. */
-const RESOURCE_VERSION = 'structure-v1';
+const RESOURCE_VERSION = 'ascii-v1';
 const CACHE_PREFIX = 'r-language-tutor-offline:';
 const COMMIT_PATH = '/__r_tutor_offline_commit__';
 const ASSETS = [

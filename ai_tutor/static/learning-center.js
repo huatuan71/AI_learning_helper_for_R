@@ -122,7 +122,7 @@ export class LearningCenter {
   async clearConversations() { await learningStore.clearConversations(); }
   async exportConversations() {
     const data = await learningStore.snapshot();
-    downloadText(JSON.stringify({version:'1.2.1', records:data.conversations.map(item => item.record)}, null, 2), 'R语言学习记录.json', 'application/json;charset=utf-8');
+    downloadText(JSON.stringify({version:'1.2.1', records:data.conversations.map(item => item.record)}, null, 2), 'r-tutor-conversations.json', 'application/json;charset=utf-8');
   }
   async visit(id) { return this.run(() => learningStore.recordVisit(id)); }
   async enroll(id) {
@@ -465,7 +465,7 @@ export class LearningCenter {
     report.append(node('h2','学习小结'),node('p',`${start} 至 ${end} · 本地课程与记录模板生成`,'muted'),
       node('p',`${ids.length} 个主题 · ${events.length} 次学习事件 · ${attempts.length} 次作答 · ${attempts.filter(independent).length} 次独立完成 · ${conversations.length} 条对话`));
     const output=node('div',undefined,'lc-actions lc-no-print');
-    output.append(action('导出文本周报',()=>downloadText(report.innerText,`R语言学习周报_${start}_${end}.txt`)),action('打印',()=>window.print()));
+    output.append(action('导出文本周报',()=>downloadText(report.innerText,`r-tutor-weekly-report_${start}_${end}.txt`)),action('打印',()=>window.print()));
     root.append(output,report);
     if(!ids.length) report.append(node('p','这段时间还没有学习事件或作答。'),link('浏览知识地图 →','#/knowledge'));
     const details=await Promise.all(ids.map(id=>this.detail(id)));
@@ -534,7 +534,7 @@ export class LearningCenter {
     });
     archive.append(action('导出完整档案', () => this.run(async () => {
       const data = await learningStore.exportArchive();
-      downloadText(JSON.stringify(data,null,2),'R语言完整学习档案.json','application/json;charset=utf-8');
+      downloadText(JSON.stringify(data,null,2),'r-tutor-learning-archive.json','application/json;charset=utf-8');
     })),file);
 
     const reset = disclosure('重置个人学习档案');

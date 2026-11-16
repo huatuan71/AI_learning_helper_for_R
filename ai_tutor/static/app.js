@@ -1,9 +1,9 @@
 'use strict';
-import {requestJson as api, streamAnswer as streamApi} from './api-client.js?v=structure-v1';
-import {createAnswerRenderer, firstSentence} from './answer-renderer.js?v=structure-v1';
-import {LiquidKnowledgeScene} from './liquid-scene.js?v=structure-v1';
-import {ModelSettings} from './model-settings.js?v=structure-v1';
-import {RFileInput} from './r-file.js?v=structure-v1';
+import {requestJson as api, streamAnswer as streamApi} from './api-client.js?v=ascii-v1';
+import {createAnswerRenderer, firstSentence} from './answer-renderer.js?v=ascii-v1';
+import {LiquidKnowledgeScene} from './liquid-scene.js?v=ascii-v1';
+import {ModelSettings} from './model-settings.js?v=ascii-v1';
+import {RFileInput} from './r-file.js?v=ascii-v1';
 
 const {codeBlock, renderTeachingBody} = createAnswerRenderer(status);
 const $ = id => document.getElementById(id);
@@ -509,7 +509,7 @@ $('export').onclick = async () => {
   }
   const blob = new Blob([JSON.stringify({version:'1.2.1',records:records.map(safeRecord)},null,2)], {type:'application/json;charset=utf-8'});
   const url = URL.createObjectURL(blob), link = el('a');
-  link.href = url; link.download = 'R语言学习记录.json'; link.click();
+  link.href = url; link.download = 'r-tutor-conversations.json'; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 document.querySelectorAll('[data-example]').forEach(b => {

@@ -104,9 +104,9 @@ def test_bootstrap_contract():
     bootstrap = (ROOT / 'static/bootstrap.js').read_text(encoding='utf-8')
     assert 'void registerOffline()' in bootstrap
     assert bootstrap.index('void registerOffline()') < bootstrap.index('await import(')
-    assert "await import('./app.js?v=structure-v1')" in bootstrap
+    assert "await import('./app.js?v=ascii-v1')" in bootstrap
     assert 'window.' not in bootstrap
     app = (ROOT / 'static/app.js').read_text(encoding='utf-8')
     assert 'new window.' not in app
-    assert "from './api-client.js?v=structure-v1'" in app
-    assert "from './answer-renderer.js?v=structure-v1'" in app
+    assert "from './api-client.js?v=ascii-v1'" in app
+    assert "from './answer-renderer.js?v=ascii-v1'" in app
