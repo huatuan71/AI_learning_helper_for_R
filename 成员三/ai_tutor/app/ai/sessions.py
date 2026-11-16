@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 
 from fastapi import Request, Response
 
+from ..config import DEVELOPMENT_ORIGINS, is_production
 from .schemas import AIError, ModelConfig
 
 COOKIE = 'r_tutor_session'
@@ -95,10 +96,6 @@ class SessionStore:
             self.active -= 1
 
 
-def is_production():
-    return os.getenv('APP_ENV', '').lower() == 'production' or bool(os.getenv('RENDER'))
-
-
 def check_origin(request: Request):
     """Browser writes must originate from this app or an explicit dev origin."""
     origin = request.headers.get('origin')
@@ -108,7 +105,7 @@ def check_origin(request: Request):
         parsed = urlsplit(public_url)
         allowed.add(f'{parsed.scheme}://{parsed.netloc}')
     if not is_production():
-        allowed.update(['http://localhost:5173', 'http://127.0.0.1:5173'])
+        allowed.update(DEVELOPMENT_ORIGINS)
     if request.headers.get('sec-fetch-site') == 'cross-site' or (origin and origin not in allowed):
         raise AIError('ORIGIN_FORBIDDEN', '请从本应用页面配置和调用模型。', 403)
 

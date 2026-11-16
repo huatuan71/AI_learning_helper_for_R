@@ -2,9 +2,9 @@
 import json
 import re
 from difflib import SequenceMatcher
-from pathlib import Path
+from .config import COURSE_PATH
 
-DATA = json.loads((Path(__file__).resolve().parents[1]/'data/course.json').read_text(encoding='utf-8'))
+DATA = json.loads(COURSE_PATH.read_text(encoding='utf-8'))
 KNOWLEDGE = {x['id']: x for x in DATA['knowledge']}
 QUESTIONS = DATA['questions']
 ERRORS = DATA['errors']

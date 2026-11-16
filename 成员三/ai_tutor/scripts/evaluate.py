@@ -15,7 +15,7 @@ from urllib.error import HTTPError, URLError
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from app.engine import DATA, answer, retrieve
-from app.main import ChatRequest
+from app.schemas import ChatRequest
 from app.ai.providers import PROVIDERS
 
 
