@@ -445,6 +445,7 @@ def test_publish_tool_verifies_then_writes(monkeypatch, tmp_path):
     root = tmp_path / 'ai_tutor'
     root.mkdir()
     monkeypatch.setattr(publish_info, 'ROOT', root)
+    monkeypatch.setattr(publish_info, 'DELIVERABLES_ROOT', tmp_path)
     def fake_urlopen(url, timeout):
         if url.endswith('/api/health'):
             result = BytesIO(json.dumps({'version':'1.2.1', 'counts':{'knowledge':43}}).encode())

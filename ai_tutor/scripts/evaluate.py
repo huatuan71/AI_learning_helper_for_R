@@ -13,6 +13,7 @@ from urllib.request import HTTPCookieProcessor, Request, build_opener
 from urllib.error import HTTPError, URLError
 
 ROOT = Path(__file__).resolve().parents[1]
+DELIVERABLES_ROOT = ROOT.parent / '成员三'
 sys.path.insert(0, str(ROOT))
 from app.engine import DATA, answer, retrieve
 from app.schemas import ChatRequest
@@ -116,5 +117,5 @@ if __name__ == '__main__':
     parser.add_argument('--region', choices=['cn-beijing','ap-southeast-1'], default='cn-beijing')
     parser.add_argument('--base-url', default='http://127.0.0.1:8000')
     parser.add_argument('--limit', type=int, choices=range(1, 51), default=50)
-    parser.add_argument('--output', default=str(ROOT.parent / '回归评估结果.csv'))
+    parser.add_argument('--output', default=str(DELIVERABLES_ROOT / '回归评估结果.csv'))
     evaluate(parser.parse_args())

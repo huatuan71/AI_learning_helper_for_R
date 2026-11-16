@@ -1,5 +1,7 @@
 # 跨平台 PWA 与离线资料
 
+> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `structure-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
+
 ## 交付与接入
 
 本线程工作树为 `.worktrees/offline-pwa`，分支为 `codex/offline-pwa`，基线为 `c7f8759`。实现文件为 `app/main.py`、`static/bootstrap.js`、`static/offline.js`、`static/service-worker.js`、`static/manifest.webmanifest`、`static/icons/`、`tests/browser_pwa.js`、`tests/test_pwa_assets.py` 和本文档。

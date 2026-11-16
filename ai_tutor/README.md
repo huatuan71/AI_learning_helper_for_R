@@ -4,13 +4,13 @@
 
 ## 开发入口
 
-日常启动、依赖安装、项目级测试及目录职责见仓库根目录 [README](../../README.md)。2026-11-16 的集成过程、本机端口和工作树命令已归档至 [学习功能集成交接](docs/handoff/learning-integration-2026-11-16.md)。
+日常启动、依赖安装、项目级测试及目录职责见仓库根目录 [README](../README.md)。2026-11-16 的集成过程、本机端口和工作树命令已归档至 [学习功能集成交接](docs/handoff/learning-integration-2026-11-16.md)。
 
 ## 配置真实AI
 
 在“更多 → 模型设置”选择厂商及真实AI或网页搜索模式，填写自己的模型ID和API Key，确认数据发送及用量后应用设置。连接测试由用户主动触发，可能产生用量。Key保存在该浏览器会话对应的后端内存，空闲30分钟或服务重启后清除。“清除密钥”可立即回到模拟模式。
 
-三家已通过模拟上游测试，用户已反馈DeepSeek连接正常，完整真实问答及搜索质量评估待记录，Render发布待账号到位。配置、官方申请入口、评估和部署步骤见上一级的 `模型配置与运行说明.md`，发布状态见 `发布信息.md`。
+三家已通过模拟上游测试，用户已反馈DeepSeek连接正常，完整真实问答及搜索质量评估待记录，Render发布待账号到位。配置、官方申请入口、评估和部署步骤见[模型配置与运行说明](../成员三/模型配置与运行说明.md)，发布状态见 [发布信息](../成员三/发布信息.md)。
 
 回答Token上限默认8192，可在模型设置中调整至32768。主要解释和代码字段支持完整长回答，实际输出长度受模型能力和所选预算约束。
 
@@ -31,7 +31,7 @@ AI回答以连续Markdown正文组织，标题、完整列表和多段代码按�
 
 本轮已安装当前电脑需要的依赖。换电脑或重新创建环境时，先安装Python 3.12（含Python Launcher），双击 `setup.cmd`，安装成功后再双击 `start.cmd`。首次安装需要联网；安装完成后，课程网页及模拟问答不依赖网络。
 
-FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)。默认Swagger页面使用外部静态资源，首次打开需网络；原始接口定义 [openapi.json](http://127.0.0.1:8000/openapi.json) 可离线访问。接口操作的详细说明见上一级的 `接口说明.md`。
+FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)。默认Swagger页面使用外部静态资源，首次打开需网络；原始接口定义 [openapi.json](http://127.0.0.1:8000/openapi.json) 可离线访问。接口操作的详细说明见[接口说明](../成员三/接口说明.md)。
 
 ## 新版页面地址
 
@@ -92,7 +92,7 @@ FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)�
 # 成员一更新资料后重新导入，再重启服务并测试
 .\.venv\Scripts\python.exe scripts/import_data.py
 
-# 按实际运行接口重新生成上一级的接口说明
+# 按实际运行接口重新生成成员三交付目录的接口说明
 .\.venv\Scripts\python.exe scripts/generate_api_docs.py
 ```
 
@@ -102,11 +102,11 @@ FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)�
 
 ```powershell
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 open http://127.0.0.1:8000
-npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_check.js"
-npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_map_files.js"
-npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_glass_ui.js"
+npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "ai_tutor/tests/browser_check.js"
+npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "ai_tutor/tests/browser_map_files.js"
+npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "ai_tutor/tests/browser_glass_ui.js"
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-mobile-map open http://127.0.0.1:8000/#/knowledge --device "Pixel 7"
-npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-mobile-map run-code --filename "成员三/ai_tutor/tests/browser_mobile_map.js"
+npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-mobile-map run-code --filename "ai_tutor/tests/browser_mobile_map.js"
 ```
 
 脚本清空独立测试浏览器中的学习记录，请勿连接个人常用浏览器执行。断开验收脚本 `tests/browser_offline.js` 由回归执行器在隔离上下文注入连接失败。真实断网刷新和重开由 `browser_pwa.js --integrated` 与 `browser_integration.cjs` 覆盖。停止脚本兼容 Windows PowerShell 与 PowerShell 7，并核对父进程身份及项目 Python 子进程。

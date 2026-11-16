@@ -8,6 +8,8 @@ const {parseArgs} = require('node:util');
 
 const root = path.resolve(__dirname, '..');
 const children = new Set();
+let stopping = false;
+let cleanupPromise;
 
 function options() {
   const {values} = parseArgs({options: {
@@ -21,6 +23,9 @@ function options() {
   }
   if (!['chromium', 'webkit'].includes(values.browser)) {
     throw Error('--browser must be chromium or webkit');
+  }
+  if (values.browser === 'webkit' && values.suite !== 'integration') {
+    throw Error('--browser webkit requires --suite integration');
   }
   return values;
 }
@@ -55,6 +60,7 @@ function health(url) {
 
 async function startServer(python, script) {
   const port = await freePort();
+  if (stopping) throw Error('Browser checks interrupted');
   const url = 'http://127.0.0.1:' + port;
   const child = spawn(python, [script, '--port', String(port)], {
     cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
@@ -80,6 +86,7 @@ async function startServer(python, script) {
 }
 
 async function runSuite(script, args, env) {
+  if (stopping) throw Error('Browser checks interrupted');
   console.log('Running ' + script);
   const child = spawn(process.execPath, [script, ...args], {
     cwd: root, env, windowsHide: true, stdio: 'inherit',
@@ -100,15 +107,15 @@ async function runSuite(script, args, env) {
   }
 }
 
-async function stopChildren() {
-  await Promise.all([...children].map(child => new Promise(resolve => {
+function stopChildren() {
+  cleanupPromise ||= Promise.all([...children].map(child => new Promise(resolve => {
     if (!child.pid || child.exitCode !== null || child.signalCode !== null) return resolve();
     const timer = setTimeout(() => { child.kill('SIGKILL'); }, 5000);
     child.once('exit', () => { clearTimeout(timer); resolve(); });
     child.once('error', () => { clearTimeout(timer); resolve(); });
     child.kill();
-  })));
-  children.clear();
+  }))).then(() => children.clear());
+  return cleanupPromise;
 }
 
 async function main() {
@@ -142,8 +149,9 @@ async function main() {
 }
 
 for (const signal of ['SIGINT', 'SIGTERM']) {
-  process.once(signal, () => {
-    for (const child of children) child.kill();
+  process.once(signal, async () => {
+    stopping = true;
+    await stopChildren();
     process.exit(signal === 'SIGINT' ? 130 : 143);
   });
 }

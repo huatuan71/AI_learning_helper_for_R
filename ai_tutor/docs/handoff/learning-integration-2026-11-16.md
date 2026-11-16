@@ -45,5 +45,5 @@ $env:LEARNING_CORE_DIR = (Join-Path (Get-Location) 'static')
 node tests/browser_learning_center.js
 ```
 
-测试会使用隔离浏览器上下文。学习中心76项专项使用真实核心模块及离线接口替身，真实离线流程由PWA和集成套件覆盖。截图与JSON报告位于项目 `output/playwright/`。全部命令、真实结果、四端范围和真机步骤见 [测试记录](../../../测试记录.md)。
+测试会使用隔离浏览器上下文。学习中心76项专项使用真实核心模块及离线接口替身，真实离线流程由PWA和集成套件覆盖。截图与JSON报告位于项目 `output/playwright/`。全部命令、真实结果、四端范围和真机步骤见 [测试记录](../../../成员三/测试记录.md)。
 

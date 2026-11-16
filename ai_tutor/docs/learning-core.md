@@ -1,5 +1,7 @@
 # 本地学习存储与复习算法交接
 
+> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `structure-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
+
 ## 本线程交付
 
 分支为 `codex/learning-core`，基于 `c7f8759`。独立工作树为仓库下的 `.worktrees/learning-core`，本机 `.git/info/exclude` 已加入 `/.worktrees/`。检查了仓库祖先目录和 `成员三` 下的适用路径，本次未发现 `AGENTS.md`。实现遵循 `成员三/学习功能实施/00_协作约定.md`。

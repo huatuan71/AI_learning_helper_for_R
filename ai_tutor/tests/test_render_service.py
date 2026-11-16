@@ -6,7 +6,7 @@ import sys
 import uvicorn
 
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location('render_service', REPO / 'render_service.py')
 service = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(service)
@@ -37,3 +37,10 @@ def test_render_start_uses_port_and_application_directory(monkeypatch):
     assert calls == [(('app.main:app',), {'app_dir': str(service.APP_ROOT),
                      'host': '0.0.0.0', 'port': 8002, 'workers': 1,
                      'proxy_headers': True, 'forwarded_allow_ips': '*', 'access_log': False})]
+
+
+def test_report_outputs_stay_in_member_delivery_directory():
+    from scripts import evaluate, generate_api_docs, publish_info
+
+    for script in (evaluate, generate_api_docs, publish_info):
+        assert script.DELIVERABLES_ROOT == REPO / '成员三'

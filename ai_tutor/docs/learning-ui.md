@@ -1,5 +1,7 @@
 # 学习界面交接
 
+> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `structure-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
+
 ## 分支与修改范围
 
 分支为 `codex/learning-ui`，基线为 `c7f8759ebe426da8cb4e6c838aaf55b93ea93695`。独立工作树位于仓库 `.worktrees/learning-ui`。交付提交使用 `feat: add learning center and guided review`，提交编号随最终交付消息提供，也可通过 `git log -1 codex/learning-ui` 查询。

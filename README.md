@@ -7,27 +7,27 @@
 Windows首次使用需要Python 3.12。在仓库根目录执行以下命令，安装成功后启动应用。
 
 ```powershell
-cd ./成员三/ai_tutor
+cd ./ai_tutor
 ./setup.cmd
 ./start.cmd
 ```
 
-浏览器打开 <http://127.0.0.1:8000/>，使用结束后运行 `stop.cmd`。已有虚拟环境可直接启动。模型配置和各功能操作见 [应用使用说明](成员三/ai_tutor/README.md)。
+浏览器打开 <http://127.0.0.1:8000/>，使用结束后运行 `stop.cmd`。已有虚拟环境可直接启动。模型配置和各功能操作见 [应用使用说明](ai_tutor/README.md)。
 
 ## 开发与测试
 
 在仓库根目录安装开发依赖并运行Python测试。根目录的 `pytest.ini` 限定本项目测试目录，并配置应用导入路径。
 
 ```powershell
-$python = (Resolve-Path './成员三/ai_tutor/.venv/Scripts/python.exe').Path
-& $python -m pip install -r ./成员三/ai_tutor/requirements-dev.txt
+$python = (Resolve-Path './ai_tutor/.venv/Scripts/python.exe').Path
+& $python -m pip install -r ./ai_tutor/requirements-dev.txt
 & $python -m pytest -q
 ```
 
 浏览器测试需要Node.js、项目的Playwright依赖及对应浏览器。在应用目录执行以下命令。
 
 ```powershell
-cd ./成员三/ai_tutor
+cd ./ai_tutor
 npm ci
 npx playwright install chromium
 npm test
@@ -50,13 +50,13 @@ npm run test:browser -- --suite integration --browser webkit
 安装开发依赖后，在仓库根目录重建课程数据。
 
 ```powershell
-& $python ./成员三/ai_tutor/scripts/import_data.py
+& $python ./ai_tutor/scripts/import_data.py
 ```
 
-默认输入来自最近的 `成员一` 目录，输出写入应用的 `data/`。可显式指定资料目录、Word文件、Excel文件和输出目录。存在多个候选输入时会给出选择提示。
+默认输入来自最近的 `成员一` 目录，输出写入应用的 `data/`。可显式指定资料目录、Word文件、Excel文件和输出目录。存在多个候选输入时，使用 `--docx` 和 `--xlsx` 明确指定源文件。
 
 ```powershell
-& $python ./成员三/ai_tutor/scripts/import_data.py --source-dir ./成员一 --output-dir ./成员三/ai_tutor/.tmp/course-check
+& $python ./ai_tutor/scripts/import_data.py --source-dir ./成员一 --output-dir ./ai_tutor/.tmp/course-check
 ```
 
 临时输出便于先检查生成结果。导入报告记录源文件摘要，导入脚本校验条目、引用、必需字段和关联关系。补充草稿及配套R案例保留各自的编写与核验记录。
@@ -66,12 +66,12 @@ npm run test:browser -- --suite integration --browser webkit
 | 位置 | 内容 |
 |---|---|
 | `成员一/` | 课程源资料、知识目录和内容审核材料 |
-| `成员三/ai_tutor/app/` | 应用组装、接口、数据模型、课程规则和模型接入 |
-| `成员三/ai_tutor/static/` | 前端模块、样式、题库与离线资源 |
-| `成员三/ai_tutor/data/` | 随版本发布的课程快照和导入报告 |
-| `成员三/ai_tutor/scripts/` | 启动、导入、评估、接口文档和发布工具 |
-| `成员三/ai_tutor/tests/` | Python、算法和浏览器测试，通用fixture位于conftest.py，模拟响应位于support目录 |
-| `成员三/ai_tutor/docs/` | 功能说明与阶段性交接记录 |
+| `ai_tutor/app/` | 应用组装、接口、数据模型、课程规则和模型接入 |
+| `ai_tutor/static/` | 前端模块、样式、题库与离线资源 |
+| `ai_tutor/data/` | 随版本发布的课程快照和导入报告 |
+| `ai_tutor/scripts/` | 启动、导入、评估、接口文档和发布工具 |
+| `ai_tutor/tests/` | Python、算法和浏览器测试，通用fixture位于conftest.py，模拟响应位于support目录 |
+| `ai_tutor/docs/` | 功能说明、阶段性交接记录和归档验收证据 |
 | `成员三/知识库补充草稿/` | 补充知识条目，配套资源位于content_assets目录 |
 
 依赖按用途分为三组，全部固定版本。
@@ -86,4 +86,6 @@ npm run test:browser -- --suite integration --browser webkit
 
 ## 并行开发
 
-每个任务使用独立分支和工作树，按文件范围分配职责。前端模块和离线清单一同提交，后端模型和调用方导入一同提交。集成分支汇总各任务后运行Python、算法及浏览器测试，再处理顶层目录迁移。
+每个任务使用独立分支和工作树，按文件范围分配职责。前端模块和离线清单一同提交，后端模型和调用方导入一同提交。集成分支汇总各任务后运行Python、算法及浏览器测试，应用统一放在根目录的 `ai_tutor/`，成员目录保存课程资料与交付材料。
+
+结构整理前已提交的截图和测试报告归档至 `ai_tutor/docs/evidence/learning-v1/`。新测试产物写入 `ai_tutor/output/`，Playwright结果和运行缓存由Git忽略规则管理。
