@@ -6,7 +6,7 @@ from pathlib import Path
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-DELIVERABLES_ROOT = ROOT.parent / '成员三'
+DELIVERABLES_ROOT = ROOT.parent / 'docs' / 'deliverables'
 BASE = os.environ.get('BASE_URL', 'http://127.0.0.1:8000').rstrip('/')
 
 
@@ -181,7 +181,7 @@ Cookie名称为r_tutor_session，随机生成，启用HttpOnly与SameSite=Strict
 参数错误返回422。Markdown正文经本地DOMPurify净化，代码按文本展示，链接限定HTTP或HTTPS并排除URL凭据。网络引用编号映射到实际搜索来源。
 源码、日志与浏览器记录中采用脱敏及明确字段清单，API Key保存在服务器会话内存。
 '''
-    (DELIVERABLES_ROOT / '接口说明.md').write_text(text, encoding='utf-8')
+    (DELIVERABLES_ROOT / 'api-reference.md').write_text(text, encoding='utf-8')
     print('接口说明已按当前运行服务的OpenAPI更新。')
 
 

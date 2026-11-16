@@ -444,6 +444,7 @@ def test_publish_tool_verifies_then_writes(monkeypatch, tmp_path):
     from scripts import publish_info
     root = tmp_path / 'ai_tutor'
     root.mkdir()
+    monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(publish_info, 'ROOT', root)
     monkeypatch.setattr(publish_info, 'DELIVERABLES_ROOT', tmp_path)
     def fake_urlopen(url, timeout):
@@ -456,7 +457,7 @@ def test_publish_tool_verifies_then_writes(monkeypatch, tmp_path):
     monkeypatch.setattr(publish_info, 'urlopen', fake_urlopen)
     publish_info.publish('https://classroom.example')
     assert 'svg' in (root / 'output/release/qrcode.svg').read_text()
-    assert 'https://classroom.example' in (tmp_path / '发布信息.md').read_text(encoding='utf-8')
+    assert 'https://classroom.example' in (tmp_path / 'release.md').read_text(encoding='utf-8')
 
 
 def test_publish_tool_rejects_wrong_service(monkeypatch):
