@@ -16,13 +16,13 @@
       "sources": [
         {
           "source_id": "S1",
-          "file": "CH11R语言安装.pdf",
+          "file": "r-installation-ch11.pdf",
           "locator": "PDF  4–20",
           "raw": "S1 PDF  4–20；S2 PDF  1–7"
         },
         {
           "source_id": "S2",
-          "file": "CH12R语言安装.pdf",
+          "file": "r-installation-ch12.pdf",
           "locator": "PDF  1–7",
           "raw": "S1 PDF  4–20；S2 PDF  1–7"
         }
@@ -67,13 +67,13 @@
       "sources": [
         {
           "source_id": "S1",
-          "file": "CH11R语言安装.pdf",
+          "file": "r-installation-ch11.pdf",
           "locator": "PDF 21–29",
           "raw": "S1 PDF 21–29；S2 PDF 8–10"
         },
         {
           "source_id": "S2",
-          "file": "CH12R语言安装.pdf",
+          "file": "r-installation-ch12.pdf",
           "locator": "PDF 8–10",
           "raw": "S1 PDF 21–29；S2 PDF 8–10"
         }
@@ -116,7 +116,7 @@
       "sources": [
         {
           "source_id": "S1",
-          "file": "CH11R语言安装.pdf",
+          "file": "r-installation-ch11.pdf",
           "locator": "PDF 28–42",
           "raw": "S1 PDF 28–42"
         }
@@ -162,13 +162,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 9–14",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 230–247",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         }
@@ -214,13 +214,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 14、72",
           "raw": "S3 PDF 14、72；S4 第14章 PDF 219–222"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 219–222",
           "raw": "S3 PDF 14、72；S4 第14章 PDF 219–222"
         }
@@ -266,13 +266,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 11、73",
           "raw": "S3 PDF 11、73；S4 第15章 PDF 233–234"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 233–234",
           "raw": "S3 PDF 11、73；S4 第15章 PDF 233–234"
         }
@@ -322,13 +322,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 15–19",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第11章 PDF 183–188",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         }
@@ -375,13 +375,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 20–27",
           "raw": "S3 PDF 20–27；S4 第12章 PDF 189–204"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第12章 PDF 189–204",
           "raw": "S3 PDF 20–27；S4 第12章 PDF 189–204"
         }
@@ -434,13 +434,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 30–31",
           "raw": "S3 PDF 30–31；S2 PDF 1–5"
         },
         {
           "source_id": "S2",
-          "file": "CH12R语言安装.pdf",
+          "file": "r-installation-ch12.pdf",
           "locator": "PDF 1–5",
           "raw": "S3 PDF 30–31；S2 PDF 1–5"
         }
@@ -495,13 +495,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 32",
           "raw": "S3 PDF 32；S4 第15章 PDF 237–239"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 237–239",
           "raw": "S3 PDF 32；S4 第15章 PDF 237–239"
         }
@@ -549,13 +549,13 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 235–237",
           "raw": "S4 第15章 PDF 235–237；S3 PDF 34"
         },
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 34",
           "raw": "S4 第15章 PDF 235–237；S3 PDF 34"
         }
@@ -599,7 +599,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 33、38",
           "raw": "S3 PDF 33、38"
         }
@@ -649,13 +649,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 34",
           "raw": "S3 PDF 34；S4 第3章 汇总"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第3章 汇总",
           "raw": "S3 PDF 34；S4 第3章 汇总"
         }
@@ -708,7 +708,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 35–37",
           "raw": "S3 PDF 35–37"
         }
@@ -757,7 +757,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 38–39",
           "raw": "S3 PDF 38–39"
         }
@@ -808,13 +808,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 40–41",
           "raw": "S3 PDF 40–41；S4 第10章 PDF 160–163"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第10章 PDF 160–163",
           "raw": "S3 PDF 40–41；S4 第10章 PDF 160–163"
         }
@@ -863,7 +863,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 42–44",
           "raw": "S3 PDF 42–44"
         }
@@ -910,13 +910,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 45–47",
           "raw": "S3 PDF 45–47；S4 第10章 PDF 164–181"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第10章 PDF 164–181",
           "raw": "S3 PDF 45–47；S4 第10章 PDF 164–181"
         }
@@ -966,7 +966,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 48–52",
           "raw": "S3 PDF 48–52"
         }
@@ -1019,7 +1019,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 51–55",
           "raw": "S3 PDF 51–55"
         }
@@ -1068,7 +1068,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 53–56",
           "raw": "S3 PDF 53–56"
         }
@@ -1116,7 +1116,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 54–57",
           "raw": "S3 PDF 54–57"
         }
@@ -1164,7 +1164,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 58–62",
           "raw": "S3 PDF 58–62"
         }
@@ -1215,7 +1215,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 63–65、82",
           "raw": "S3 PDF 63–65、82"
         }
@@ -1267,13 +1267,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 66–69",
           "raw": "S3 PDF 66–69；S4 第6章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第6章",
           "raw": "S3 PDF 66–69；S4 第6章"
         }
@@ -1327,7 +1327,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 70、72",
           "raw": "S3 PDF 70、72"
         }
@@ -1379,13 +1379,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 71、74",
           "raw": "S3 PDF 71、74；S4 第9章 PDF 143–159"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第9章 PDF 143–159",
           "raw": "S3 PDF 71、74；S4 第9章 PDF 143–159"
         }
@@ -1441,7 +1441,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 73",
           "raw": "S3 PDF 73"
         }
@@ -1490,13 +1490,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 75–78",
           "raw": "S3 PDF 75–78；S4 第8章 PDF 125–142"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第8章 PDF 125–142",
           "raw": "S3 PDF 75–78；S4 第8章 PDF 125–142"
         }
@@ -1547,13 +1547,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 79–82",
           "raw": "S3 PDF 79–82；S4 第3章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第3章",
           "raw": "S3 PDF 79–82；S4 第3章"
         }
@@ -1604,13 +1604,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 83–87",
           "raw": "S3 PDF 83–87；S4 第15章 PDF 239–243"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 239–243",
           "raw": "S3 PDF 83–87；S4 第15章 PDF 239–243"
         }
@@ -1659,13 +1659,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 88–90",
           "raw": "S3 PDF 88–90；S4 第16章 PDF 258–260"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第16章 PDF 258–260",
           "raw": "S3 PDF 88–90；S4 第16章 PDF 258–260"
         }
@@ -1713,7 +1713,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 91",
           "raw": "S3 PDF 91"
         }
@@ -1762,13 +1762,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 92–94",
           "raw": "S3 PDF 92–94；S3 PDF 88 扩展函数线索"
         },
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 88 扩展函数线索",
           "raw": "S3 PDF 92–94；S3 PDF 88 扩展函数线索"
         }
@@ -1822,7 +1822,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 214–229",
           "raw": "S4 第14章 PDF 214–229"
         }
@@ -1872,7 +1872,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 219–223",
           "raw": "S4 第14章 PDF 219–223"
         }
@@ -1922,7 +1922,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第16章 PDF 249–255",
           "raw": "S4 第16章 PDF 249–255"
         }
@@ -1975,13 +1975,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 67",
           "raw": "S3 PDF 67；S4 第7章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第7章",
           "raw": "S3 PDF 67；S4 第7章"
         }
@@ -2034,7 +2034,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 3–8、66–82",
           "raw": "S3 PDF 3–8、66–82；本任务为原创模拟"
         }
@@ -2086,13 +2086,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 80–81",
           "raw": "S3 PDF 80–81；S4 第3、13章；O1"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第3、13章",
           "raw": "S3 PDF 80–81；S4 第3、13章；O1"
         }
@@ -2141,7 +2141,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第8章",
           "raw": "S4 第8章；O2、O3；现代补充"
         }
@@ -2192,7 +2192,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 76–79",
           "raw": "S3 PDF 76–79"
         }
@@ -2245,13 +2245,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 25",
           "raw": "S3 PDF 25；S4 第12章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第12章",
           "raw": "S3 PDF 25；S4 第12章"
         }
@@ -2297,13 +2297,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 9–14",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 230–247",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         }
@@ -2326,13 +2326,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 15–19",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第11章 PDF 183–188",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         }
@@ -2355,7 +2355,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 48–52",
           "raw": "S3 PDF 48–52"
         }
@@ -2378,13 +2378,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 66–69",
           "raw": "S3 PDF 66–69；S4 第6章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第6章",
           "raw": "S3 PDF 66–69；S4 第6章"
         }
@@ -2407,13 +2407,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 83–87",
           "raw": "S3 PDF 83–87；S4 第15章 PDF 239–243"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 239–243",
           "raw": "S3 PDF 83–87；S4 第15章 PDF 239–243"
         }
@@ -2436,13 +2436,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 14、72",
           "raw": "S3 PDF 14、72；S4 第14章 PDF 219–222"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 219–222",
           "raw": "S3 PDF 14、72；S4 第14章 PDF 219–222"
         }
@@ -2465,13 +2465,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 20–27",
           "raw": "S3 PDF 20–27；S4 第12章 PDF 189–204"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第12章 PDF 189–204",
           "raw": "S3 PDF 20–27；S4 第12章 PDF 189–204"
         }
@@ -2494,7 +2494,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 33、38",
           "raw": "S3 PDF 33、38"
         }
@@ -2517,7 +2517,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 35–37",
           "raw": "S3 PDF 35–37"
         }
@@ -2540,7 +2540,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 38–39",
           "raw": "S3 PDF 38–39"
         }
@@ -2563,7 +2563,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 42–44",
           "raw": "S3 PDF 42–44"
         }
@@ -2586,13 +2586,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 45–47",
           "raw": "S3 PDF 45–47；S4 第10章 PDF 164–181"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第10章 PDF 164–181",
           "raw": "S3 PDF 45–47；S4 第10章 PDF 164–181"
         }
@@ -2615,13 +2615,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 9–14",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 230–247",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         }
@@ -2644,13 +2644,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 11、73",
           "raw": "S3 PDF 11、73；S4 第15章 PDF 233–234"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 233–234",
           "raw": "S3 PDF 11、73；S4 第15章 PDF 233–234"
         }
@@ -2673,13 +2673,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 15–19",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第11章 PDF 183–188",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         }
@@ -2702,7 +2702,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 53–56",
           "raw": "S3 PDF 53–56"
         }
@@ -2725,7 +2725,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 219–223",
           "raw": "S4 第14章 PDF 219–223"
         }
@@ -2748,13 +2748,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 9–14",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 230–247",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         }
@@ -2777,7 +2777,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 3–8、66–82",
           "raw": "S3 PDF 3–8、66–82；本任务为原创模拟"
         }
@@ -2800,13 +2800,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 75–78",
           "raw": "S3 PDF 75–78；S4 第8章 PDF 125–142"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第8章 PDF 125–142",
           "raw": "S3 PDF 75–78；S4 第8章 PDF 125–142"
         }
@@ -2829,13 +2829,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 79–82",
           "raw": "S3 PDF 79–82；S4 第3章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第3章",
           "raw": "S3 PDF 79–82；S4 第3章"
         }
@@ -2858,7 +2858,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 91",
           "raw": "S3 PDF 91"
         }
@@ -2881,7 +2881,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第16章 PDF 249–255",
           "raw": "S4 第16章 PDF 249–255"
         }
@@ -2904,13 +2904,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 67",
           "raw": "S3 PDF 67；S4 第7章"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第7章",
           "raw": "S3 PDF 67；S4 第7章"
         }
@@ -2936,13 +2936,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 9–14",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 230–247",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         }
@@ -2965,7 +2965,7 @@
       "sources": [
         {
           "source_id": "S1",
-          "file": "CH11R语言安装.pdf",
+          "file": "r-installation-ch11.pdf",
           "locator": "PDF 28–42",
           "raw": "S1 PDF 28–42"
         }
@@ -2988,13 +2988,13 @@
       "sources": [
         {
           "source_id": "S1",
-          "file": "CH11R语言安装.pdf",
+          "file": "r-installation-ch11.pdf",
           "locator": "PDF 4–20",
           "raw": "S1 PDF 4–20；S2 PDF 1–7"
         },
         {
           "source_id": "S2",
-          "file": "CH12R语言安装.pdf",
+          "file": "r-installation-ch12.pdf",
           "locator": "PDF 1–7",
           "raw": "S1 PDF 4–20；S2 PDF 1–7"
         }
@@ -3017,13 +3017,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 11、73",
           "raw": "S3 PDF 11、73；S4 第15章 PDF 233–234"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 233–234",
           "raw": "S3 PDF 11、73；S4 第15章 PDF 233–234"
         }
@@ -3046,13 +3046,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 15–19",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第11章 PDF 183–188",
           "raw": "S3 PDF 15–19；S4 第11章 PDF 183–188"
         }
@@ -3075,7 +3075,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 35–37",
           "raw": "S3 PDF 35–37"
         }
@@ -3098,7 +3098,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 53–56",
           "raw": "S3 PDF 53–56"
         }
@@ -3121,13 +3121,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 83–87",
           "raw": "S3 PDF 83–87；S4 第15章 PDF 239–243"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 239–243",
           "raw": "S3 PDF 83–87；S4 第15章 PDF 239–243"
         }
@@ -3150,7 +3150,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 219–223",
           "raw": "S4 第14章 PDF 219–223"
         }
@@ -3173,7 +3173,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第14章 PDF 219–223",
           "raw": "S4 第14章 PDF 219–223"
         }
@@ -3196,7 +3196,7 @@
       "sources": [
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第16章 PDF 249–255",
           "raw": "S4 第16章 PDF 249–255"
         }
@@ -3219,13 +3219,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 9–14",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第15章 PDF 230–247",
           "raw": "S3 PDF 9–14；S4 第15章 PDF 230–247"
         }
@@ -3248,13 +3248,13 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 71、74",
           "raw": "S3 PDF 71、74；S4 第9章 PDF 143–159"
         },
         {
           "source_id": "S4",
-          "file": "R数据科学_译本.pdf",
+          "file": "r-for-data-science-zh.pdf",
           "locator": "第9章 PDF 143–159",
           "raw": "S3 PDF 71、74；S4 第9章 PDF 143–159"
         }
@@ -3277,7 +3277,7 @@
       "sources": [
         {
           "source_id": "S3",
-          "file": "CH2R语言数据操作课件.pdf",
+          "file": "r-data-operations-ch02.pdf",
           "locator": "PDF 38–39",
           "raw": "S3 PDF 38–39"
         }
@@ -3865,7 +3865,7 @@
   ],
   "version": "916ec03645ae",
   "source_files": [
-    "成员一_课程知识体系与教学内容.docx",
-    "成员一_知识目录与案例管理表.xlsx"
+    "course-knowledge.docx",
+    "knowledge-catalog.xlsx"
   ]
 }

@@ -17,8 +17,8 @@ from openpyxl.utils.exceptions import InvalidFileException
 
 ROOT = Path(__file__).resolve().parents[1]
 NS = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
-FILES = {'S1': 'CH11R语言安装.pdf', 'S2': 'CH12R语言安装.pdf',
-         'S3': 'CH2R语言数据操作课件.pdf', 'S4': 'R数据科学_译本.pdf'}
+FILES = {'S1': 'r-installation-ch11.pdf', 'S2': 'r-installation-ch12.pdf',
+         'S3': 'r-data-operations-ch02.pdf', 'S4': 'r-for-data-science-zh.pdf'}
 COUNTS = {'knowledge': 43, 'questions': 24, 'errors': 14, 'relations': 95}
 
 
@@ -29,8 +29,8 @@ def resolve_input(source_dir, explicit, suffix):
             raise ValueError(f'请指定存在的 {suffix} 文件，收到 {path}')
         return path
     if source_dir is None:
-        source_dir = next((parent / '成员一' for parent in ROOT.parents
-                           if (parent / '成员一').is_dir()), None)
+        source_dir = next((parent / 'content' / 'sources' for parent in ROOT.parents
+                           if (parent / 'content' / 'sources').is_dir()), None)
         if source_dir is None:
             raise ValueError('未找到课程资料目录，请使用 --source-dir 或显式文件参数')
     source_dir = Path(source_dir).resolve()

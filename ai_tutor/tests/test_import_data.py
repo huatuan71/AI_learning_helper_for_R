@@ -51,12 +51,27 @@ def test_explicit_files_override_discovery(tmp_path, source_files, capsys):
 
 def test_discovery_follows_nearest_source_directory_after_app_move(tmp_path, monkeypatch):
     moved_root = tmp_path / 'project/apps/nested/tutor'
-    source = tmp_path / 'project/成员一'
+    source = tmp_path / 'project/content/sources'
     source.mkdir(parents=True)
     document = source / 'course.docx'
     document.touch()
     monkeypatch.setattr(importer, 'ROOT', moved_root)
     assert importer.resolve_input(None, None, '.docx') == document.resolve()
+
+
+def test_default_source_paths_use_the_ascii_catalog(source_files):
+    assert source_files == (ROOT.parent / 'content/sources/course-knowledge.docx',
+                            ROOT.parent / 'content/sources/knowledge-catalog.xlsx')
+    data, _ = importer.build_course(*source_files)
+    assert data['source_files'] == ['course-knowledge.docx', 'knowledge-catalog.xlsx']
+    assert data['version'] == hashlib.sha256(b''.join(path.read_bytes() for path in source_files)).hexdigest()[:12]
+    for collection in ('knowledge', 'questions', 'errors'):
+        for item in data[collection]:
+            for source in item['sources']:
+                assert set(source) == {'source_id', 'file', 'locator', 'raw'}
+                if source['file'].endswith('.pdf'):
+                    assert source['file'].isascii()
+                    assert (ROOT.parent / 'content/sources' / source['file']).is_file()
 
 
 @pytest.mark.parametrize('suffix,option', [('.docx', '--docx'), ('.xlsx', '--xlsx')])
