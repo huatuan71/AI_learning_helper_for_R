@@ -17,10 +17,10 @@
 
 | 本地资料 | 已确认内容 | 对成员三的作用 |
 |---|---|---|
-| `R语言期中作业框架.docx` | 明确模型接口、资料接入、任务分类、教学引导、联调、公网链接及二维码要求 | 确定任务范围与交付底线 |
-| `成员一/成员一_课程知识体系与教学内容.docx` | 43个知识条目K01—K43、24道问答Q01—Q24、14个错误案例E01—E14 | 构建知识库、提示词示例与回归案例 |
-| `成员一/成员一_知识目录与案例管理表.xlsx` | 工作区已有此文件；教学文档称其包含95条关系 | 后续与成员一确认实际字段、关系和导出规则 |
-| 成员一文件夹中的4份PDF | 工作区已有安装课件、数据操作课件及教材译本 | 对照来源与页码，必要时回查原文 |
+| `docs/project-brief.docx` | 明确模型接口、资料接入、任务分类、教学引导、联调、公网链接及二维码要求 | 确定任务范围与交付底线 |
+| `content/sources/course-knowledge.docx` | 43个知识条目K01—K43、24道问答Q01—Q24、14个错误案例E01—E14 | 构建知识库、提示词示例与回归案例 |
+| `content/sources/knowledge-catalog.xlsx` | 工作区已有此文件；教学文档称其包含95条关系 | 后续与成员一确认实际字段、关系和导出规则 |
+| content/sources目录中的4份PDF | 工作区已有安装课件、数据操作课件及教材译本 | 对照来源与页码，必要时回查原文 |
 
 本规划核对了框架文档及成员一教学文档中的相关内容；尚未逐条复跑R代码，也未审计Excel和全部PDF。教学文档中的“已实测通过”是成员一的记录，不能当作本项目服务端执行结果。工作区清单未见独立R脚本，开发前应接收原始脚本，或按文档重建后复核，避免复制Word时丢失换行。
 
@@ -173,7 +173,7 @@ FastAPI服务
   "example_code": "x <- c(2, NA, 4)\nmean(x, na.rm=TRUE)",
   "pitfalls": "x == NA不能用于可靠地识别缺失项。",
   "exercise": "解释全部为NA时求均值的结果。",
-  "sources": [{"source_id": "S3", "file": "CH2R语言数据操作课件.pdf", "pages": [11, 73]}],
+  "sources": [{"source_id": "S3", "file": "r-data-operations-ch02.pdf", "pages": [11, 73]}],
   "verification": "成员一标记已实测，待交接脚本复核",
   "content_version": "v1"
 }
@@ -362,8 +362,7 @@ FastAPI服务
 下列是开发完成时应形成的文件结构建议，本次只创建了本说明文档。
 
 ```text
-成员三/
-├─ 成员三_AI模型配置与核心功能开发说明.md
+r-ai-tutor/
 ├─ ai_tutor/                   # 待开发的可运行版本
 │  ├─ app/                     # API、模型封装、检索、校验
 │  ├─ static/                  # 与成员二集成的网页
@@ -373,12 +372,14 @@ FastAPI服务
 │  ├─ requirements.txt
 │  ├─ .env.example
 │  └─ README.md
-├─ 接口说明.md
-├─ 模型配置与运行说明.md
-├─ 调试记录.md
-├─ 回归评估结果.csv
-├─ skill采用记录.md            # 来源、路径、commit、许可与改动
-└─ 发布信息.md                 # 公网链接、二维码位置、发布日期
+└─ docs/deliverables/
+   ├─ implementation.md
+   ├─ api-reference.md
+   ├─ model-setup.md
+   ├─ debug-log.md
+   ├─ regression-evaluation.csv
+   ├─ skill-adoption.md        # 来源、路径、commit、许可与改动
+   └─ release.md               # 公网链接、二维码位置、发布日期
 ```
 
 交接时检查：另一名成员能按说明启动；配置文件不含真实密钥；知识来源可追溯；记录模型/提示词/数据版本；测试失败项有处理结论；公网链接与二维码对应同一可用版本。

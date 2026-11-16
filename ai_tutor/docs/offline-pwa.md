@@ -1,6 +1,6 @@
 # 跨平台 PWA 与离线资料
 
-> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `structure-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
+> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `ascii-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
 
 ## 交付与接入
 
@@ -114,10 +114,10 @@ async function saveOfflineMaterials(onProgress) {
 
 ## 测试命令
 
-以下命令在本工作树的 `成员三/ai_tutor` 下执行。使用主工作区已有 Python 虚拟环境。
+以下命令在本工作树的 `ai_tutor` 下执行。使用主工作区已有 Python 虚拟环境。
 
 ```powershell
-$pwaPython = 'E:\作业2\R语言及其应用\小组作业\成员三\ai_tutor\.venv\Scripts\python.exe'
+$pwaPython = 'E:/projects/r-ai-tutor/ai_tutor/.venv/Scripts/python.exe'
 & $pwaPython -m pytest -q
 & $pwaPython -m uvicorn app.main:app --host 127.0.0.1 --port 8013 --log-level warning
 ```
@@ -141,10 +141,10 @@ node tests/browser_pwa.js --integrated
 现有浏览器回归使用项目原有 Playwright CLI 脚本，在工作树根目录生成仅替换端口的临时副本并运行。
 
 ```powershell
-Set-Location ../..
+Set-Location ..
 npx.cmd --offline --package @playwright/cli playwright-cli -s=pwa-regression open http://127.0.0.1:8013/
 New-Item -ItemType Directory -Force -Path .tmp,output/playwright | Out-Null
-$browserSource = Get-Content -Raw '成员三/ai_tutor/tests/browser_check.js'
+$browserSource = Get-Content -Raw 'ai_tutor/tests/browser_check.js'
 [IO.File]::WriteAllText((Join-Path (Get-Location) '.tmp\browser_check_8013.js'), $browserSource.Replace('http://127.0.0.1:8000','http://127.0.0.1:8013'))
 npx.cmd --offline --package @playwright/cli playwright-cli -s=pwa-regression run-code --filename .tmp/browser_check_8013.js
 ```
@@ -178,4 +178,4 @@ npx.cmd --offline --package @playwright/cli playwright-cli -s=pwa-regression run
 
 ## 集成验收更新 · 2026-11-16
 
-本分支成果已合并到 `codex/learning-integration`。最终实际代码、完整测试结果、跨浏览器范围、启动地址与真机待验收步骤见 `成员三/测试记录.md` 中本轮集成记录。本文前述单分支测试保留原始范围，跨线程待接线事项已在集成工作树复核。
+本分支成果已合并到 `codex/learning-integration`。最终实际代码、完整测试结果、跨浏览器范围、启动地址与真机待验收步骤见 `docs/deliverables/test-records.md` 中本轮集成记录。本文前述单分支测试保留原始范围，跨线程待接线事项已在集成工作树复核。

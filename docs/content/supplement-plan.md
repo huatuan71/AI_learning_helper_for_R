@@ -21,12 +21,12 @@
 建议每个知识点使用独立文件：
 
 ```text
-成员三/知识库补充草稿/
+content/supplements/
 ├─ K01.md
 ├─ K02.md
 └─ ...
 
-成员三/ai_tutor/content_assets/
+ai_tutor/content_assets/
 ├─ code/K01_example_01.R
 ├─ data/K01_example_01.csv
 └─ images/K01_visual_01.svg
@@ -342,7 +342,7 @@
 ```r
 R.version.string
 sessionInfo()
-source("对应示例文件.R", echo = TRUE)
+source("Kxx_example_01.R", echo = TRUE)
 ```
 
 ## 八、内容审核清单
@@ -387,13 +387,13 @@ source("对应示例文件.R", echo = TRUE)
 请为R语言AI助教补充 [Kxx—Kxx] 的教学内容。
 
 开始前读取：
-1. 成员三/知识库补充清单与编写框架.md
-2. 成员三/ai_tutor/data/course.json 中对应知识点的现有内容
+1. docs/content/supplement-plan.md
+2. ai_tutor/data/course.json 中对应知识点的现有内容
 
 严格使用文档中的“知识点草稿模板”和该知识点在43点清单中的补充方向。
 每个知识点至少交付：学习目标、先备检查、直观理解、2个为什么、基础例题、应用例题、逐步讲解、实际核验输出、图解方案、易错案例、完整练习、2道自测题、追问建议、来源与验证。
 
-只创建或修改“成员三/知识库补充草稿/Kxx.md”及该知识点专属的代码、数据、图片文件。不要修改course.json、接口、前端和其他知识点文件。
+只创建或修改“content/supplements/Kxx.md”及该知识点专属的代码、数据、图片文件。不要修改course.json、接口、前端和其他知识点文件。
 
 所有R代码必须可独立运行；输出必须实际验证。无法验证的内容明确标记，不要编造。需要扩展包时记录包名和版本，不要自动安装包。图解必须服务教学并包含替代文本。
 

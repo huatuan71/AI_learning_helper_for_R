@@ -6,12 +6,12 @@
 
 | 线程 | 分支 | 直接复制的提示词 | 主要成果 |
 |---|---|---|---|
-| 一 | `codex/learning-core` | `01_存储与复习算法.md` | IndexedDB、数据迁移、档案导入导出、复习算法 |
-| 二 | `codex/learning-ui` | `02_学习中心界面.md` | 学习概览、复习、小结、收藏、现有页面联动 |
-| 三 | `codex/offline-pwa` | `03_离线与跨平台.md` | PWA、离线资源包、离线启动、安装适配 |
-| 四 | `codex/learning-integration` | `04_集成验收.md` | 合并、真实浏览器验收、问题修复、运行说明 |
+| 一 | `codex/learning-core` | `01-storage-and-review.md` | IndexedDB、数据迁移、档案导入导出、复习算法 |
+| 二 | `codex/learning-ui` | `02-learning-ui.md` | 学习概览、复习、小结、收藏、现有页面联动 |
+| 三 | `codex/offline-pwa` | `03-offline-and-platforms.md` | PWA、离线资源包、离线启动、安装适配 |
+| 四 | `codex/learning-integration` | `04-acceptance.md` | 合并、真实浏览器验收、问题修复、运行说明 |
 
-代码仓库位于 `E:\作业2\R语言及其应用\小组作业`，项目位于 `成员三/ai_tutor`。功能代码基线为 `8464936`，四个任务分支从包含本组说明的同一提交创建。
+代码仓库的路径示例为 `E:/projects/r-ai-tutor`，项目位于 `ai_tutor`。功能代码基线为 `8464936`，四个任务分支从包含本组说明的同一提交创建。
 
 各线程使用独立工作树。优先使用聊天已分配的工作树。需要自行创建时，可使用仓库下的 `.worktrees/learning-core`、`.worktrees/learning-ui`、`.worktrees/offline-pwa`、`.worktrees/learning-integration`，并将 `/.worktrees/` 加入本机 `.git/info/exclude`。这样并行切换分支和修改文件相互独立。
 
@@ -35,7 +35,7 @@
 | 一 | 新增 `static/learning-store.js`、`static/review-scheduler.js`、`tests/learning_core_test.mjs`、`docs/learning-core.md` |
 | 二 | `static/app.js`、`static/index.html`、`static/knowledge-map.js`，新增 `static/learning-center.js`、`static/learning-center.css`、`static/review-bank.json`、`tests/browser_learning_center.js`、`docs/learning-ui.md` |
 | 三 | `static/bootstrap.js`、`app/main.py`，新增 `static/offline.js`、`static/service-worker.js`、`static/manifest.webmanifest`、`static/icons/`、`tests/browser_pwa.js`、`tests/test_pwa_assets.py`、`docs/offline-pwa.md` |
-| 四 | 合并完成后按实际问题修复以上文件，更新 `README.md`、`成员三/测试记录.md`、必要的浏览器测试及交接说明 |
+| 四 | 合并完成后按实际问题修复以上文件，更新 `README.md`、`docs/deliverables/test-records.md`、必要的浏览器测试及交接说明 |
 
 已有 `static/learning.css`、`static/style.css`、`static/liquid-scene.js` 和模型模块由集成线程在确有问题时修改。线程一至三发现跨归属需求时，写入各自交接说明，并给出具体接入位置。
 

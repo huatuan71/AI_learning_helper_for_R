@@ -1,6 +1,6 @@
 # 学习功能集成验收 · 2026年11月16日
 
-本轮结果适用于 `.worktrees/learning-integration` 中的 `codex/learning-integration`。按顺序合并本地已提交分支 `codex/learning-core` 的 `b738f7b`、`codex/learning-ui` 的 `dcb2136`、`codex/offline-pwa` 的 `fc746f2`。三个来源工作树中的未提交截图与测试产物由原工作树保留。祖先目录、仓库及项目适用路径未找到AGENTS.md，执行依据为 `学习功能实施/00_协作约定.md` 与本轮用户要求。
+本轮结果适用于 `.worktrees/learning-integration` 中的 `codex/learning-integration`。按顺序合并本地已提交分支 `codex/learning-core` 的 `b738f7b`、`codex/learning-ui` 的 `dcb2136`、`codex/offline-pwa` 的 `fc746f2`。三个来源工作树中的未提交截图与测试产物由原工作树保留。祖先目录、仓库及项目适用路径未找到AGENTS.md，执行依据为 `docs/handoff/learning-plan/00-coordination.md` 与本轮用户要求。
 
 ## 实际运行与环境
 
@@ -57,15 +57,17 @@ Windows WebKit在 `context.setOffline(true)` 后刷新，连续两次出现 `Web
 
 ## 可重复命令
 
-在集成工作树的 `成员三/ai_tutor` 目录执行。Playwright路径可替换为本机已安装的同版本包。运行 `browser_regression.cjs` 前，在独立终端启动模型测试服务。
+以下命令路径已按当前ASCII目录调整，示例仓库根目录为 `E:/projects/r-ai-tutor`。历史分支、验收结果和版本记录沿用当时记录。
+
+在集成工作树的 `ai_tutor` 目录执行。Playwright路径可替换为本机已安装的同版本包。运行 `browser_regression.cjs` 前，在独立终端启动模型测试服务。
 
 ```powershell
-$py = 'E:/作业2/R语言及其应用/小组作业/成员三/ai_tutor/.venv/Scripts/python.exe'
+$py = 'E:/projects/r-ai-tutor/ai_tutor/.venv/Scripts/python.exe'
 ./start.ps1 -Port 8014 -PythonExe $py
 & $py -m pytest --collect-only -q
 & $py -m pytest -q
 node --test tests/learning_core_test.mjs
-$env:PLAYWRIGHT_MODULE = 'C:/Users/huani/.codex/skills/Powerpoint-fancy-design/node_modules/playwright'
+$env:PLAYWRIGHT_MODULE = (Resolve-Path './node_modules/playwright').Path
 $env:BASE_URL = 'http://127.0.0.1:8014'
 $env:PWA_BASE_URL = $env:BASE_URL
 node tests/browser_pwa.js --integrated
@@ -179,7 +181,7 @@ CLI检查使用已安装Playwright自带的 `playwright-core/lib/tools/cli-clien
 
 ## 检索评估
 
-`回归评估结果.csv`由 `ai_tutor/scripts/evaluate.py` 生成，包含50行。
+`regression-evaluation.csv`由 `ai_tutor/scripts/evaluate.py` 生成，包含50行。
 
 - 已有Q01—Q24及E01—E14共38题，Top-4命中38/38，比例100%。
 - 开发者起草的12道候选保留题命中11/12，比例91.7%，待成员四独立审核。

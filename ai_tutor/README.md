@@ -10,7 +10,7 @@
 
 在“更多 → 模型设置”选择厂商及真实AI或网页搜索模式，填写自己的模型ID和API Key，确认数据发送及用量后应用设置。连接测试由用户主动触发，可能产生用量。Key保存在该浏览器会话对应的后端内存，空闲30分钟或服务重启后清除。“清除密钥”可立即回到模拟模式。
 
-三家已通过模拟上游测试，用户已反馈DeepSeek连接正常，完整真实问答及搜索质量评估待记录，Render发布待账号到位。配置、官方申请入口、评估和部署步骤见[模型配置与运行说明](../成员三/模型配置与运行说明.md)，发布状态见 [发布信息](../成员三/发布信息.md)。
+三家已通过模拟上游测试，用户已反馈DeepSeek连接正常，完整真实问答及搜索质量评估待记录，Render发布待账号到位。配置、官方申请入口、评估和部署步骤见[模型配置与运行说明](../docs/deliverables/model-setup.md)，发布状态见 [发布信息](../docs/deliverables/release.md)。
 
 回答Token上限默认8192，可在模型设置中调整至32768。主要解释和代码字段支持完整长回答，实际输出长度受模型能力和所选预算约束。
 
@@ -29,9 +29,11 @@ AI回答以连续Markdown正文组织，标题、完整列表和多段代码按�
 5. “学习记录”包含概览、复习、小结与记录四页签。记录页可返回对话、导出或清空对话。切换视图保留未发送对话草稿，复习作答草稿支持刷新恢复。右上角“更多”提供对话导出、清空、接口文档及版本说明。完整学习档案使用“设置与资料”的入口。
 6. 用完后双击 `stop.cmd`。脚本只停止它启动且身份核对一致的本项目进程，不关闭其他占用端口的程序。
 
+当前对话导出文件名为 `r-tutor-conversations.json`，完整档案为 `r-tutor-learning-archive.json`，小结为 `r-tutor-weekly-report_{start}_{end}.txt`。
+
 本轮已安装当前电脑需要的依赖。换电脑或重新创建环境时，先安装Python 3.12（含Python Launcher），双击 `setup.cmd`，安装成功后再双击 `start.cmd`。首次安装需要联网；安装完成后，课程网页及模拟问答不依赖网络。
 
-FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)。默认Swagger页面使用外部静态资源，首次打开需网络；原始接口定义 [openapi.json](http://127.0.0.1:8000/openapi.json) 可离线访问。接口操作的详细说明见[接口说明](../成员三/接口说明.md)。
+FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)。默认Swagger页面使用外部静态资源，首次打开需网络；原始接口定义 [openapi.json](http://127.0.0.1:8000/openapi.json) 可离线访问。接口操作的详细说明见[接口说明](../docs/deliverables/api-reference.md)。
 
 ## 新版页面地址
 
@@ -92,7 +94,7 @@ FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)�
 # 成员一更新资料后重新导入，再重启服务并测试
 .\.venv\Scripts\python.exe scripts/import_data.py
 
-# 按实际运行接口重新生成成员三交付目录的接口说明
+# 按实际运行接口重新生成 docs/deliverables/api-reference.md
 .\.venv\Scripts\python.exe scripts/generate_api_docs.py
 ```
 

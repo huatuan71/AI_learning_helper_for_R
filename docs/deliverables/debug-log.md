@@ -66,7 +66,7 @@ Marked 18.2.0与DOMPurify 3.4.17随项目本地提供，发布包经过sha512摘
 
 ## Render中文根目录校验失败
 
-用户在Blueprint创建页面遇到RootDir正则校验错误，截图显示中文目录“成员三/ai_tutor”被拒绝。部署根目录调整为仓库根目录 `.`，构建和启动分别使用英文入口 `python render_service.py build` 与 `python render_service.py start`。
+用户在Blueprint创建页面遇到RootDir正则校验错误，历史截图显示中文目录“成员三/ai_tutor”被拒绝，当前应用目录已迁至 `ai_tutor/`。部署根目录调整为仓库根目录 `.`，构建和启动分别使用英文入口 `python render_service.py build` 与 `python render_service.py start`。
 
 根目录脚本以Python路径定位应用目录，构建时调用现有requirements.txt，启动时通过Uvicorn的app_dir加载应用并读取Render提供的PORT，使用单worker及代理头设置。
 

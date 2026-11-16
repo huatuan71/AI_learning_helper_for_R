@@ -1,6 +1,6 @@
 # 学习界面交接
 
-> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `structure-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
+> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `ascii-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
 
 ## 分支与修改范围
 
@@ -73,8 +73,8 @@
 
 ```powershell
 $env:BASE_URL = 'http://127.0.0.1:8012'
-$env:PLAYWRIGHT_MODULE = '已安装的playwright包绝对路径'
-$env:LEARNING_CORE_DIR = '线程一工作树/成员三/ai_tutor/static的绝对路径'
+$env:PLAYWRIGHT_MODULE = (Resolve-Path './node_modules/playwright').Path
+$env:LEARNING_CORE_DIR = 'E:/projects/r-ai-tutor/.worktrees/learning-core/ai_tutor/static'
 node tests/browser_learning_center.js
 ```
 
@@ -98,4 +98,4 @@ node tests/browser_learning_center.js
 
 ## 集成验收更新 · 2026-11-16
 
-本分支成果已合并到 `codex/learning-integration`。最终实际代码、完整测试结果、跨浏览器范围、启动地址与真机待验收步骤见 `成员三/测试记录.md` 中本轮集成记录。本文前述单分支测试保留原始范围，跨线程待接线事项已在集成工作树复核。
+本分支成果已合并到 `codex/learning-integration`。最终实际代码、完整测试结果、跨浏览器范围、启动地址与真机待验收步骤见 `docs/deliverables/test-records.md` 中本轮集成记录。本文前述单分支测试保留原始范围，跨线程待接线事项已在集成工作树复核。

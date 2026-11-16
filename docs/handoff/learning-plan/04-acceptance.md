@@ -5,10 +5,10 @@
 ```text
 请负责R语言AI助教学习功能的集成、真实验收和交接，持续修复直到已授权范围的功能通过检查，或明确指出需要外部条件才能验证的项目。
 
-仓库位于 E:\作业2\R语言及其应用\小组作业，项目位于 成员三/ai_tutor。
+仓库路径示例为 E:/projects/r-ai-tutor，项目位于 ai_tutor。
 你的专属分支为 codex/learning-integration。
 
-先读取适用的AGENTS.md，以及 成员三/学习功能实施/00_协作约定.md。读取 docs/learning-core.md、docs/learning-ui.md、docs/offline-pwa.md 时，应以实际合并后的文件和代码为准。
+先读取适用的AGENTS.md，以及 docs/handoff/learning-plan/00-coordination.md。读取 docs/learning-core.md、docs/learning-ui.md、docs/offline-pwa.md 时，应以实际合并后的文件和代码为准。
 
 使用独立工作树。优先使用当前聊天已分配的工作树。需要自行创建时，可在仓库 .worktrees/learning-integration 创建本分支工作树，并将 /.worktrees/ 加入本机 .git/info/exclude。
 
@@ -52,8 +52,8 @@ WebKit运行和390px视口的结果分别记录。真机验收步骤整理给用
 
 四、文档与运行
 
-更新 README.md、成员三/测试记录.md，整理学习入口、复习规则、档案位置与迁移、导入导出、PWA安装、首次离线下载、更新与恢复方式。
-核对成员三/接口说明.md，按真实实现更新新增公共资源入口的访问说明。现有接口的用途、参数、状态码和示例以代码与测试为依据。
+更新 README.md、docs/deliverables/test-records.md，整理学习入口、复习规则、档案位置与迁移、导入导出、PWA安装、首次离线下载、更新与恢复方式。
+核对docs/deliverables/api-reference.md，按真实实现更新新增公共资源入口的访问说明。现有接口的用途、参数、状态码和示例以代码与测试为依据。
 
 启动服务时检查8000端口与既有进程，使用该工作树的启动脚本及可用端口。多个线程的服务按各自进程身份管理。交付明确的实际访问地址。
 确认首页、知识地图、学习记录、/docs、/openapi.json及PWA资源能访问后保留可用服务。

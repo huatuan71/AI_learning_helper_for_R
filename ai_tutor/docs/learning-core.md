@@ -1,10 +1,10 @@
 # 本地学习存储与复习算法交接
 
-> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `structure-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
+> 本文记录学习功能初次集成时的实现与验证。当前目录、模块入口与测试命令见 [项目说明](../../README.md)。应用壳版本已更新为 `ascii-v1`，离线清单为28项。初次集成的截图和报告归档在 `evidence/learning-v1/`。
 
 ## 本线程交付
 
-分支为 `codex/learning-core`，基于 `c7f8759`。独立工作树为仓库下的 `.worktrees/learning-core`，本机 `.git/info/exclude` 已加入 `/.worktrees/`。检查了仓库祖先目录和 `成员三` 下的适用路径，本次未发现 `AGENTS.md`。实现遵循 `成员三/学习功能实施/00_协作约定.md`。
+分支为 `codex/learning-core`，基于 `c7f8759`。独立工作树为仓库下的 `.worktrees/learning-core`，本机 `.git/info/exclude` 已加入 `/.worktrees/`。检查了仓库祖先目录和 `成员三` 下的适用路径，本次未发现 `AGENTS.md`。实现遵循 `docs/handoff/learning-plan/00-coordination.md`。
 
 交付文件如下。
 
@@ -193,23 +193,24 @@ const tasks = buildReviewQueue({
 
 ```powershell
 # 在独立工作树根目录执行
-node --test '成员三/ai_tutor/tests/learning_core_test.mjs'
-node --check '成员三/ai_tutor/static/learning-store.js'
-node --check '成员三/ai_tutor/static/review-scheduler.js'
+node --test 'ai_tutor/tests/learning_core_test.mjs'
+node --check 'ai_tutor/static/learning-store.js'
+node --check 'ai_tutor/static/review-scheduler.js'
 ```
 
 算法测试结果为13组通过，0失败，覆盖新卡、24小时检测、全部等级与评分、提示上限、同日与跨日、重复提交、任务配额、稳定排序、直接先修、循环与缺失关系、时区、夏令时和错误输入。
 
-浏览器测试在项目根目录启动独立静态服务，暴露 `static/` 和 `data/course.json`。服务目录应为本工作树中的 `成员三/ai_tutor`。
+浏览器测试在项目根目录启动独立静态服务，暴露 `static/` 和 `data/course.json`。服务目录应为本工作树中的 `ai_tutor`。
 
 ```powershell
-python -m http.server 8766 --bind 127.0.0.1
+python -m http.server 8766 --bind 127.0.0.1 --directory ./ai_tutor
 ```
 
-测试文件提供直接浏览器运行入口。依次传入本机已有Playwright模块绝对路径、静态服务地址和可选浏览器可执行文件绝对路径。在本工作树根目录实际运行的命令如下。
+测试文件提供直接浏览器运行入口。依次传入本机已有Playwright模块绝对路径、静态服务地址和可选浏览器可执行文件绝对路径。以下复验命令在本工作树根目录执行，路径已按当前ASCII目录给出。
 
 ```powershell
-node '成员三/ai_tutor/tests/learning_core_test.mjs' --browser 'C:/Users/huani/.codex/skills/Powerpoint-fancy-design/node_modules/playwright/index.mjs' http://127.0.0.1:8766 'C:/Users/huani/AppData/Local/ms-playwright/chromium-1217/chrome-win64/chrome.exe'
+$playwrightModule = (Resolve-Path './ai_tutor/node_modules/playwright/index.mjs').Path
+node 'ai_tutor/tests/learning_core_test.mjs' --browser $playwrightModule http://127.0.0.1:8766
 ```
 
 也可在已有Playwright驱动中导入测试文件的 `runBrowserTests(page, baseUrl, browserName)`。本轮先通过Playwright CLI执行浏览器入口，最终通过上述直接入口复跑并输出39项通过结果，0页面异常。
@@ -229,4 +230,4 @@ node '成员三/ai_tutor/tests/learning_core_test.mjs' --browser 'C:/Users/huani
 
 ## 集成验收更新 · 2026-11-16
 
-本分支成果已合并到 `codex/learning-integration`。最终实际代码、完整测试结果、跨浏览器范围、启动地址与真机待验收步骤见 `成员三/测试记录.md` 中本轮集成记录。本文前述单分支测试保留原始范围，跨线程待接线事项已在集成工作树复核。
+本分支成果已合并到 `codex/learning-integration`。最终实际代码、完整测试结果、跨浏览器范围、启动地址与真机待验收步骤见 `docs/deliverables/test-records.md` 中本轮集成记录。本文前述单分支测试保留原始范围，跨线程待接线事项已在集成工作树复核。

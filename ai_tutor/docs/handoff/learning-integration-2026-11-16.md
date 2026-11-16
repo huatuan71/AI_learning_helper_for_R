@@ -19,16 +19,18 @@ Windows/Android的支持浏览器可从地址栏或菜单安装。iOS在Safari�
 
 ### 本机启动与复验
 
+以下命令路径已按当前ASCII目录调整，示例仓库根目录为 `E:/projects/r-ai-tutor`。历史分支、验收结果和版本记录沿用当时记录。
+
 本轮复用仓库已有Python虚拟环境，运行代码来自集成工作树。默认 `start.cmd` 使用8000，独立工作树可指定端口及解释器。启动脚本检查目标端口，进程身份保存在该工作树 `.runtime/server.json`，`stop.cmd` 按脚本路径和启动时间核对身份。
 
 ```powershell
-# 在 .worktrees/learning-integration/成员三/ai_tutor 中执行
-./start.ps1 -Port 8014 -PythonExe 'E:/作业2/R语言及其应用/小组作业/成员三/ai_tutor/.venv/Scripts/python.exe'
-$py = 'E:/作业2/R语言及其应用/小组作业/成员三/ai_tutor/.venv/Scripts/python.exe'
+# 在 .worktrees/learning-integration/ai_tutor 中执行
+./start.ps1 -Port 8014 -PythonExe 'E:/projects/r-ai-tutor/ai_tutor/.venv/Scripts/python.exe'
+$py = 'E:/projects/r-ai-tutor/ai_tutor/.venv/Scripts/python.exe'
 & $py -m pytest --collect-only -q
 & $py -m pytest -q
 node --test tests/learning_core_test.mjs
-$env:PLAYWRIGHT_MODULE = 'C:/Users/huani/.codex/skills/Powerpoint-fancy-design/node_modules/playwright'
+$env:PLAYWRIGHT_MODULE = (Resolve-Path './node_modules/playwright').Path
 $env:BASE_URL = 'http://127.0.0.1:8014'
 $env:PWA_BASE_URL = $env:BASE_URL
 node tests/browser_pwa.js --integrated
@@ -45,5 +47,5 @@ $env:LEARNING_CORE_DIR = (Join-Path (Get-Location) 'static')
 node tests/browser_learning_center.js
 ```
 
-测试会使用隔离浏览器上下文。学习中心76项专项使用真实核心模块及离线接口替身，真实离线流程由PWA和集成套件覆盖。截图与JSON报告位于项目 `output/playwright/`。全部命令、真实结果、四端范围和真机步骤见 [测试记录](../../../成员三/测试记录.md)。
+测试会使用隔离浏览器上下文。学习中心76项专项使用真实核心模块及离线接口替身，真实离线流程由PWA和集成套件覆盖。截图与JSON报告位于项目 `output/playwright/`。全部命令、真实结果、四端范围和真机步骤见 [测试记录](../../../docs/deliverables/test-records.md)。
 
