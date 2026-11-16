@@ -15,10 +15,6 @@ ROOT = Path(__file__).resolve().parents[1]
 client = TestClient(app)
 WORKER = (ROOT / 'static/service-worker.js').read_text(encoding='utf-8')
 ASSETS = re.findall(r"'([^']+)'", WORKER.split('const ASSETS = [', 1)[1].split('];', 1)[0])
-HANDOFF = {
-    '/static/learning-store.js', '/static/review-scheduler.js',
-    '/static/learning-center.js', '/static/learning-center.css', '/static/review-bank.json',
-}
 
 
 def test_public_endpoints():
@@ -84,14 +80,12 @@ def test_real_png(name, size):
 
 def test_whitelist_and_dependency_inventory():
     assert len(ASSETS) == len(set(ASSETS))
-    assert HANDOFF <= set(ASSETS)
     assert '/offline-course.json' in ASSETS and '/' in ASSETS
     assert not any('/api/' in asset or '://' in asset for asset in ASSETS)
-    for asset in set(ASSETS) - HANDOFF - {'/', '/offline-course.json'}:
+    for asset in set(ASSETS) - {'/', '/offline-course.json'}:
         assert (ROOT / asset.lstrip('/')).is_file(), asset
         assert client.get(asset).status_code == 200
     # Follow literal module imports, CSS URLs and HTML asset links used by this checkout.
-    # Missing handoff modules are checked after integration by browser_pwa.js --integrated.
     for path in (ROOT / 'static').glob('*'):
         if path.suffix not in {'.js', '.css', '.html'} or path.name == 'service-worker.js':
             continue
@@ -108,6 +102,11 @@ def test_whitelist_and_dependency_inventory():
 
 def test_bootstrap_contract():
     bootstrap = (ROOT / 'static/bootstrap.js').read_text(encoding='utf-8')
-    assert "const build = 'learning-v1'" in bootstrap
     assert 'void registerOffline()' in bootstrap
     assert bootstrap.index('void registerOffline()') < bootstrap.index('await import(')
+    assert "await import('./app.js?v=structure-v1')" in bootstrap
+    assert 'window.' not in bootstrap
+    app = (ROOT / 'static/app.js').read_text(encoding='utf-8')
+    assert 'new window.' not in app
+    assert "from './api-client.js?v=structure-v1'" in app
+    assert "from './answer-renderer.js?v=structure-v1'" in app

@@ -1,5 +1,5 @@
 /* Update RESOURCE_VERSION with an incompatible shell release. Public resources only. */
-const RESOURCE_VERSION = 'learning-layout-v1';
+const RESOURCE_VERSION = 'structure-v1';
 const CACHE_PREFIX = 'r-language-tutor-offline:';
 const COMMIT_PATH = '/__r_tutor_offline_commit__';
 const ASSETS = [
@@ -12,6 +12,8 @@ const ASSETS = [
   '/static/bootstrap.js',
   '/static/offline.js',
   '/static/app.js',
+  '/static/api-client.js',
+  '/static/answer-renderer.js',
   '/static/knowledge-map.js',
   '/static/liquid-scene.js',
   '/static/r-file.js',
@@ -52,7 +54,9 @@ async function committedPackages() {
       const response = await cache.match(COMMIT_PATH);
       if (!response) continue;
       const meta = await response.json();
-      if (meta.schema === 1 && Array.isArray(meta.assets) && meta.assets.length === ASSETS.length &&
+      // A committed manifest belongs to the release that wrote it. A newer shell
+      // can add resources while the previous complete package remains available.
+      if (meta.schema === 1 && Array.isArray(meta.assets) && meta.assets.length > 0 &&
           meta.assets.every(asset => ALLOWED.has(asset.path) && /^[a-f0-9]{64}$/.test(asset.sha256)) &&
           new Set(meta.assets.map(asset => asset.path)).size === meta.assets.length &&
           meta.assets.some(asset => asset.path === '/offline-course.json')) {

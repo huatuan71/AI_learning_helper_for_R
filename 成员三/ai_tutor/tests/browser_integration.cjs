@@ -8,6 +8,8 @@ const playwright = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const engine = process.env.BROWSER || 'chromium';
 let base = process.env.BASE_URL || 'http://127.0.0.1:8014';
 const output = 'output/playwright';
+const worker = fs.readFileSync(path.join(__dirname, '../static/service-worker.js'), 'utf8');
+const offlineAssetCount = worker.split('const ASSETS = [')[1].split('];')[0].match(/'[^']+'/g).length;
 
 async function main() {
   fs.mkdirSync(output,{recursive:true});
@@ -49,7 +51,7 @@ async function main() {
     await page.getByRole('button',{name:'保存离线资料',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('#learning-feedback').textContent.includes('离线资料已保存'));
     const initial = await page.evaluate(async () => (await import('/static/offline.js?v=learning-v1')).getOfflineStatus());
-    check(initial.ready && initial.assetCount===26,'UI downloads all 26 real public resources');
+    check(initial.ready && initial.assetCount===offlineAssetCount,'UI downloads every declared public resource');
     check((await snapshot(page)).course.knowledge.length===43,'download stores complete course in IndexedDB');
     await page.evaluate(async () => {
       const {learningStore}=await import('/static/learning-store.js?v=learning-v1');

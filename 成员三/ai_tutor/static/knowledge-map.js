@@ -1,6 +1,6 @@
 /* Deterministic 2D knowledge navigation. No physics loop, random positions or HTML injection. */
 'use strict';
-class KnowledgeMap {
+export class KnowledgeMap {
   constructor({api, explain, exercise, codeBlock, units, visit, enroll, bookmark}) {
     Object.assign(this, {api, explain, exercise, codeBlock, units, visit, enroll, bookmark});
     this.items = []; this.edges = []; this.nodes = new Map(); this.cache = new Map();

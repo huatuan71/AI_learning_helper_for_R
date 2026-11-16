@@ -1,5 +1,11 @@
 'use strict';
-import {markdownFragment} from './answer-markdown.js?v=learning-v1';
+import {requestJson as api, streamAnswer as streamApi} from './api-client.js?v=structure-v1';
+import {createAnswerRenderer, firstSentence} from './answer-renderer.js?v=structure-v1';
+import {LiquidKnowledgeScene} from './liquid-scene.js?v=structure-v1';
+import {ModelSettings} from './model-settings.js?v=structure-v1';
+import {RFileInput} from './r-file.js?v=structure-v1';
+
+const {codeBlock, renderTeachingBody} = createAnswerRenderer(status);
 const $ = id => document.getElementById(id);
 function syncViewportWidth() {
   document.documentElement.style.setProperty('--viewport-width', `${window.innerWidth}px`);
@@ -73,63 +79,6 @@ function save() {
   try { localStorage.setItem(STORE, JSON.stringify(records.map(safeRecord))); return true; }
   catch { status('浏览器存储不可用，当前记录仍可导出。', true); return false; }
 }
-async function api(path, body, options = {}) {
-  const response = await fetch(path, {
-    cache: 'no-store',
-    method: body ? 'POST' : 'GET',
-    headers: body ? {'Content-Type': 'application/json'} : {},
-    body: body ? JSON.stringify(body) : undefined,
-    credentials: 'include',
-    signal: options.signal || AbortSignal.timeout(body ? (modelSettings.config.mode === 'search' ? 100000 : 70000) : 10000)
-  });
-  let data;
-  try { data = await response.json(); } catch { throw Error('服务返回了无法读取的响应'); }
-  if (!response.ok) {
-    const error = Error(data.error?.message || '请求失败（' + response.status + '）');
-    error.code = data.error?.code;
-    error.requestId = data.request_id;
-    throw error;
-  }
-  return data;
-}
-async function streamApi(path, body, signal, onEvent) {
-  const response = await fetch(path, {method:'POST', credentials:'include', cache:'no-store',
-    headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), signal});
-  if (!response.ok) {
-    const data = await response.json();
-    const error = Error(data.error?.message || '请求失败');
-    error.code = data.error?.code; error.requestId = data.request_id; throw error;
-  }
-  if (!response.headers.get('content-type')?.includes('text/event-stream')) throw Error('服务返回了无法读取的流式响应');
-  const reader = response.body.getReader(), decoder = new TextDecoder();
-  let buffer = '';
-  try {
-    while (true) {
-      const {value, done} = await reader.read();
-      buffer += decoder.decode(value, {stream:!done});
-      buffer = buffer.replace(/\r\n/g, '\n');
-      let boundary;
-      while ((boundary = buffer.indexOf('\n\n')) !== -1) {
-        const frame = buffer.slice(0,boundary); buffer = buffer.slice(boundary+2);
-        const lines = frame.split('\n');
-        const event = lines.find(line => line.startsWith('event:'))?.slice(6).trim();
-        const dataLines = lines.filter(line => line.startsWith('data:')).map(line => line.slice(5).trimStart());
-        if (!dataLines.length) continue;
-        const data = JSON.parse(dataLines.join('\n'));
-        if (event === 'done') return data;
-        if (event === 'error') {
-          const error = Error(data.error?.message || '生成失败');
-          error.code = data.error?.code; error.requestId = data.request_id; throw error;
-        }
-        onEvent(event, data);
-      }
-      if (done) throw Error('连接提前结束，请重新发送。');
-    }
-  } finally {
-    await reader.cancel().catch(()=>{});
-    reader.releaseLock();
-  }
-}
 
 function liveAnswer(question, review) {
   const card = el('article', undefined, 'message streaming-message' + (review ? ' review-message' : ''));
@@ -194,68 +143,7 @@ function selectTopic(id) {
   $('current-topic').textContent = k ? k.id + ' · ' + k.title : '';
   $('topic-chip').hidden = !k;
 }
-function codeBlock(parent, text, label, unverified = false) {
-  if (!text) return;
-  const wrap = el('div', undefined, 'code-wrap');
-  const heading = el('div', undefined, 'code-heading');
-  heading.append(el('span', label));
-  if (unverified) heading.append(el('span', '未运行验证', 'unverified'));
-  const copy = button('复制代码', async () => {
-    try { await navigator.clipboard.writeText(text); copy.textContent = '已复制'; }
-    catch { status('复制失败，请手动选中代码复制。', true); }
-  }, 'copy');
-  heading.append(copy); wrap.append(heading, el('pre', text)); parent.append(wrap);
-}
-function firstSentence(text) {
-  const match = text.match(/^.*?[。！？](?:\s*\[W\d+\])*|^[^\n]+\n/u);
-  return match ? match[0].trim() : text;
-}
-function appendProse(node, text, sources = []) {
-  const parts = String(text).split(/(\[W\d+\])/g);
-  for (const part of parts) {
-    const source = sources.find(item => '[' + item.source_id + ']' === part);
-    let url;
-    try { url = source && new URL(source.url); } catch { url = null; }
-    if (url && ['https:','http:'].includes(url.protocol) && !url.username && !url.password) {
-      const link = el('a', part, 'web-citation');
-      link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.title = source.title;
-      node.append(link);
-    } else node.append(document.createTextNode(part));
-  }
-  return node;
-}
-function renderTeachingBody(node, answer, sources = []) {
-  node.replaceChildren();
-  if (answer.content_markdown?.trim()) {
-    node.append(markdownFragment(answer.content_markdown));
-    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
-    const references = [];
-    while (walker.nextNode()) {
-      const text = walker.currentNode;
-      if (/\[W\d+\]/.test(text.textContent) && !text.parentElement.closest('code,pre,a')) references.push(text);
-    }
-    for (const text of references) text.replaceWith(appendProse(el('span'), text.textContent, sources));
-    for (const pre of [...node.querySelectorAll('pre')]) {
-      const code = pre.querySelector('code');
-      const language = code?.className.match(/\blanguage-([\w+-]+)/)?.[1] || '';
-      const holder = el('div');
-      const label = language.toLowerCase() === 'r' ? 'R代码' : (language ? language + '代码' : '代码');
-      codeBlock(holder, (code || pre).textContent.replace(/\n$/, ''), label, true);
-      pre.replaceWith(...holder.childNodes);
-    }
-    return;
-  }
-  if (answer.summary) node.append(appendProse(el('p'), answer.summary, sources));
-  const steps = el('ol', undefined, 'steps');
-  (answer.steps || []).forEach(text => steps.append(appendProse(el('li'), text, sources)));
-  if (steps.childElementCount) node.append(steps);
-  for (const issue of answer.issues || []) {
-    const label = ({error:'运行错误',warning:'警告',logic:'逻辑错误'}[issue.kind] || issue.kind) +
-      (issue.line == null ? '' : ' · 第' + issue.line + '行');
-    node.append(appendProse(el('p'), label + '。' + issue.reason, sources));
-  }
-  codeBlock(node, answer.corrected_code || answer.example_code, answer.corrected_code ? '参考修正' : '代码讲解', true);
-}
+
 function renderRecords() {
   const root = $('messages'); root.replaceChildren();
   $('welcome').hidden = records.length > 0;
@@ -540,8 +428,8 @@ function renderHistory() {
     root.append(row);
   }
 }
-const modelSettings = new window.ModelSettings(status);
-const fileInput = new window.RFileInput();
+const modelSettings = new ModelSettings(status);
+const fileInput = new RFileInput();
 const composer = document.querySelector('.composer-dock');
 new ResizeObserver(() => {
   if (currentView === 'chat') {
@@ -557,7 +445,7 @@ async function courseApi(path) {
     throw error;
   }
 }
-const mapUI = new window.KnowledgeMap({api:courseApi, codeBlock, units:UNITS,
+const mapUI = new LiquidKnowledgeScene({api:courseApi, codeBlock, units:UNITS,
   visit: id => learningCenter?.visit(id),
   enroll: id => learningCenter?.enroll(id),
   bookmark: id => learningCenter?.bookmark({knowledgeId:id,title:id+' · '+knowledge.find(item => item.id===id)?.title}),
