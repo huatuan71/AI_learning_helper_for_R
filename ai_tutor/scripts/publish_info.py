@@ -10,7 +10,7 @@ import qrcode
 import qrcode.image.svg
 
 ROOT = Path(__file__).resolve().parents[1]
-DELIVERABLES_ROOT = ROOT.parent / '成员三'
+DELIVERABLES_ROOT = ROOT.parent / 'docs' / 'deliverables'
 
 
 def publish(url):
@@ -46,7 +46,7 @@ def publish(url):
 
 服务采用单实例、单worker。Key按浏览器会话保存在服务器内存，服务重启后需重新配置。
 '''
-    (DELIVERABLES_ROOT / '发布信息.md').write_text(note, encoding='utf-8')
+    (DELIVERABLES_ROOT / 'release.md').write_text(note, encoding='utf-8')
     print('公网基础检查通过，已生成发布信息与二维码。手机及真实调用结果需继续补充。')
 
 

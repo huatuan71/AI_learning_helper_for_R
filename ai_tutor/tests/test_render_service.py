@@ -39,8 +39,8 @@ def test_render_start_uses_port_and_application_directory(monkeypatch):
                      'proxy_headers': True, 'forwarded_allow_ips': '*', 'access_log': False})]
 
 
-def test_report_outputs_stay_in_member_delivery_directory():
+def test_report_outputs_stay_in_delivery_directory():
     from scripts import evaluate, generate_api_docs, publish_info
 
     for script in (evaluate, generate_api_docs, publish_info):
-        assert script.DELIVERABLES_ROOT == REPO / '成员三'
+        assert script.DELIVERABLES_ROOT == REPO / 'docs' / 'deliverables'
