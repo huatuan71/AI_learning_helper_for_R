@@ -1,0 +1,5 @@
+print(paste(LETTERS[1:4], 1:4, collapse = "_"))
+dept <- c("FIN", "ACC")
+quarter <- c("Q1", "Q2")
+print(paste(rep(dept, each = 2), rep(quarter, times = 2), sep = "_"))
+print(paste0("report_", paste(dept, collapse = "-"), ".pdf"))

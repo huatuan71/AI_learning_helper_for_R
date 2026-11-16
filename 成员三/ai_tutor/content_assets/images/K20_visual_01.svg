@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="826" viewBox="0 0 720 826" role="img" aria-labelledby="title desc">
+<title id="title">K20 绑定方向与转置</title>
+<desc id="desc">左上为rbind，原矩阵下方追加一行，要求列数相同；左下为cbind，原矩阵右侧追加一列，要求行数相同；右侧为转置，2行3列的网格沿对角线翻转成3行2列。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="826" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K20 绑定方向与转置</text>
+<text x="36" y="116" font-size="24" fill="#79bdf1" font-weight="700">rbind：下方接行，列数要相同</text>
+<rect x="36" y="136" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="71.0" y="170.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="114" y="136" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="149.0" y="170.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="192" y="136" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="227.0" y="170.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="36" y="194" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="71.0" y="228.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="114" y="194" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="149.0" y="228.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="192" y="194" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="227.0" y="228.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<rect x="36" y="252" width="70" height="50" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="71.0" y="286.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">7</text>
+<rect x="114" y="252" width="70" height="50" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="149.0" y="286.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">8</text>
+<rect x="192" y="252" width="70" height="50" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="227.0" y="286.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">9</text>
+<text x="300" y="286" font-size="22" fill="#9eafc2">← 新行 3 格</text>
+<text x="36" y="372" font-size="24" fill="#79bdf1" font-weight="700">cbind：右侧接列，行数要相同</text>
+<rect x="36" y="392" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="71.0" y="426.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="114" y="392" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="149.0" y="426.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="192" y="392" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="227.0" y="426.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="36" y="450" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="71.0" y="484.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="114" y="450" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="149.0" y="484.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="192" y="450" width="70" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="227.0" y="484.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<rect x="270" y="392" width="70" height="108" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="305" y="428" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">7</text>
+<text x="305" y="480" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">8</text>
+<text x="360" y="452" font-size="22" fill="#9eafc2">← 新列 2 格</text>
+<text x="36" y="584" font-size="24" fill="#79bdf1" font-weight="700">t()：行变列、列变行</text>
+<rect x="36" y="604" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="66.0" y="636.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="104" y="604" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="134.0" y="636.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="172" y="604" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="202.0" y="636.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="36" y="656" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="66.0" y="688.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="104" y="656" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="134.0" y="688.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="172" y="656" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="202.0" y="688.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<text x="150" y="742" font-size="22" fill="#9eafc2" text-anchor="middle">2 × 3</text>
+<line x1="260" y1="654" x2="360" y2="654" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="400" y="590" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="430.0" y="622.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="468" y="590" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="498.0" y="622.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="400" y="642" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="430.0" y="674.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="468" y="642" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="498.0" y="674.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="400" y="694" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="430.0" y="726.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="468" y="694" width="60" height="46" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="498.0" y="726.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<text x="470" y="776" font-size="22" fill="#9eafc2" text-anchor="middle">3 × 2</text>
+</g>
+</svg>

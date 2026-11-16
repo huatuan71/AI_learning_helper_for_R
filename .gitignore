@@ -44,4 +44,8 @@ Desktop.ini
 .tmp/
 .runtime/
 .playwright-cli/
-output/playwright/
+**/output/playwright/
+
+# Local test result exports (http_evidence.json is kept on purpose as review evidence)
+**/tests/test-results.xml
+**/tests/ui-backend-results.xml

@@ -1,0 +1,5 @@
+a <- array(1:12, dim = c(2, 3, 2))
+print(dim(a))
+print(a[, , 2])
+print(a[2, 3, 1])
+print(apply(a, 3, sum))

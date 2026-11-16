@@ -1,0 +1,7 @@
+inv <- c("INV2026-0012", "INV2025-0307", "INV2026-1150")
+print(all(nchar(inv) == 12))
+year <- as.integer(substr(inv, 4, 7))
+seq_no <- as.integer(substr(inv, 9, 12))
+print(year)
+print(seq_no)
+print(inv[year == 2026])

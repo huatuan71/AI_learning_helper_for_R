@@ -1,0 +1,6 @@
+m <- matrix(1:6, nrow = 2)
+print(m)
+m2 <- matrix(1:6, nrow = 2, byrow = TRUE)
+print(m2)
+print(dim(m))
+print(m[2, 3])

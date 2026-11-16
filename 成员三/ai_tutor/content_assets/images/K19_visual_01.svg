@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="702" viewBox="0 0 720 702" role="img" aria-labelledby="title desc">
+<title id="title">K19 按列填充与按行填充</title>
+<desc id="desc">左侧网格为默认按列填充，箭头先向下再换列，第一行为1、3、5；右侧网格为byrow=TRUE按行填充，箭头先向右再换行，第一行为1、2、3。下方说明m[1, ]返回向量，m[1, , drop = FALSE]仍是1行3列的矩阵。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="702" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K19 按列填充与按行填充</text>
+<text x="36" y="116" font-size="23" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">matrix(1:6, nrow = 2)</text>
+<text x="372" y="116" font-size="23" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">byrow = TRUE</text>
+<rect x="36" y="140" width="88" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="80.0" y="179.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="132" y="140" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="176.0" y="179.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="228" y="140" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="272.0" y="179.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="36" y="208" width="88" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="80.0" y="247.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="132" y="208" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="176.0" y="247.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="228" y="208" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="272.0" y="247.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<rect x="372" y="140" width="88" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="416.0" y="179.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="468" y="140" width="88" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="512.0" y="179.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="564" y="140" width="88" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="608.0" y="179.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="372" y="208" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="416.0" y="247.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="468" y="208" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="512.0" y="247.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="564" y="208" width="88" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="608.0" y="247.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<line x1="80" y1="280" x2="80" y2="322" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="176" y1="280" x2="176" y2="322" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="272" y1="280" x2="272" y2="322" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="36" y="372" font-size="22" fill="#9eafc2">逐列从上往下填满</text>
+<line x1="392" y1="290" x2="620" y2="290" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="372" y="372" font-size="22" fill="#9eafc2">先横着填满一行</text>
+<rect x="36" y="420" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="464" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">m[1, ] → 1 3 5</text>
+<text x="58" y="506" font-size="25" fill="#b7c5d4">只取一行时降为向量，dim() 为 NULL</text>
+<rect x="36" y="546" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="590" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">m[1, , drop = FALSE]</text>
+<text x="58" y="632" font-size="25" fill="#b7c5d4">仍是 1 行 3 列的矩阵，可以继续按行列取值</text>
+</g>
+</svg>

@@ -1,0 +1,6 @@
+x <- c(12.1, 13.4, NA, 12.8, 30.2, 13.0, 12.6)
+print(c(n = length(x), valid = sum(!is.na(x))))
+print(mean(x))
+print(round(mean(x, na.rm = TRUE), 2))
+print(median(x, na.rm = TRUE))
+print(quantile(x, c(0.25, 0.75), na.rm = TRUE))

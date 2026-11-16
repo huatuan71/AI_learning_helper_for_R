@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="766" viewBox="0 0 720 766" role="img" aria-labelledby="title desc">
+<title id="title">K13 均值被极端值拉动</title>
+<desc id="desc">一条从12到31的数轴，五个点集中在12.1到13.4之间，一个点在30.2。中位数12.9位于密集区，均值15.68被右侧的30.2拉向右边，四分位范围12.65到13.30用方框表示。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="766" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K13 均值被极端值拉动</text>
+<line x1="60" y1="300" x2="660" y2="300" stroke="#9eafc2" stroke-width="2.5"/>
+<line x1="60.0" y1="292" x2="60.0" y2="308" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="60.0" y="340" font-size="22" fill="#9eafc2" text-anchor="middle">11</text>
+<line x1="180.0" y1="292" x2="180.0" y2="308" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="180.0" y="340" font-size="22" fill="#9eafc2" text-anchor="middle">15</text>
+<line x1="330.0" y1="292" x2="330.0" y2="308" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="330.0" y="340" font-size="22" fill="#9eafc2" text-anchor="middle">20</text>
+<line x1="480.0" y1="292" x2="480.0" y2="308" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="480.0" y="340" font-size="22" fill="#9eafc2" text-anchor="middle">25</text>
+<line x1="630.0" y1="292" x2="630.0" y2="308" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="630.0" y="340" font-size="22" fill="#9eafc2" text-anchor="middle">30</text>
+<rect x="109.50000000000001" y="266" width="19.499999999999986" height="68" rx="4" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<circle cx="93.0" cy="300" r="9" fill="#f5f9ff" stroke="#030813" stroke-width="2"/>
+<circle cx="108.0" cy="300" r="9" fill="#f5f9ff" stroke="#030813" stroke-width="2"/>
+<circle cx="114.0" cy="300" r="9" fill="#f5f9ff" stroke="#030813" stroke-width="2"/>
+<circle cx="120.0" cy="300" r="9" fill="#f5f9ff" stroke="#030813" stroke-width="2"/>
+<circle cx="132.0" cy="300" r="9" fill="#f5f9ff" stroke="#030813" stroke-width="2"/>
+<circle cx="636.0" cy="300" r="9" fill="#f5f9ff" stroke="#030813" stroke-width="2"/>
+<path d="M117.0,230 l12,14 l-12,14 l-12,-14 z" fill="#7fd1b0"/>
+<text x="117.0" y="214" font-size="24" fill="#7fd1b0" font-weight="700" text-anchor="middle">中位数 12.9</text>
+<path d="M200.5,364 l14,26 l-28,0 z" fill="#f2b56b"/>
+<text x="200.49" y="424" font-size="24" fill="#f2b56b" font-weight="700" text-anchor="middle">均值 15.68</text>
+<text x="636.0" y="270" font-size="24" fill="#f5f9ff" text-anchor="middle">30.2</text>
+<rect x="36" y="480" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="524" font-size="28" fill="#79bdf1" font-weight="700">四分位范围 12.65–13.30</text>
+<text x="58" y="566" font-size="25" fill="#b7c5d4">中间一半的测量集中在这个小方框里</text>
+<rect x="36" y="610" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="654" font-size="28" fill="#79bdf1" font-weight="700">均值 ≠ 中位数时先查数据</text>
+<text x="58" y="696" font-size="25" fill="#b7c5d4">一个30.2把均值拉高了约2.8毫克</text>
+</g>
+</svg>

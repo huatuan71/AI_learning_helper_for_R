@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="856" viewBox="0 0 720 856" role="img" aria-labelledby="title desc">
+<title id="title">K15 区间端点的开与闭</title>
+<desc id="desc">两条数轴对比。上方为默认right=TRUE，区间为(0,60]、(60,80]、(80,100]，0处为空心圆；下方为right=FALSE且include.lowest=TRUE，区间为[0,60)、[60,80)、[80,100]，60和80处实心圆属于右侧区间，100处为实心圆。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="856" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K15 区间端点的开与闭</text>
+<text x="36" y="130" font-size="26" fill="#f5f9ff" font-weight="700">默认 right = TRUE（左开右闭）</text>
+<line x1="70.0" y1="220" x2="650.0" y2="220" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="70.0" y="198" font-size="22" fill="#9eafc2" text-anchor="middle">0</text>
+<text x="418.0" y="198" font-size="22" fill="#9eafc2" text-anchor="middle">60</text>
+<text x="534.0" y="198" font-size="22" fill="#9eafc2" text-anchor="middle">80</text>
+<text x="650.0" y="198" font-size="22" fill="#9eafc2" text-anchor="middle">100</text>
+<text x="244.0" y="264" font-size="22" fill="#79bdf1" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">(0,60]</text>
+<text x="476.0" y="264" font-size="22" fill="#79bdf1" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">(60,80]</text>
+<text x="592.0" y="302" font-size="22" fill="#79bdf1" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">(80,100]</text>
+<circle cx="70.0" cy="220" r="10" fill="#030813" stroke="#79bdf1" stroke-width="3"/>
+<circle cx="418.0" cy="220" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<circle cx="534.0" cy="220" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<circle cx="650.0" cy="220" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<text x="36" y="350" font-size="23" fill="#f2b56b">0 不在任何区间 → NA；60 属于左边一组</text>
+<text x="36" y="450" font-size="26" fill="#f5f9ff" font-weight="700" font-family="Consolas, Menlo, monospace">right = FALSE, include.lowest = TRUE</text>
+<line x1="70.0" y1="530" x2="650.0" y2="530" stroke="#9eafc2" stroke-width="2.5"/>
+<text x="70.0" y="508" font-size="22" fill="#9eafc2" text-anchor="middle">0</text>
+<text x="418.0" y="508" font-size="22" fill="#9eafc2" text-anchor="middle">60</text>
+<text x="534.0" y="508" font-size="22" fill="#9eafc2" text-anchor="middle">80</text>
+<text x="650.0" y="508" font-size="22" fill="#9eafc2" text-anchor="middle">100</text>
+<text x="244.0" y="574" font-size="22" fill="#79bdf1" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">[0,60)</text>
+<text x="476.0" y="574" font-size="22" fill="#79bdf1" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">[60,80)</text>
+<text x="592.0" y="612" font-size="22" fill="#79bdf1" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">[80,100]</text>
+<circle cx="70.0" cy="530" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<circle cx="418.0" cy="530" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<circle cx="534.0" cy="530" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<circle cx="650.0" cy="530" r="10" fill="#79bdf1" stroke="#79bdf1" stroke-width="3"/>
+<text x="36" y="660" font-size="23" fill="#7fd1b0">60、80 进入右边一组；100 被纳入最后一组</text>
+<rect x="36" y="700" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="744" font-size="28" fill="#79bdf1" font-weight="700">空心 ○ = 圆括号 = 不含端点</text>
+<text x="58" y="786" font-size="25" fill="#b7c5d4">实心 ● = 方括号 = 包含端点</text>
+</g>
+</svg>

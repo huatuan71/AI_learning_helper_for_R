@@ -444,3 +444,24 @@
 @media(prefers-reduced-motion:reduce) {
   .scene-orb-label { transition:none!important; }
 }
+
+/* Knowledge supplement (知识库补充草稿) inside the map detail panel */
+#detail-body .supplement { margin-top:30px; padding-top:6px; border-top:1px solid #8a9bb033; }
+#detail-body .supplement-note { font-size:13px; color:var(--muted); margin-bottom:10px; }
+#detail-body .supplement-part { margin:0; border-bottom:1px solid #8a9bb026; }
+#detail-body .supplement-part>summary { cursor:pointer; padding:13px 2px; font-size:15px; font-weight:600; list-style-position:inside; }
+#detail-body .supplement-part>summary:focus-visible { outline:2px solid var(--blue); outline-offset:2px; border-radius:6px; }
+#detail-body .supplement-body { padding:0 2px 16px; font-size:14px; line-height:1.75; overflow-wrap:anywhere; }
+#detail-body .supplement-body p { font-size:14px; margin:10px 0; white-space:normal; }
+#detail-body .supplement-body h3 { font-size:14px; margin:18px 0 8px; }
+#detail-body .supplement-body ul, #detail-body .supplement-body ol { padding-left:22px; margin:10px 0; }
+#detail-body .supplement-body li { margin:6px 0; }
+#detail-body .supplement-body :not(pre)>code { background:#8a9bb024; border-radius:4px; padding:1px 5px; font-size:.92em; }
+#detail-body .supplement-body .code-wrap { margin:10px 0; }
+#detail-body .course-figure { display:block; width:100%; height:auto; margin:12px 0; border-radius:14px; }
+#detail-body .course-file { color:var(--blue); text-decoration:underline; text-underline-offset:2px; }
+#knowledge-view #map-detail #detail-body .supplement-note,
+#knowledge-view #map-detail #detail-body .supplement-body { color:#b7c5d4; }
+#knowledge-view #map-detail #detail-body .supplement-part>summary { color:#f5f9ff; }
+#knowledge-view #map-detail #detail-body .supplement-body :not(pre)>code { color:#eef5ff; background:#b8d5ef1f; }
+#knowledge-view #map-detail #detail-body .course-file { color:#76baff; }

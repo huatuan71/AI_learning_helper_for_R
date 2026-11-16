@@ -1,0 +1,6 @@
+term1 <- c("Ann", "Ben", "Cai", "Dan", "Ben")
+term2 <- c("Cai", "Eva", "Ann", "Fay")
+print(setdiff(term2, term1))
+print(setdiff(term1, term2))
+print(intersect(term1, term2))
+print(length(union(term1, term2)))

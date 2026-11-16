@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="716" viewBox="0 0 720 716" role="img" aria-labelledby="title desc">
+<title id="title">K21 矩阵乘法的行乘列</title>
+<desc id="desc">左矩阵A为1、2和3、4，高亮第一行1、2；右矩阵B为0、1和1、0，高亮第一列0、1；结果第一行第一列为1乘0加2乘1等于2。下方写着2×2乘2×2得2×2，左矩阵的列数必须等于右矩阵的行数。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="716" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K21 矩阵乘法的行乘列</text>
+<text x="36" y="116" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="36" y="136" width="64" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="68.0" y="173.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="108" y="136" width="64" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="140.0" y="173.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="36" y="200" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="68.0" y="237.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="108" y="200" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="140.0" y="237.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<text x="226" y="206" font-size="26" fill="#9eafc2" text-anchor="middle" font-family="Consolas, Menlo, monospace">%*%</text>
+<text x="280" y="116" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">B</text>
+<rect x="280" y="136" width="64" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="312.0" y="173.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0</text>
+<rect x="352" y="136" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="384.0" y="173.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="280" y="200" width="64" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="312.0" y="237.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="352" y="200" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="384.0" y="237.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0</text>
+<text x="452" y="206" font-size="30" fill="#9eafc2" text-anchor="middle">=</text>
+<rect x="490" y="136" width="64" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="522.0" y="173.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="562" y="136" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="594.0" y="173.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="490" y="200" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="522.0" y="237.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="562" y="200" width="64" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="594.0" y="237.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="36" y="300" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="344" font-size="28" fill="#79bdf1" font-weight="700">第 1 行 × 第 1 列</text>
+<text x="58" y="386" font-size="25" fill="#b7c5d4">1×0 + 2×1 = 2　逐项相乘再求和</text>
+<rect x="36" y="430" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="474" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">(2 × 2) %*% (2 × 2) → 2 × 2</text>
+<text x="58" y="516" font-size="25" fill="#b7c5d4">内侧两个数要相同，外侧两个数决定结果大小</text>
+<rect x="36" y="560" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="604" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">A * B 是逐元素相乘</text>
+<text x="58" y="646" font-size="25" fill="#b7c5d4">同位置相乘，结果为 0 2 / 3 0，含义完全不同</text>
+</g>
+</svg>

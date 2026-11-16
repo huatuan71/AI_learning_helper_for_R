@@ -6,6 +6,10 @@ from pathlib import Path
 
 DATA = json.loads((Path(__file__).resolve().parents[1]/'data/course.json').read_text(encoding='utf-8'))
 KNOWLEDGE = {x['id']: x for x in DATA['knowledge']}
+# Optional teaching supplements built by scripts/import_enrichment.py; absent file means none yet.
+_ENRICHMENT_FILE = Path(__file__).resolve().parents[1]/'data/enrichment.json'
+ENRICHMENT = (json.loads(_ENRICHMENT_FILE.read_text(encoding='utf-8'))['items']
+              if _ENRICHMENT_FILE.is_file() else {})
 QUESTIONS = DATA['questions']
 ERRORS = DATA['errors']
 ALIASES = {

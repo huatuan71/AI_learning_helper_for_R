@@ -25,6 +25,8 @@ AI回答以连续Markdown正文组织，标题、完整列表和多段代码按�
 5. “学习记录”可返回某条对话、导出或清空当前浏览器记录；刷新恢复记录，切换视图保留未发送草稿（草稿不会保存到刷新后）。右上角“更多”同时提供导出、清空、接口文档及版本说明。导出文件包含提问和代码，分享前自行检查。
 6. 用完后双击 `stop.cmd`。脚本只停止它启动且身份核对一致的本项目进程，不关闭其他占用端口的程序。
 
+**macOS / Linux**：对应脚本为 `setup.command`、`start.command`、`stop.command`，在访达中双击或在终端执行 `./start.command`。首次需要Python 3.12或更新版本（python.org安装包或 `brew install python@3.12`）。macOS启动成功后会自动打开首页。如果双击提示“无法验证开发者”，在访达中右键脚本选择“打开”一次即可；若提示没有执行权限，在本目录运行 `chmod +x *.command`。
+
 本轮已安装当前电脑需要的依赖。换电脑或重新创建环境时，先安装Python 3.12（含Python Launcher），双击 `setup.cmd`，安装成功后再双击 `start.cmd`。首次安装需要联网；安装完成后，课程网页及模拟问答不依赖网络。
 
 FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)。默认Swagger页面使用外部静态资源，首次打开需网络；原始接口定义 [openapi.json](http://127.0.0.1:8000/openapi.json) 可离线访问。接口操作的详细说明见上一级的 `接口说明.md`。
@@ -53,6 +55,7 @@ FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)�
 - 知识详情使用深色覆盖面板：桌面端占页面约44%宽度并贯穿场景高度，手机端使用约70%视口高度的底部面板；打开详情不会离开知识地图。
 - 课程单元使用项目自绘的深色菜单，不再调用操作系统的白色下拉层；支持鼠标、触摸、上下方向键、Home、End、Enter和Escape。首页、知识地图、AI问答、代码纠错和学习记录之间使用约220毫秒的淡出淡入过渡；系统开启“减少动画”时立即切换。
 - 可见知识标签是原生按钮，Tab、Enter和Space可操作；另有K01至K43的隐藏结构化导航供辅助技术使用。WebGL初始化失败时保留原生二维知识地图。
+- 已编写补充讲义的知识点（当前K01—K24）在详情底部显示“深入学习”：学习目标、先备检查、直观理解、分层例题、图解、易错案例、完整练习、自测题及来源与验证，各部分可折叠。内容来自 `../知识库补充草稿/Kxx.md`，K01—K08的代码与输出为离线R实测记录，不加“未运行验证”标记；K09—K24尚待R实测，页面和AI上下文都会注明，代码块带“未运行验证”标记；示例脚本、验证记录和SVG图通过 `/content/code/` 与 `/content/images/` 只读提供，课程PDF不对外提供。真实AI模式会把最相关知识点的讲义片段一并作为课程资料。
 - 地图详情使用真实 `GET /api/knowledge/{id}` 内容。圆球缩写只用于显示，详情保留完整标题、解释、语法、参数、示例、易错点与来源；不会改变课程数据。
 
 ## 运行范围和能力限制
@@ -86,11 +89,20 @@ FastAPI交互文档：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)�
 # 成员一更新资料后重新导入，再重启服务并测试
 .\.venv\Scripts\python.exe scripts/import_data.py
 
+# 新增或修改 ../知识库补充草稿/Kxx.md 后重新生成 data/enrichment.json
+# 缺少必填章节、引用不存在的资源或编号不在课程中时会中止并列出问题
+.\.venv\Scripts\python.exe scripts/import_enrichment.py
+
+# 在装有R的电脑上逐字核对“待R实测”讲义中的代码输出（Rscript不在PATH时用 --rscript 指定路径）
+# 全部通过的讲义加 --write 改为已实测并保存核对记录，之后重新运行上一条导入命令
+.\.venv\Scripts\python.exe scripts/check_r_outputs.py
+.\.venv\Scripts\python.exe scripts/check_r_outputs.py --write
+
 # 按实际运行接口重新生成上一级的接口说明
 .\.venv\Scripts\python.exe scripts/generate_api_docs.py
 ```
 
-依赖锁定在 `requirements.txt`，请使用项目虚拟环境，不要求修改全局Python。启动异常查看 `.runtime/server.err.log`；该目录、虚拟环境及临时文件都被Git忽略。
+macOS / Linux 把 `.\.venv\Scripts\python.exe` 换成 `.venv/bin/python`。依赖锁定在 `requirements.txt`，请使用项目虚拟环境，不要求修改全局Python。启动异常查看 `.runtime/server.err.log`；该目录、虚拟环境及临时文件都被Git忽略。
 
 浏览器验收脚本位于 `tests/browser_check.js`，由Playwright CLI的 `run-code --filename` 执行。截图与下载验证产物使用工作区根目录的 `output/playwright/`，不纳入版本控制。浏览器验收命令（在工作区根目录执行，需 Node.js / npx）：
 

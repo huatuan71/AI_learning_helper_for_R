@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="752" viewBox="0 0 720 752" role="img" aria-labelledby="title desc">
+<title id="title">K23 从清单到稀疏矩阵</title>
+<desc id="desc">左侧列出两条记录：第1行第1列值5，第3行第2列值7；右侧3行3列的网格中这两个位置显示5和7，其余7个位置为点号。下方横条显示非零格子占2/9。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="752" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K23 从清单到稀疏矩阵</text>
+<text x="36" y="116" font-size="24" fill="#79bdf1" font-weight="700">只存非零值清单</text>
+<rect x="36" y="136" width="260" height="170" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="60" y="180" font-size="24" fill="#9eafc2" font-family="Consolas, Menlo, monospace">i  j  x</text>
+<text x="60" y="230" font-size="26" fill="#f5f9ff" font-weight="700" font-family="Consolas, Menlo, monospace">1  1  5</text>
+<text x="60" y="280" font-size="26" fill="#f5f9ff" font-weight="700" font-family="Consolas, Menlo, monospace">3  2  7</text>
+<line x1="312" y1="220" x2="370" y2="220" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="390" y="116" font-size="24" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">dims = c(3, 3)</text>
+<rect x="390" y="136" width="88" height="50" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="434.0" y="170.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="486" y="136" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="530.0" y="170.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<rect x="582" y="136" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="626.0" y="170.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<rect x="390" y="194" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="434.0" y="228.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<rect x="486" y="194" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="530.0" y="228.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<rect x="582" y="194" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="626.0" y="228.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<rect x="390" y="252" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="434.0" y="286.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<rect x="486" y="252" width="88" height="50" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="530.0" y="286.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">7</text>
+<rect x="582" y="252" width="88" height="50" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="626.0" y="286.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">.</text>
+<text x="36" y="380" font-size="24" fill="#b7c5d4">密度 = 非零格子 / 全部格子 = 2 / 9</text>
+<rect x="36" y="400" width="648" height="36" rx="6" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<rect x="36" y="400" width="144.0" height="36" rx="6" fill="#79bdf1"/>
+<rect x="36" y="470" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="514" font-size="28" fill="#79bdf1" font-weight="700">点号 . 是没有存储的 0</text>
+<text x="58" y="556" font-size="25" fill="#b7c5d4">不是缺失值 NA</text>
+<rect x="36" y="596" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="640" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">as.matrix() 会写出全部 0</text>
+<text x="58" y="682" font-size="25" fill="#b7c5d4">矩阵很大时会失去节省内存的优势</text>
+</g>
+</svg>

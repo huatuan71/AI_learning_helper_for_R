@@ -1,0 +1,5 @@
+x <- c("  Alice ", "Bob  Lee", "cat.dog", "ID-2026")
+print(grepl("e", x))
+print(grep("[0-9]", x))
+print(sub(" ", "_", x))
+print(gsub(" ", "_", x))

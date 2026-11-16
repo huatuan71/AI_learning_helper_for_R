@@ -1,0 +1,5 @@
+code <- c("STAT101", "MATH2", "R语言")
+print(length(code))
+print(nchar(code))
+print(substr(code, 1, 4))
+print(substr(code, 5, nchar(code)))

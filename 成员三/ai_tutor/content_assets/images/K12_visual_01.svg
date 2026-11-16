@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="954" viewBox="0 0 720 954" role="img" aria-labelledby="title desc">
+<title id="title">K12 两期名单的集合关系</title>
+<desc id="desc">两个相交的圆，左圆为第一期名单、右圆为第二期名单。只在左圆的Ben和Dan是退出人员，对应setdiff(term1, term2)；重叠部分的Ann和Cai对应intersect；只在右圆的Eva和Fay是新增人员，对应setdiff(term2, term1)。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="954" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K12 两期名单的集合关系</text>
+<circle cx="270" cy="330" r="190" fill="#0c1a2b" fill-opacity="0.85" stroke="#79bdf1" stroke-width="2.5"/>
+<circle cx="450" cy="330" r="190" fill="#102a24" fill-opacity="0.65" stroke="#7fd1b0" stroke-width="2.5"/>
+<text x="170" y="120" font-size="25" fill="#79bdf1" font-weight="700" text-anchor="middle">term1 第一期</text>
+<text x="550" y="120" font-size="25" fill="#7fd1b0" font-weight="700" text-anchor="middle">term2 第二期</text>
+<text x="180" y="310" font-size="30" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">Ben</text>
+<text x="180" y="358" font-size="30" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">Dan</text>
+<text x="360" y="310" font-size="30" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">Ann</text>
+<text x="360" y="358" font-size="30" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">Cai</text>
+<text x="540" y="310" font-size="30" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">Eva</text>
+<text x="540" y="358" font-size="30" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">Fay</text>
+<rect x="36" y="560" width="648" height="104" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="604" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">退出：setdiff(term1, term2)</text>
+<text x="58" y="646" font-size="25" fill="#b7c5d4">Ben、Dan　只在第一期出现</text>
+<rect x="36" y="682" width="648" height="104" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="726" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">共同：intersect(term1, term2)</text>
+<text x="58" y="768" font-size="25" fill="#b7c5d4">Ann、Cai　两期都在</text>
+<rect x="36" y="804" width="648" height="104" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="848" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">新增：setdiff(term2, term1)</text>
+<text x="58" y="890" font-size="25" fill="#b7c5d4">Eva、Fay　只在第二期出现</text>
+</g>
+</svg>

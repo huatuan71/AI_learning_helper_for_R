@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="790" viewBox="0 0 720 790" role="img" aria-labelledby="title desc">
+<title id="title">K24 MARGIN保留哪一维</title>
+<desc id="desc">一个两层的立方数组，行是门店A、B，列是三个月，层是tea和cake。MARGIN=1得到长度2的向量，按门店汇总；MARGIN=3得到长度2的向量，按商品汇总；MARGIN=c(1,3)得到2行2列的表，只汇总月份。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="790" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K24 MARGIN保留哪一维</text>
+<text x="36" y="116" font-size="24" fill="#79bdf1" font-weight="700">sales：门店 × 月份 × 商品</text>
+<rect x="96" y="160" width="300" height="120" rx="12" fill="#102a24" stroke="#7fd1b0" stroke-width="2"/>
+<text x="246" y="150" font-size="20" fill="#7fd1b0" text-anchor="middle">cake 层</text>
+<rect x="60" y="196" width="300" height="120" rx="12" fill="#0c1522" stroke="#79bdf1" stroke-width="2"/>
+<text x="210" y="262" font-size="23" fill="#f5f9ff" font-weight="700" text-anchor="middle">tea 层  2 行 × 3 列</text>
+<text x="450" y="200" font-size="22" fill="#9eafc2">行：门店 A、B</text>
+<text x="450" y="240" font-size="22" fill="#9eafc2">列：Jan Feb Mar</text>
+<text x="450" y="280" font-size="22" fill="#9eafc2">层：tea cake</text>
+<text x="36" y="370" font-size="24" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">MARGIN = 1</text>
+<text x="300" y="370" font-size="22" fill="#9eafc2">保留门店</text>
+<rect x="36" y="388" width="80" height="48" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="76.0" y="421.0" font-size="23" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">50</text>
+<rect x="124" y="388" width="80" height="48" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="164.0" y="421.0" font-size="23" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">62</text>
+<text x="330" y="420" font-size="22" fill="#b7c5d4">A、B 各一个总数</text>
+<text x="36" y="490" font-size="24" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">MARGIN = 3</text>
+<text x="300" y="490" font-size="22" fill="#9eafc2">保留商品</text>
+<rect x="36" y="508" width="80" height="48" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="76.0" y="541.0" font-size="23" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">71</text>
+<rect x="124" y="508" width="80" height="48" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="164.0" y="541.0" font-size="23" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">41</text>
+<text x="330" y="540" font-size="22" fill="#b7c5d4">tea、cake 各一个总数</text>
+<text x="36" y="610" font-size="24" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">MARGIN = c(1, 3)</text>
+<text x="300" y="610" font-size="22" fill="#9eafc2">保留门店和商品</text>
+<rect x="36" y="628" width="120" height="48" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="96.0" y="661.0" font-size="23" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">30 20</text>
+<rect x="164" y="628" width="120" height="48" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="224.0" y="661.0" font-size="23" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">41 21</text>
+<text x="330" y="660" font-size="22" fill="#b7c5d4">只把月份加总，得到 2 × 2</text>
+<text x="36" y="740" font-size="24" fill="#7fd1b0" font-weight="700">保留的维度就是结果的形状。</text>
+</g>
+</svg>

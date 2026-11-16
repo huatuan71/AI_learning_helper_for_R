@@ -1,0 +1,5 @@
+a <- c(72, 75, 78, 80, 85)
+b <- c(55, 68, 78, 90, 99)
+print(c(mean = mean(a), median = median(a), sd = round(sd(a), 2)))
+print(c(mean = mean(b), median = median(b), sd = round(sd(b), 2)))
+print(range(b))

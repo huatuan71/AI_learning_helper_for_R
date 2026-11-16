@@ -1,0 +1,5 @@
+m <- matrix(1:6, nrow = 2, dimnames = list(c("r1", "r2"), c("x", "y", "z")))
+m3 <- rbind(m, r3 = colSums(m))
+print(m3)
+print(t(m3))
+print(rbind(before = dim(m), after = dim(t(m))))

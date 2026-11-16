@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="836" viewBox="0 0 720 836" role="img" aria-labelledby="title desc">
+<title id="title">K14 order与rank的方向</title>
+<desc id="desc">原始成绩30、10、20位于位置1到3。order给出2、3、1，表示排序后的第1个来自位置2；rank给出3、1、2，表示位置1的30排第3。两者箭头方向相反。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="836" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K14 order与rank的方向</text>
+<text x="36" y="112" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">原始 x &lt;- c(30, 10, 20)</text>
+<rect x="160" y="150" width="120" height="64" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="220.0" y="191.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">30</text>
+<text x="220.0" y="138" font-size="20" fill="#9eafc2" text-anchor="middle">1</text>
+<rect x="288" y="150" width="120" height="64" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="348.0" y="191.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">10</text>
+<text x="348.0" y="138" font-size="20" fill="#9eafc2" text-anchor="middle">2</text>
+<rect x="416" y="150" width="120" height="64" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="476.0" y="191.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">20</text>
+<text x="476.0" y="138" font-size="20" fill="#9eafc2" text-anchor="middle">3</text>
+<text x="36" y="282" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">order(x)</text>
+<line x1="348" y1="220" x2="220" y2="316" stroke="#9eafc2" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="6 6"/>
+<line x1="476" y1="220" x2="348" y2="316" stroke="#9eafc2" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="6 6"/>
+<line x1="220" y1="220" x2="476" y2="316" stroke="#9eafc2" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="6 6"/>
+<rect x="160" y="322" width="120" height="58" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="220.0" y="360.0" font-size="24" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">位置2</text>
+<rect x="288" y="322" width="120" height="58" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="348.0" y="360.0" font-size="24" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">位置3</text>
+<rect x="416" y="322" width="120" height="58" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="476.0" y="360.0" font-size="24" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">位置1</text>
+<text x="36" y="426" font-size="23" fill="#9eafc2">第1、2、3名原来站在哪个位置（名次→位置）</text>
+<text x="36" y="508" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">rank(x)</text>
+<rect x="160" y="528" width="120" height="58" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="220.0" y="566.0" font-size="24" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">第3名</text>
+<rect x="288" y="528" width="120" height="58" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="348.0" y="566.0" font-size="24" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">第1名</text>
+<rect x="416" y="528" width="120" height="58" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="476.0" y="566.0" font-size="24" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">第2名</text>
+<text x="36" y="632" font-size="23" fill="#9eafc2">每个原始位置上的值排第几（位置→名次）</text>
+<rect x="36" y="680" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="724" font-size="28" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">x[order(x)] 等价于 sort(x)</text>
+<text x="58" y="766" font-size="25" fill="#b7c5d4">名次要用 rank()，不要把 order() 当名次</text>
+</g>
+</svg>

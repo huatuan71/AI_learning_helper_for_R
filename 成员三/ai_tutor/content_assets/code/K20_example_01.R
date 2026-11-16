@@ -1,0 +1,6 @@
+m <- matrix(1:4, 2)
+colnames(m) <- c("a", "b")
+print(rbind(m, m))
+print(cbind(m, extra = c(5, 6)))
+print(t(m))
+print(diag(c(2, 3)))

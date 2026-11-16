@@ -1,0 +1,6 @@
+score <- c(S01 = 78, S02 = NA, S03 = 105, S04 = 88, S05 = 54)
+print(score["S04"])
+print(which(is.na(score)))
+print(which(score < 0 | score > 100))
+print(names(score)[score < 60 & !is.na(score)])
+print(which.max(score))

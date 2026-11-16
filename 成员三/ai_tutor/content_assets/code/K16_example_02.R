@@ -1,0 +1,7 @@
+id <- c("ECO-2101", "FIN-3302", "ACC-1105")
+print(all(nchar(id) == 8))
+dept <- substr(id, 1, 3)
+num <- substr(id, 5, 8)
+print(dept)
+print(num)
+print(as.integer(substr(num, 1, 1)))

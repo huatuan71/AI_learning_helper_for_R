@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1020" viewBox="0 0 720 1020" role="img" aria-labelledby="title desc">
+<title id="title">K09 五种向量生成方式</title>
+<desc id="desc">五行对比：c拼接已有值，冒号生成步长为1的序列，seq按步长或个数生成，rep按times整体重复或按each逐个重复，sample在设定种子后从向量中随机抽取。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="1020" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K09 五种向量生成方式</text>
+<text x="36" y="130" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">c(ids, 7, 8)</text>
+<text x="684" y="130" font-size="22" fill="#9eafc2" text-anchor="end">拼接已有的值</text>
+<rect x="36" y="148" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="73.0" y="184.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="118" y="148" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="155.0" y="184.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">…</text>
+<rect x="200" y="148" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="237.0" y="184.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<rect x="282" y="148" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="319.0" y="184.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">7</text>
+<rect x="364" y="148" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="401.0" y="184.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">8</text>
+<text x="36" y="270" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">1:6</text>
+<text x="684" y="270" font-size="22" fill="#9eafc2" text-anchor="end">步长为1，包含两端</text>
+<rect x="36" y="288" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="73.0" y="324.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<rect x="118" y="288" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="155.0" y="324.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<rect x="200" y="288" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="237.0" y="324.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<rect x="282" y="288" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="319.0" y="324.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4</text>
+<rect x="364" y="288" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="401.0" y="324.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="446" y="288" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="483.0" y="324.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6</text>
+<text x="36" y="410" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">seq(10, 30, by = 5)</text>
+<text x="684" y="410" font-size="22" fill="#9eafc2" text-anchor="end">按步长前进</text>
+<rect x="36" y="428" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="73.0" y="464.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">10</text>
+<rect x="118" y="428" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="155.0" y="464.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">15</text>
+<rect x="200" y="428" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="237.0" y="464.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">20</text>
+<rect x="282" y="428" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="319.0" y="464.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">25</text>
+<rect x="364" y="428" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="401.0" y="464.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">30</text>
+<text x="36" y="550" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">rep(c("A","B"), times = 3)</text>
+<text x="684" y="550" font-size="22" fill="#9eafc2" text-anchor="end">整体重复</text>
+<rect x="36" y="568" width="74" height="54" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="73.0" y="604.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="118" y="568" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="155.0" y="604.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<rect x="200" y="568" width="74" height="54" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="237.0" y="604.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="282" y="568" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="319.0" y="604.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<rect x="364" y="568" width="74" height="54" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="401.0" y="604.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="446" y="568" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="483.0" y="604.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<text x="36" y="690" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">rep(c("A","B"), each = 3)</text>
+<text x="684" y="690" font-size="22" fill="#9eafc2" text-anchor="end">逐个重复</text>
+<rect x="36" y="708" width="74" height="54" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="73.0" y="744.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="118" y="708" width="74" height="54" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="155.0" y="744.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="200" y="708" width="74" height="54" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="237.0" y="744.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<rect x="282" y="708" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="319.0" y="744.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<rect x="364" y="708" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="401.0" y="744.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<rect x="446" y="708" width="74" height="54" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="483.0" y="744.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<text x="36" y="830" font-size="26" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">set.seed(42); sample(1:10, 3)</text>
+<rect x="36" y="848" width="648" height="64" rx="12" fill="#07101c" stroke="#79bdf1" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="360" y="890" font-size="24" fill="#b7c5d4" text-anchor="middle">从1到10中无放回抽3个，结果由种子决定</text>
+<text x="36" y="970" font-size="24" fill="#9eafc2">种子相同、R版本相同时，抽样结果可以复现。</text>
+</g>
+</svg>

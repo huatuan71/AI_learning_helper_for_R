@@ -1,0 +1,6 @@
+price <- c(12, 8, 15, 20)
+qty <- c(3, 5, 2, 1)
+print(price * qty)
+print(sum(price * qty))
+print(price * 0.9)
+print(price + c(1, 2))

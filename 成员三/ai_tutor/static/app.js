@@ -1,5 +1,5 @@
 'use strict';
-import {markdownFragment} from './answer-markdown.js?v=20261115.7';
+import {markdownFragment} from './answer-markdown.js?v=20261115.8';
 const $ = id => document.getElementById(id);
 const STORE = 'r-tutor-mock-v1';
 const UNITS = ['环境与自助学习','类型与缺失','向量与字符串','矩阵与数组','数据框','列表与批量处理','函数与控制','综合与包扩展'];
@@ -246,6 +246,19 @@ function renderTeachingBody(node, answer, sources = []) {
   }
   codeBlock(node, answer.corrected_code || answer.example_code, answer.corrected_code ? '参考修正' : '代码讲解', true);
 }
+// Course supplements: verified drafts carry offline R output, so they skip the "未运行验证" tag.
+function renderCourseMarkdown(node, text, verified = true) {
+  node.append(markdownFragment(text, {localContent:true}));
+  for (const pre of [...node.querySelectorAll('pre')]) {
+    const code = pre.querySelector('code');
+    const language = (code?.className.match(/\blanguage-([\w+-]+)/)?.[1] || '').toLowerCase();
+    const label = {r:'R代码', text:'运行输出', sh:'终端命令'}[language] || '代码';
+    const holder = el('div');
+    codeBlock(holder, (code || pre).textContent.replace(/\n$/, ''), label, !verified);
+    pre.replaceWith(...holder.childNodes);
+  }
+  return node;
+}
 function renderRecords() {
   const root = $('messages'); root.replaceChildren();
   $('welcome').hidden = records.length > 0;
@@ -489,7 +502,7 @@ function renderHistory() {
 }
 const modelSettings = new window.ModelSettings(status);
 const fileInput = new window.RFileInput();
-const mapUI = new window.KnowledgeMap({api, codeBlock, units:UNITS,
+const mapUI = new window.KnowledgeMap({api, codeBlock, units:UNITS, markdown:renderCourseMarkdown,
   explain: id => explainKnowledge(id),
   exercise: id => { if(busy)return; navigate('chat');setCode(false);send('给我练习',{knowledgeId:id,useComposer:false,taskType:'exercise',displayQuestion:'练习'}); }
 });

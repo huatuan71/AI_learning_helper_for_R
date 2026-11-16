@@ -1,0 +1,6 @@
+A <- matrix(c(3, 1, 2, 4), nrow = 2)
+b <- c(18, 16)
+x <- solve(A, b)
+print(x)
+print(A %*% x)
+print(all.equal(as.vector(A %*% x), b))

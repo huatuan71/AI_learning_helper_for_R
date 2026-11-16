@@ -3,6 +3,7 @@ from typing import Literal
 from uuid import uuid4
 import logging
 import os
+import re
 import time
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
@@ -12,7 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, ConfigDict, model_validator
 from starlette.exceptions import HTTPException
 from starlette.datastructures import MutableHeaders
-from .engine import DATA, KNOWLEDGE, answer
+from .engine import DATA, ENRICHMENT, KNOWLEDGE, answer
 from .ai.routes import router as ai_router
 from .ai.schemas import AIError
 from .ai.service import TutorService, run_for_session
@@ -203,7 +204,21 @@ def catalog():
 def knowledge(knowledge_id: str):
     if knowledge_id not in KNOWLEDGE:
         raise HTTPException(404, '知识点不存在，请从课程目录选择')
-    return KNOWLEDGE[knowledge_id]
+    return {**KNOWLEDGE[knowledge_id], 'enrichment': ENRICHMENT.get(knowledge_id)}
+
+
+CONTENT_TYPES = {'.R': 'text/plain; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.svg': 'image/svg+xml'}
+CONTENT_NAME = re.compile(r'K\d{2}_[A-Za-z0-9_]+\.(R|txt|svg)')
+
+
+@app.get('/content/{kind}/{name}', include_in_schema=False)
+def content_asset(kind: Literal['code', 'images'], name: str):
+    """Serve example scripts, validation logs and diagrams referenced by the supplements."""
+    path = ROOT/'content_assets'/kind/name
+    if not CONTENT_NAME.fullmatch(name) or not path.is_file():
+        raise HTTPException(404, '资源不存在')
+    return FileResponse(path, media_type=CONTENT_TYPES[path.suffix],
+                        headers={'Cache-Control': 'no-cache', 'Content-Disposition': 'inline'})
 
 
 def prepare_request(body, request, response, review=False):

@@ -1,0 +1,6 @@
+score <- c(78, 92, 65, 88, 54)
+print(score[2])
+print(score[c(1, 3)])
+print(score[-1])
+print(score[score >= 80])
+print(which(score < 60))

@@ -1,0 +1,7 @@
+raw <- c("  Wang  Fang ", "Li Lei", " Zhao   Min", "Sun Li ")
+clean <- gsub("\\s+", " ", trimws(raw))
+print(clean)
+code <- c("FIN-2026-01", "fin-2026-2", "ACC-2025-11", "N/A")
+ok <- grepl("^[A-Z]{3}-[0-9]{4}-[0-9]{2}$", code)
+print(ok)
+print(code[!ok])

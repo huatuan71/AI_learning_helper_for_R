@@ -1,0 +1,5 @@
+A <- matrix(c(1, 3, 2, 4), nrow = 2)
+B <- matrix(c(0, 1, 1, 0), nrow = 2)
+print(A)
+print(A * B)
+print(A %*% B)

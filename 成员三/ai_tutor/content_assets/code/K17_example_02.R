@@ -1,0 +1,5 @@
+month <- c("01", "02", "03")
+files <- paste0("sales_2026_", month, ".csv")
+print(files)
+title <- paste0("2026年第一季度共", length(files), "个文件，月份：", paste(month, collapse = "、"))
+print(title)

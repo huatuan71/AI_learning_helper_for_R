@@ -1,0 +1,5 @@
+score <- c(78, 92, 65, 92, 88)
+print(sort(score))
+print(sort(score, decreasing = TRUE))
+print(order(score, decreasing = TRUE))
+print(rank(score))

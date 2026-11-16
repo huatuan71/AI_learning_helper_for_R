@@ -7,13 +7,13 @@ import httpx
 from pydantic import ValidationError
 from pydantic_core import from_json
 
-from ..engine import KNOWLEDGE, DATA, answer as mock_answer, retrieve
+from ..engine import ENRICHMENT, KNOWLEDGE, DATA, answer as mock_answer, retrieve
 from .output import hint_content, output_schema, output_shape, parse_teaching, validation_details
 from .providers import ADAPTERS, CallBudget, validate_config
 from .schemas import AIError
 
 logger = logging.getLogger('r_tutor')
-PROMPT_VERSION = 'tutor-v1.2.0-r4'
+PROMPT_VERSION = 'tutor-v1.2.0-r5'
 SYSTEM = """你是面向R语言初学者的中文课程助教。
 直接回答当前问题，根据难度给充分、可复核的解释，最后提供1至2个追问建议。
 content_markdown承载完整、连贯的Markdown正文。自行安排段落、标题、列表、代码和验证说明的顺序。
@@ -26,6 +26,7 @@ content_markdown承载完整、连贯的Markdown正文。自行安排段落、�
 仅引用本次提供的课程知识编号。无法依据课程资料回答的部分标记is_supplementary=true。
 不生成课程文件名或页码。网络引用只可使用给定来源编号[W1]等，放在所支持的句段末尾。
 不声称运行过R代码。expected_output仅是预期输出，不确定时留空。
+课程资料的teaching_notes是已审核的补充讲义，可参照其中的讲解、例题与易错案例组织回答；其中的输出是离线实测记录，不代表本次运行。
 问题位置只能使用当前提交代码的实际行号，信息不足时line=null并请求最小复现。
 用户修改代码后重新分析。参考修正应使用用户的变量和数据，避免替换成课程样例。
 仅task_type=exercise时使用teaching_mode。hint只给拆解和提示，solution可给完整参考解。
@@ -60,6 +61,19 @@ def course_context(req, review):
         size = len(json.dumps(record, ensure_ascii=False))
         if total + size <= 20000:
             records.append(record)
+            total += size
+    # Add verified teaching supplements for the best match only, so the budget stays predictable.
+    wanted = ['直观理解', '为什么', '易错案例'] + (['完整练习'] if baseline['task_type'] == 'exercise' else ['基础例题'])
+    for record in records[:1]:
+        extra = ENRICHMENT.get(record['id'])
+        if not extra:
+            continue
+        notes = {s['title']: s['markdown'] for s in extra['sections'] if s['title'] in wanted}
+        if notes and not extra.get('verified', True):
+            notes['验证状态'] = '待R实测：其中的输出是编写者的预期结果，尚未在R中运行核对。'
+        size = len(json.dumps(notes, ensure_ascii=False))
+        if notes and total + size <= 20000:
+            record['teaching_notes'] = notes
             total += size
     return baseline['task_type'], records
 

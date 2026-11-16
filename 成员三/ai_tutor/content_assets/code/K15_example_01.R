@@ -1,0 +1,5 @@
+score <- c(59, 60, 75, 89, 90, 100)
+g1 <- cut(score, breaks = c(0, 60, 90, 100))
+print(g1)
+g2 <- cut(score, breaks = c(0, 60, 90, 100), right = FALSE)
+print(g2)

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="806" viewBox="0 0 720 806" role="img" aria-labelledby="title desc">
+<title id="title">K11 循环补齐如何配对</title>
+<desc id="desc">上排六个销售额格子，下排费率0.10和0.08重复三轮补齐到六格，逐列相乘得到佣金。底部示例说明长度5与长度2相加时最后一轮只用了一半，R发出长度警告。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="806" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K11 循环补齐如何配对</text>
+<text x="36" y="112" font-size="25" fill="#79bdf1" font-weight="700">sales（长度6）</text>
+<rect x="36" y="130" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="86.0" y="167.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">120</text>
+<rect x="144" y="130" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="194.0" y="167.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">80</text>
+<rect x="252" y="130" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="302.0" y="167.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">150</text>
+<rect x="360" y="130" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="410.0" y="167.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">90</text>
+<rect x="468" y="130" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="518.0" y="167.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">200</text>
+<rect x="576" y="130" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="626.0" y="167.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">60</text>
+<text x="36" y="236" font-size="25" fill="#79bdf1" font-weight="700">rate（长度2，补齐3轮）</text>
+<rect x="36" y="254" width="100" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="86.0" y="291.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0.10</text>
+<rect x="144" y="254" width="100" height="56" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="194.0" y="291.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0.08</text>
+<rect x="252" y="254" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="302.0" y="291.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0.10</text>
+<rect x="360" y="254" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="410.0" y="291.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0.08</text>
+<rect x="468" y="254" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="518.0" y="291.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0.10</text>
+<rect x="576" y="254" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="626.0" y="291.0" font-size="26" fill="#9eafc2" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">0.08</text>
+<text x="140" y="346" font-size="22" fill="#9eafc2" text-anchor="middle">第1轮</text>
+<text x="356" y="346" font-size="22" fill="#9eafc2" text-anchor="middle">第2轮</text>
+<text x="572" y="346" font-size="22" fill="#9eafc2" text-anchor="middle">第3轮</text>
+<text x="36" y="400" font-size="25" fill="#79bdf1" font-weight="700">sales * rate（逐列相乘）</text>
+<rect x="36" y="418" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="86.0" y="455.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">12.0</text>
+<rect x="144" y="418" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="194.0" y="455.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">6.4</text>
+<rect x="252" y="418" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="302.0" y="455.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">15.0</text>
+<rect x="360" y="418" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="410.0" y="455.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">7.2</text>
+<rect x="468" y="418" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="518.0" y="455.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">20.0</text>
+<rect x="576" y="418" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="626.0" y="455.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">4.8</text>
+<text x="36" y="520" font-size="25" fill="#b7c5d4">6是2的整数倍：没有警告。</text>
+<text x="36" y="600" font-size="25" fill="#f2b56b" font-weight="700">score（长度5） + bonus（长度2）</text>
+<rect x="36" y="618" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="86.0" y="655.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="144" y="618" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="194.0" y="655.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">10</text>
+<rect x="252" y="618" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="302.0" y="655.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<rect x="360" y="618" width="100" height="56" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="410.0" y="655.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">10</text>
+<rect x="468" y="618" width="100" height="56" rx="10" fill="#3a2610" stroke="#f2b56b" stroke-width="2"/>
+<text x="518.0" y="655.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">5</text>
+<text x="36" y="716" font-size="25" fill="#b7c5d4">最后一轮只用到一半：R给出长度警告。</text>
+<text x="36" y="756" font-size="24" fill="#9eafc2">有无警告都要自己核对配对是否符合规则。</text>
+</g>
+</svg>

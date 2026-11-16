@@ -1,8 +1,8 @@
 /* Deterministic 2D knowledge navigation. No physics loop, random positions or HTML injection. */
 'use strict';
 class KnowledgeMap {
-  constructor({api, explain, exercise, codeBlock, units}) {
-    Object.assign(this, {api, explain, exercise, codeBlock, units});
+  constructor({api, explain, exercise, codeBlock, units, markdown}) {
+    Object.assign(this, {api, explain, exercise, codeBlock, units, markdown});
     this.items = []; this.edges = []; this.nodes = new Map(); this.cache = new Map();
     this.selected = null; this.sequence = 0; this.ready = false;
     this.$ = id => document.getElementById(id);
@@ -193,6 +193,21 @@ class KnowledgeMap {
     if(wasMobile && this.pageScrollBeforeDetail!==undefined)window.scrollTo({top:this.pageScrollBeforeDetail,behavior:'instant'});
     if(restore && previous && !this.nodes.get(previous).holder.hidden)this.nodes.get(previous).orb.focus({preventScroll:true});
   }
+  supplement(root,extra) {
+    // Verified teaching supplement from 知识库补充草稿; each part folds so the panel stays scannable.
+    if(!extra || !extra.sections?.length || !this.markdown)return;
+    const part=this.node('section',undefined,'supplement');
+    part.append(this.node('h3','深入学习'));
+    const status=extra.verified===false?'代码与预期输出尚待R实测，请以本机运行结果为准':'代码与输出为离线R实测记录';
+    part.append(this.node('p','分层例题、图解、易错案例和练习。'+status+(extra.difficulty?' · 难度：'+extra.difficulty:'')+'。','supplement-note'));
+    const open=new Set(['学习目标','直观理解']);
+    extra.sections.forEach(s=>{
+      const fold=this.node('details',undefined,'supplement-part');fold.open=open.has(s.title);
+      fold.append(this.node('summary',s.title));
+      const body=this.node('div',undefined,'supplement-body');this.markdown(body,s.markdown,extra.verified!==false);fold.append(body);part.append(fold);
+    });
+    root.append(part);
+  }
   async select(id) {
     const n=this.nodes.get(id);if(!n)return;
     if(n.holder.hidden){this.setUnitValue('');this.filter(false);}
@@ -213,6 +228,7 @@ class KnowledgeMap {
       const section=(label,text)=>{if(!text)return;const part=this.node('section');part.append(this.node('h3',label),this.node('p',text));root.append(part);};
       section('概念讲解',fields['解释']);section('函数语法',fields['函数语法']);section('参数说明',fields['参数说明']);
       this.codeBlock(root,fields['运行示例'],'示例代码',true);section('易错点',fields['易错提醒']);
+      this.supplement(root,k.enrichment);
       const sources=this.node('details');sources.append(this.node('summary','内容来源'));
       (k.sources||[]).forEach(c=>sources.append(this.node('p',c.file+' · '+c.locator)));root.append(sources);
       const related=this.edges.filter(e=>e.from===id || e.to===id).map(e=>e.from===id?e.to:e.from);

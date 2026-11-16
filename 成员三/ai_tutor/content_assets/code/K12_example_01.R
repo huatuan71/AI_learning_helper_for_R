@@ -1,0 +1,6 @@
+roster <- c("Ann", "Ben", "Cai", "Dan", "Eva")
+present <- c("Ben", "Eva", "Ann", "Ben")
+print(unique(present))
+print(roster %in% present)
+print(roster[!roster %in% present])
+print(match(c("Eva", "Zoe"), roster))

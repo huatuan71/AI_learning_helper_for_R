@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="796" viewBox="0 0 720 796" role="img" aria-labelledby="title desc">
+<title id="title">K17 sep与collapse的两层连接</title>
+<desc id="desc">左侧为两列材料A、B、C和1、2、3，同一行用sep连接成A_1、B_2、C_3三个结果；右侧把这三个结果用collapse连接成一个字符串A_1|B_2|C_3。图下注明sep作用于每一行内部，collapse作用于行与行之间。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#79bdf1" stroke-width="1.5"/></marker></defs>
+<rect width="720" height="796" rx="20" fill="#030813"/>
+<g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#b7c5d4">
+<text x="36" y="62" font-size="32" font-weight="700" fill="#f5f9ff">K17 sep与collapse的两层连接</text>
+<text x="36" y="112" font-size="21" fill="#79bdf1" font-weight="700" font-family="Consolas, Menlo, monospace">paste(LETTERS[1:3], 1:3, sep = "_", collapse = "|")</text>
+<rect x="36" y="160" width="64" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="68.0" y="199.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A</text>
+<text x="118" y="200" font-size="26" fill="#9eafc2" text-anchor="middle">+</text>
+<rect x="136" y="160" width="64" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="168.0" y="199.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">1</text>
+<line x1="212" y1="190" x2="262" y2="190" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="270" y="160" width="110" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="325.0" y="199.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">A_1</text>
+<line x1="388" y1="190" x2="452" y2="230" stroke="#9eafc2" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="36" y="250" width="64" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="68.0" y="289.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B</text>
+<text x="118" y="290" font-size="26" fill="#9eafc2" text-anchor="middle">+</text>
+<rect x="136" y="250" width="64" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="168.0" y="289.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">2</text>
+<line x1="212" y1="280" x2="262" y2="280" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="270" y="250" width="110" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="325.0" y="289.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">B_2</text>
+<line x1="388" y1="280" x2="452" y2="260" stroke="#9eafc2" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="36" y="340" width="64" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="68.0" y="379.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">C</text>
+<text x="118" y="380" font-size="26" fill="#9eafc2" text-anchor="middle">+</text>
+<rect x="136" y="340" width="64" height="60" rx="10" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="168.0" y="379.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">3</text>
+<line x1="212" y1="370" x2="262" y2="370" stroke="#79bdf1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="270" y="340" width="110" height="60" rx="10" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="325.0" y="379.0" font-size="26" fill="#f5f9ff" font-weight="600" text-anchor="middle" font-family="Consolas, Menlo, monospace">C_3</text>
+<line x1="388" y1="370" x2="452" y2="290" stroke="#9eafc2" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="460" y="222" width="228" height="76" rx="12" fill="#123352" stroke="#79bdf1" stroke-width="2"/>
+<text x="574" y="270" font-size="26" fill="#f5f9ff" font-weight="700" text-anchor="middle" font-family="Consolas, Menlo, monospace">A_1|B_2|C_3</text>
+<text x="146" y="460" font-size="24" fill="#79bdf1" font-weight="700" text-anchor="middle">第一层 sep：每一行内部</text>
+<text x="574" y="360" font-size="24" fill="#79bdf1" font-weight="700" text-anchor="middle">第二层 collapse：</text>
+<text x="574" y="396" font-size="24" fill="#79bdf1" font-weight="700" text-anchor="middle">行与行之间</text>
+<rect x="36" y="510" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="554" font-size="28" fill="#79bdf1" font-weight="700">结果个数不变 → 用 sep</text>
+<text x="58" y="596" font-size="25" fill="#b7c5d4">paste(LETTERS[1:3], 1:3, sep = "_") 得到 3 项</text>
+<rect x="36" y="640" width="648" height="110" rx="12" fill="#0c1522" stroke="#294158" stroke-width="2"/>
+<text x="58" y="684" font-size="28" fill="#79bdf1" font-weight="700">合成一个字符串 → 用 collapse</text>
+<text x="58" y="726" font-size="25" fill="#b7c5d4">只有 collapse 才会让结果长度变为 1</text>
+</g>
+</svg>
