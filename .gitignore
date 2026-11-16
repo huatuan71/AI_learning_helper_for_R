@@ -39,9 +39,12 @@ Desktop.ini
 
 # Logs and machine-local tool settings
 *.log
+**/.import.lock
+.worktrees/
 .codex/
 .aws/
 .tmp/
 .runtime/
 .playwright-cli/
 **/output/playwright/
+**/output/test-results/

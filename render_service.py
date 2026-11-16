@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-APP_ROOT = Path(__file__).resolve().parent / '\u6210\u5458\u4e09' / 'ai_tutor'
+APP_ROOT = Path(__file__).resolve().parent / 'ai_tutor'
 
 
 def main(argv=None):

@@ -1,0 +1,1836 @@
+{
+  "version": "review-bank-v1",
+  "items": [
+    {
+      "id": "K01-concept-01",
+      "knowledgeId": "K01",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "保存脚本后，怎样让赋值语句实际建立对象？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "保存和执行是两个步骤。执行赋值语句才能建立对象。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K01",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S1 PDF  4–20；S2 PDF  1–7。先修：无。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "执行该赋值语句",
+        "只改脚本文件名",
+        "只打开环境窗口"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K01-application-01",
+      "knowledgeId": "K01",
+      "type": "application",
+      "format": "self",
+      "prompt": "按顺序说明赋值、计算均值和查看版本的作用。脚本已保存但对象不存在时，先检查什么？",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "R是执行计算的语言和环境；RStudio是帮助编辑、运行和查看结果的开发工具。保存脚本后要执行相应代码，环境窗口才会出现对象。\n<- 把右侧结果赋给左侧名称；print 显式显示对象。\n课程示例记录的输出（本应用未运行验证）\n[1] 3\n[1] \"R version 4.6.1 (2026-06-24 ucrt)\"\n在脚本里写好不等于已执行；对象名称区分大小写。",
+      "code": "x <- 1:5\nprint(mean(x))\nprint(R.version.string)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K01",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S1 PDF  4–20；S2 PDF  1–7。先修：无。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K02-concept-01",
+      "knowledgeId": "K02",
+      "type": "concept",
+      "format": "self",
+      "prompt": "说明安装包、加载包与使用包名::函数名的区别。",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "安装是把包放到电脑上；library将包附加到当前会话；包名::函数名可以直接调用已安装包的导出函数。\n包名必须真实存在；安装通常需要网络；每个新会话重新加载。\n不要把package_name当成真实包名；不要在每次分析时重复安装。课件“调用包后方可使用”需加上::用法的例外。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K02",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S1 PDF 21–29；S2 PDF 8–10。先修：K01。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K02-application-01",
+      "knowledgeId": "K02",
+      "type": "application",
+      "format": "self",
+      "prompt": "解释requireNamespace与stats::median这两行的作用，指出哪一行计算中位数。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "安装是把包放到电脑上；library将包附加到当前会话；包名::函数名可以直接调用已安装包的导出函数。\n包名必须真实存在；安装通常需要网络；每个新会话重新加载。\n课程示例记录的输出（本应用未运行验证）\n[1] TRUE\n[1] 5\n不要把package_name当成真实包名；不要在每次分析时重复安装。课件“调用包后方可使用”需加上::用法的例外。",
+      "code": "print(requireNamespace(\"stats\", quietly=TRUE))\nprint(stats::median(c(1,5,9)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K02",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S1 PDF 21–29；S2 PDF 8–10。先修：K01。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K03-concept-01",
+      "knowledgeId": "K03",
+      "type": "concept",
+      "format": "self",
+      "prompt": "遇到函数使用问题时，怎样组织帮助查询与可复现记录？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "先查看函数用途、参数和示例，再把问题缩小到最短代码；记录版本便于复查。\nhelp的topic是帮助主题；example运行文档中的示例。\n复制控制台代码时去掉提示符 > 和续行符 +；不要把文档中的输出当输入。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K03",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S1 PDF 28–42。先修：K01、K02。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K03-application-01",
+      "knowledgeId": "K03",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明head与packageVersion分别检查什么，并说明复制控制台代码时应去掉哪些提示符。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "先查看函数用途、参数和示例，再把问题缩小到最短代码；记录版本便于复查。\nhelp的topic是帮助主题；example运行文档中的示例。\n课程示例记录的输出（本应用未运行验证）\n[1] 1 2 3 4 5 6\n[1] '4.6.1'\n复制控制台代码时去掉提示符 > 和续行符 +；不要把文档中的输出当输入。",
+      "code": "print(utils::head(1:10))\nprint(packageVersion(\"base\"))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K03",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S1 PDF 28–42。先修：K01、K02。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K04-concept-01",
+      "knowledgeId": "K04",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "typeof(1L)的结果是什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "课程示例给出typeof(1L)为integer。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K04",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 9–14；S4 第15章 PDF 230–247。先修：K01。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "integer",
+        "character",
+        "logical"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K04-application-01",
+      "knowledgeId": "K04",
+      "type": "application",
+      "format": "self",
+      "prompt": "预测三项typeof、混合向量和字符转数值的结果，并说明原因。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "typeof查看底层存储，class查看对象的行为类别。数字加引号后是字符；原子向量的元素采用同一种底层类型。\nx为待检查或转换对象。常用原子类型有logical、integer、double、character；还有complex、raw。\n课程示例记录的输出（本应用未运行验证）\n[1] \"integer\"   \"double\"    \"character\"\n[1] \"1\" \"2\"\n[1] 1 2\nnumeric通常涵盖整数和双精度数；factor是带levels/class的整数编码对象，不是第七种原子类型。",
+      "code": "print(c(typeof(1L),typeof(1),typeof(\"1\")))\nprint(c(1,\"2\"))\nprint(as.numeric(c(\"1\",\"2\")))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K04",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 9–14；S4 第15章 PDF 230–247。先修：K01。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K05-concept-01",
+      "knowledgeId": "K05",
+      "type": "concept",
+      "format": "self",
+      "prompt": "逐项逻辑判断与单个短路判断分别使用哪些运算符？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "比较产生逻辑向量；&和|逐项组合条件；&&和||用于单个逻辑判断并短路求值。\n==判断相等；!取反；any至少一个为真；all全部为真。\n使用TRUE/FALSE；T/F可以被重新赋值；不要把赋值=误写成比较==。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K05",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 14、72；S4 第14章 PDF 219–222。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K05-application-01",
+      "knowledgeId": "K05",
+      "type": "application",
+      "format": "self",
+      "prompt": "预测筛选结果以及any与all的结果，说明边界60和90是否保留。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "比较产生逻辑向量；&和|逐项组合条件；&&和||用于单个逻辑判断并短路求值。\n==判断相等；!取反；any至少一个为真；all全部为真。\n课程示例记录的输出（本应用未运行验证）\n[1] 80\n[1]  TRUE FALSE\n使用TRUE/FALSE；T/F可以被重新赋值；不要把赋值=误写成比较==。",
+      "code": "x <- c(50,80,90)\nprint(x[x>=60 & x<90])\nprint(c(any(x>=90),all(x>=60)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K05",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 14、72；S4 第14章 PDF 219–222。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K06-concept-01",
+      "knowledgeId": "K06",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "要检测向量x中的缺失项，应使用哪种表达式？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "is.na检测NA及NaN。与NA比较得到未知逻辑值。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K06",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 11、73；S4 第15章 PDF 233–234。先修：K04、K05。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "is.na(x)",
+        "x == NA",
+        "is.infinite(x)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K06-application-01",
+      "knowledgeId": "K06",
+      "type": "application",
+      "format": "self",
+      "prompt": "预测均值、缺失检测和有限值检测结果，解释na.rm是否改变原向量。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "NA表示缺失；NaN是未定义的数值计算结果；Inf表示无穷。检查缺失用is.na，检查有限数用is.finite。\nna.rm=TRUE在汇总时移除缺失项，不会修改原向量。\n课程示例记录的输出（本应用未运行验证）\n[1] 3\n[1]  TRUE  TRUE FALSE\n[1] FALSE FALSE FALSE  TRUE\nx==NA得不到有效缺失筛选；全缺失时mean(...,na.rm=TRUE)得到NaN。",
+      "code": "x <- c(2,NA,4)\nprint(mean(x,na.rm=TRUE))\nprint(is.na(c(NA,NaN,Inf)))\nprint(is.finite(c(NA,NaN,Inf,2)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K06",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 11、73；S4 第15章 PDF 233–234。先修：K04、K05。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K07-concept-01",
+      "knowledgeId": "K07",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "直接对普通因子as.numeric得到什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "先转字符再转数值，才能按数值标签解释。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K07",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 15–19；S4 第11章 PDF 183–188。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "内部整数编码",
+        "原标签代表的数值",
+        "总是字符"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K07-application-01",
+      "knowledgeId": "K07",
+      "type": "application",
+      "format": "self",
+      "prompt": "解释因子排序与字符转数值步骤，指出直接as.numeric(g)的风险。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "因子保存有限类别；有序因子还保存类别之间的次序。用levels明确类别顺序。\nlevels是允许的原始取值及顺序；labels是显示标签；ordered是否有序。\n课程示例记录的输出（本应用未运行验证）\n[1] low  high\nLevels: low < mid < high\n[1] 10 20\n直接as.numeric(factor)得到内部编码；不在levels中的取值变成NA。",
+      "code": "f <- factor(c(\"low\",\"high\"),levels=c(\"low\",\"mid\",\"high\"),ordered=TRUE)\nprint(f)\ng <- factor(c(\"10\",\"20\"))\nprint(as.numeric(as.character(g)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K07",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 15–19；S4 第11章 PDF 183–188。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K08-concept-01",
+      "knowledgeId": "K08",
+      "type": "concept",
+      "format": "self",
+      "prompt": "Date、POSIXct与POSIXlt有何区别？解析时为什么要写格式与时区？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "Date表示日期，POSIXct表示时间点，POSIXlt按年/月/日等成分组织。解析格式要对应输入，时间点要考虑时区。\n%Y四位年；%m月；%d日；%H时；%M分；%S秒；tz指定时区。\nformat的结果是字符；月份%m与分钟%M不同；英文月份解析依赖语言区域。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K08",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 20–27；S4 第12章 PDF 189–204。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K08-application-01",
+      "knowledgeId": "K08",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明日期格式、天数间隔与时区格式化的对应关系，区分%m与%M。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "Date表示日期，POSIXct表示时间点，POSIXlt按年/月/日等成分组织。解析格式要对应输入，时间点要考虑时区。\n%Y四位年；%m月；%d日；%H时；%M分；%S秒；tz指定时区。\n课程示例记录的输出（本应用未运行验证）\n[1] 10\n[1] \"2026-11-11 08:30\"\nformat的结果是字符；月份%m与分钟%M不同；英文月份解析依赖语言区域。",
+      "code": "d <- as.Date(c(\"2026/11/01\",\"2026/11/11\"),format=\"%Y/%m/%d\")\nprint(as.numeric(difftime(d[2],d[1],units=\"days\")))\ntm <- as.POSIXct(\"2026-11-11 08:30:00\",tz=\"Asia/Shanghai\")\nprint(format(tm,\"%Y-%m-%d %H:%M\",tz=\"Asia/Shanghai\"))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K08",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 20–27；S4 第12章 PDF 189–204。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K09-concept-01",
+      "knowledgeId": "K09",
+      "type": "concept",
+      "format": "self",
+      "prompt": "c、seq、rep与sample分别做什么？抽样前为什么设置种子？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "向量是一组有序元素。c拼接，seq按规则生成，rep重复；抽样需设种子才便于复现。\nby步长；times重复次数；replace是否有放回。\nx:y包含两端；1:0得到c(1,0)，不是空向量；不同R版本或随机算法可能影响随机结果。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K09",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 30–31；S2 PDF 1–5。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K09-application-01",
+      "knowledgeId": "K09",
+      "type": "application",
+      "format": "self",
+      "prompt": "读出seq和rep的结果，解释为什么两次相同种子的抽样可以对照。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "向量是一组有序元素。c拼接，seq按规则生成，rep重复；抽样需设种子才便于复现。\nby步长；times重复次数；replace是否有放回。\n课程示例记录的输出（本应用未运行验证）\n[1]  0  2  4  6  8 10\n[1] 1 2 1 2\n[1]  1  5 10\nx:y包含两端；1:0得到c(1,0)，不是空向量；不同R版本或随机算法可能影响随机结果。",
+      "code": "print(seq(0,10,by=2))\nprint(rep(c(1,2),times=2))\nset.seed(42); a <- sample(1:10,3)\nset.seed(42); b <- sample(1:10,3)\nprint(a)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K09",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 30–31；S2 PDF 1–5。先修：K04。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K10-concept-01",
+      "knowledgeId": "K10",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "R向量的第一个元素使用什么位置索引？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "R从1开始编号，负索引用于排除。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K10",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 32；S4 第15章 PDF 237–239。先修：K05、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "1",
+        "0",
+        "-1"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K10-application-01",
+      "knowledgeId": "K10",
+      "type": "application",
+      "format": "self",
+      "prompt": "读出按位置选取、which与which.max的结果，说明名称是否保留。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "R从1开始编号。正索引选取、负索引排除、逻辑索引按条件保留；which返回为真的位置。\ni可以是位置或名称；正负位置不可混用，0除外。\n课程示例记录的输出（本应用未运行验证）\na c \n4 8 \na c \n1 3 \nc \n3\n原子向量越界用[通常得到NA；列表[[越界通常报错，不能一概而论。",
+      "code": "x <- c(a=4,b=2,c=8)\nprint(x[c(1,3)])\nprint(which(x>3))\nprint(which.max(x))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K10",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 32；S4 第15章 PDF 237–239。先修：K05、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K11-concept-01",
+      "knowledgeId": "K11",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "c(1,2,3,4)+c(10,20)得到什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "短向量10,20循环配对两次。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K11",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S4 第15章 PDF 235–237；S3 PDF 34。先修：K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "11,22,13,24",
+        "11,12,23,24",
+        "总是报错"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K11-application-01",
+      "knowledgeId": "K11",
+      "type": "application",
+      "format": "self",
+      "prompt": "分别预测加常数与加短向量的结果，说明循环补齐顺序。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "R常按元素计算；短向量会循环使用。长度不是整数倍时可能警告，整数倍时也可能逻辑错误。\n元素级运算依次配对；长度1常用于给所有元素加常数。\n课程示例记录的输出（本应用未运行验证）\n[1] 11 12 13 14\n[1] 11 22 13 24\n无警告不代表配对正确；计算应主动检查长度。",
+      "code": "x <- c(1,2,3,4)\nprint(x+10)\nprint(x+c(10,20))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K11",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S4 第15章 PDF 235–237；S3 PDF 34。先修：K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K12-concept-01",
+      "knowledgeId": "K12",
+      "type": "concept",
+      "format": "self",
+      "prompt": "match、%in%与集合运算返回的内容有什么区别？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "集合运算关注是否出现，通常去重；match按左侧顺序返回在右侧首次匹配的位置，%in%返回成员判断。\ntable为查找表；match未匹配默认NA；setdiff有方向。\nsetdiff(x,y)不同于setdiff(y,x)；match遇到重复只取第一次。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K12",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 33、38。先修：K09、K10。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K12-application-01",
+      "knowledgeId": "K12",
+      "type": "application",
+      "format": "self",
+      "prompt": "读出交集、差集和match的结果，解释差集的方向。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "集合运算关注是否出现，通常去重；match按左侧顺序返回在右侧首次匹配的位置，%in%返回成员判断。\ntable为查找表；match未匹配默认NA；setdiff有方向。\n课程示例记录的输出（本应用未运行验证）\n[1] 2\n[1] 1 3\n[1]  2  1 26\nsetdiff(x,y)不同于setdiff(y,x)；match遇到重复只取第一次。",
+      "code": "x <- c(1,2,2,3); y <- c(2,4)\nprint(intersect(x,y)); print(setdiff(x,y))\nprint(match(c(\"b\",\"a\",\"z\"),letters))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K12",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 33、38。先修：K09、K10。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K13-concept-01",
+      "knowledgeId": "K13",
+      "type": "concept",
+      "format": "self",
+      "prompt": "做数值汇总前应确认哪些信息？sd使用哪种标准差定义？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "汇总把一组值概括成少量统计量。先确认单位和缺失值，再计算。\nprobs为0到1的分位点；多数数值汇总可用na.rm；sd采用样本标准差。\nlength包含缺失项；求非缺失个数用sum(!is.na(x))；分位数算法可以通过type改变。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K13",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 34；S4 第3章 汇总。先修：K06、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K13-application-01",
+      "knowledgeId": "K13",
+      "type": "application",
+      "format": "self",
+      "prompt": "根据代码说明长度、极值、均值、中位数、总和与分位数如何核对。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "汇总把一组值概括成少量统计量。先确认单位和缺失值，再计算。\nprobs为0到1的分位点；多数数值汇总可用na.rm；sd采用样本标准差。\n课程示例记录的输出（本应用未运行验证）\nlength    min    max   mean median    sum \n       4      2      8      5      5     20 \n       0%  50% 100% \n       2    5    8\nlength包含缺失项；求非缺失个数用sum(!is.na(x))；分位数算法可以通过type改变。",
+      "code": "x <- c(2,4,6,8)\nprint(c(length=length(x),min=min(x),max=max(x),mean=mean(x),median=median(x),sum=sum(x)))\nprint(quantile(x,c(0,.5,1)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K13",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 34；S4 第3章 汇总。先修：K06、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K14-concept-01",
+      "knowledgeId": "K14",
+      "type": "concept",
+      "format": "self",
+      "prompt": "sort与order分别返回什么？重排数据框应选用哪个？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "sort给排序后的值；order给排列所需的原位置；rank给每个原始元素的秩。\ndecreasing控制降序；ties.method控制相同值的秩。\n课件“原始向量排序后的位置”只适合无并列值的直观解释；默认并列秩取平均。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K14",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 35–37。先修：K10。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K14-application-01",
+      "knowledgeId": "K14",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明排序值与排序索引的差别，解释缺失项的位置。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "sort给排序后的值；order给排列所需的原位置；rank给每个原始元素的秩。\ndecreasing控制降序；ties.method控制相同值的秩。\n课程示例记录的输出（本应用未运行验证）\n[1] 2 4 5 6 8\n[1] 2 1 4 5 3\n[1] 2 1 5 3 4\n[1] 1.5 1.5 3.0\n课件“原始向量排序后的位置”只适合无并列值的直观解释；默认并列秩取平均。",
+      "code": "x <- c(4,2,8,5,6)\nprint(sort(x)); print(order(x)); print(rank(x))\nprint(rank(c(2,2,5)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K14",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 35–37。先修：K10。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K15-concept-01",
+      "knowledgeId": "K15",
+      "type": "concept",
+      "format": "self",
+      "prompt": "cut如何把连续数据分组？断点端点的归属受什么参数影响？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "cut把连续数字放进不同区间；边界是否纳入决定端点落在哪组。\nbreaks为分界点；right=TRUE表示右闭；include.lowest将最外侧端点纳入。\n默认不含最小边界；labels数量必须等于区间数；区间外值变NA。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K15",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 38–39。先修：K07、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K15-application-01",
+      "knowledgeId": "K15",
+      "type": "application",
+      "format": "self",
+      "prompt": "按代码中的断点说明分箱与端点归属，指出标签如何对应区间。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "cut把连续数字放进不同区间；边界是否纳入决定端点落在哪组。\nbreaks为分界点；right=TRUE表示右闭；include.lowest将最外侧端点纳入。\n课程示例记录的输出（本应用未运行验证）\n[1] low  low  high high\nLevels: low high\n默认不含最小边界；labels数量必须等于区间数；区间外值变NA。",
+      "code": "g <- cut(c(0,60,61,100),breaks=c(0,60,100),labels=c(\"low\",\"high\"),include.lowest=TRUE)\nprint(g)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K15",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 38–39。先修：K07、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K16-concept-01",
+      "knowledgeId": "K16",
+      "type": "concept",
+      "format": "self",
+      "prompt": "substr与substring的起止位置如何解释？nchar返回什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "nchar数每个字符串的字符数，length数向量有几个元素；substr按起止位置截取。\nstart/stop从1开始，stop包含在内；chars与bytes可能不同。\n中文字符数不是字节数；文本必须正确解码后再处理。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K16",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 40–41；S4 第10章 PDF 160–163。先修：K04、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K16-application-01",
+      "knowledgeId": "K16",
+      "type": "application",
+      "format": "self",
+      "prompt": "逐行说明字符长度、截取与替换的目标，核对位置起点。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "nchar数每个字符串的字符数，length数向量有几个元素；substr按起止位置截取。\nstart/stop从1开始，stop包含在内；chars与bytes可能不同。\n课程示例记录的输出（本应用未运行验证）\n[1] 3 4\n[1] 2\n[1] \"R\" \"d\"\n中文字符数不是字节数；文本必须正确解码后再处理。",
+      "code": "x <- c(\"R语言\",\"data\")\nprint(nchar(x)); print(length(x)); print(substr(x,1,1))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K16",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 40–41；S4 第10章 PDF 160–163。先修：K04、K09。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K17-concept-01",
+      "knowledgeId": "K17",
+      "type": "concept",
+      "format": "self",
+      "prompt": "paste的sep和collapse分别控制什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "sep控制每组内部如何连接；collapse把整个结果向量再合成一个字符串；paste0相当于sep为空。\n...可以为多个向量；sep是项内分隔；collapse是项间分隔。\nsep和collapse作用层次不同；长度不等会循环。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K17",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 42–44。先修：K09、K16。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K17-application-01",
+      "knowledgeId": "K17",
+      "type": "application",
+      "format": "self",
+      "prompt": "区分本例逐项拼接与合并成一个字符串的操作。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "sep控制每组内部如何连接；collapse把整个结果向量再合成一个字符串；paste0相当于sep为空。\n...可以为多个向量；sep是项内分隔；collapse是项间分隔。\n课程示例记录的输出（本应用未运行验证）\n[1] \"A_1\" \"B_2\" \"C_3\" \"D_4\"\n[1] \"A_1|B_2|C_3|D_4\"\nsep和collapse作用层次不同；长度不等会循环。",
+      "code": "x <- paste(LETTERS[1:4],1:4,sep=\"_\")\nprint(x); print(paste(x,collapse=\"|\"))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K17",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 42–44。先修：K09、K16。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K18-concept-01",
+      "knowledgeId": "K18",
+      "type": "concept",
+      "format": "self",
+      "prompt": "grepl、grep、sub与gsub各返回什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "grep返回匹配位置，grepl返回逻辑值；sub每个字符串只替换首次匹配，gsub替换所有匹配。\npattern为正则表达式；fixed=TRUE按普通文本匹配；value=TRUE返回匹配文本。\n正则中的点代表任意字符；按字面替换时使用fixed=TRUE或正确转义。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K18",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 45–47；S4 第10章 PDF 164–181。先修：K16。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K18-application-01",
+      "knowledgeId": "K18",
+      "type": "application",
+      "format": "self",
+      "prompt": "逐行说明正则检测、位置查找与替换，解释转义符的作用。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "grep返回匹配位置，grepl返回逻辑值；sub每个字符串只替换首次匹配，gsub替换所有匹配。\npattern为正则表达式；fixed=TRUE按普通文本匹配；value=TRUE返回匹配文本。\n课程示例记录的输出（本应用未运行验证）\n[1] 1\n[1]  TRUE FALSE\n[1] \"r R\"  \"data\"\n[1] \"r r\"  \"data\"\n[1] \"a_b\"\n正则中的点代表任意字符；按字面替换时使用fixed=TRUE或正确转义。",
+      "code": "x <- c(\"R R\",\"data\")\nprint(grep(\"R\",x)); print(grepl(\"R\",x))\nprint(sub(\"R\",\"r\",x)); print(gsub(\"R\",\"r\",x))\nprint(gsub(\".\",\"_\",\"a.b\",fixed=TRUE))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K18",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 45–47；S4 第10章 PDF 164–181。先修：K16。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K19-concept-01",
+      "knowledgeId": "K19",
+      "type": "concept",
+      "format": "self",
+      "prompt": "矩阵有哪些类型和维度约束？默认怎样填充？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "矩阵是带两个维度的向量；基础原子矩阵中各元素同类型，默认按列填充。\nbyrow=TRUE按行填；drop=FALSE避免单行或单列降为向量。\n矩阵不是数据框；混入字符可能使整个矩阵转为字符。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K19",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 48–52。先修：K09、K10。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K19-application-01",
+      "knowledgeId": "K19",
+      "type": "application",
+      "format": "self",
+      "prompt": "解释本例矩阵的行列、填充顺序与dimnames，核对取值位置。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "矩阵是带两个维度的向量；基础原子矩阵中各元素同类型，默认按列填充。\nbyrow=TRUE按行填；drop=FALSE避免单行或单列降为向量。\n课程示例记录的输出（本应用未运行验证）\n[,1] [,2] [,3]\n[1,]    1    3    5\n[2,]    2    4    6\n     [,1]\n[1,]    1\n[2,]    2\n[1] 2 3\n矩阵不是数据框；混入字符可能使整个矩阵转为字符。",
+      "code": "m <- matrix(1:6,nrow=2)\nprint(m); print(m[,1,drop=FALSE])\nprint(dim(m))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K19",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 48–52。先修：K09、K10。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K20-concept-01",
+      "knowledgeId": "K20",
+      "type": "concept",
+      "format": "self",
+      "prompt": "转置、按行列合并与行列汇总分别使用哪些函数？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "rbind按行叠加，cbind按列拼接，t转置交换行列。操作前检查另一维长度与变量含义。\n矩阵rbind需列数相容，cbind需行数相容；diag向量创建对角矩阵。\n按位置绑定不会自动按学生ID对齐；按键匹配应使用merge或join。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K20",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 51–55。先修：K19。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K20-application-01",
+      "knowledgeId": "K20",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明转置前后维度、行列绑定及行列汇总的结果含义。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "rbind按行叠加，cbind按列拼接，t转置交换行列。操作前检查另一维长度与变量含义。\n矩阵rbind需列数相容，cbind需行数相容；diag向量创建对角矩阵。\n课程示例记录的输出（本应用未运行验证）\na b\n[1,] 1 3\n[2,] 2 4\n[3,] 1 3\n[4,] 2 4\n     a b extra\n[1,] 1 3     5\n[2,] 2 4     6\n  [,1] [,2]\na    1    2\nb    3    4\n     [,1] [,2]\n[1,]    2    0\n[2,]    0    3\n按位置绑定不会自动按学生ID对齐；按键匹配应使用merge或join。",
+      "code": "m <- matrix(1:4,2)\ncolnames(m) <- c(\"a\",\"b\")\nprint(rbind(m,m)); print(cbind(m,extra=c(5,6)))\nprint(t(m)); print(diag(c(2,3)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K20",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 51–55。先修：K19。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K21-concept-01",
+      "knowledgeId": "K21",
+      "type": "concept",
+      "format": "self",
+      "prompt": "矩阵逐元素乘法与矩阵乘法使用什么运算符？维度如何匹配？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "*是逐元素乘，%*%是线性代数矩阵乘；solve(A,b)求解Ax=b，solve(A)求逆。\n乘法要求左矩阵列数等于右矩阵行数；solve要求相应问题可解。\n维度不相容会报non-conformable arguments；奇异矩阵不可直接求逆。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K21",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 53–56。先修：K19、K20。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K21-application-01",
+      "knowledgeId": "K21",
+      "type": "application",
+      "format": "self",
+      "prompt": "先核对维度，再说明代码中逐项乘法与矩阵乘法的区别。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "*是逐元素乘，%*%是线性代数矩阵乘；solve(A,b)求解Ax=b，solve(A)求逆。\n乘法要求左矩阵列数等于右矩阵行数；solve要求相应问题可解。\n课程示例记录的输出（本应用未运行验证）\n[,1] [,2]\n[1,]    4    0\n[2,]    0   16\n     [,1] [,2]\n[1,]    4    0\n[2,]    0   16\n[1] 3 2\n     [,1] [,2]\n[1,]    4    0\n[2,]    0   16\n     [,1] [,2]\n[1,]    4    0\n[2,]    0   16\n维度不相容会报non-conformable arguments；奇异矩阵不可直接求逆。",
+      "code": "A <- matrix(c(2,0,0,4),2); b <- c(6,8)\nprint(A*A); print(A%*%A); print(solve(A,b))\nprint(crossprod(A)); print(tcrossprod(A))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K21",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 53–56。先修：K19、K20。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K22-concept-01",
+      "knowledgeId": "K22",
+      "type": "concept",
+      "format": "self",
+      "prompt": "eigen、svd与solve分别用于什么任务？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "特征分解描述方阵的特征方向；SVD可用于矩形矩阵。先学维度和矩阵乘法，再接触此扩展。\nsymmetric=TRUE只用于确知对称的矩阵；nu/nv指定奇异向量数量。\n特征向量/奇异向量符号可整体翻转；浮点计算用容差检查。课件rARPACK快速分解只作扩展线索。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K22",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 54–57。先修：K21。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K22-application-01",
+      "knowledgeId": "K22",
+      "type": "application",
+      "format": "self",
+      "prompt": "指出特征分解、奇异值分解或求解步骤的输入要求与输出含义。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "特征分解描述方阵的特征方向；SVD可用于矩形矩阵。先学维度和矩阵乘法，再接触此扩展。\nsymmetric=TRUE只用于确知对称的矩阵；nu/nv指定奇异向量数量。\n课程示例记录的输出（本应用未运行验证）\n[1] 3 1\n[1] 3 1\n     [,1] [,2]\n[1,]    2    1\n[2,]    1    2\n特征向量/奇异向量符号可整体翻转；浮点计算用容差检查。课件rARPACK快速分解只作扩展线索。",
+      "code": "A <- matrix(c(2,1,1,2),2)\ne <- eigen(A,symmetric=TRUE); print(e$values)\ns <- svd(A); print(s$d)\nprint(s$u%*%diag(s$d)%*%t(s$v))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K22",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 54–57。先修：K21。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K23-concept-01",
+      "knowledgeId": "K23",
+      "type": "concept",
+      "format": "self",
+      "prompt": "稀疏矩阵为什么适合大量零值数据？应怎样检查其结构？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "当绝大部分元素为0时，可只存少量非零值及其位置，减少存储。\ni/j非零项行列位置；x对应数值；dims为完整维度。\n稀疏不保证任何操作都更快；转为普通大矩阵可能失去内存优势。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K23",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 58–62。先修：K19、K21。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K23-application-01",
+      "knowledgeId": "K23",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明稀疏矩阵构造时各位置与数值的对应关系，怎样核对结构？",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "当绝大部分元素为0时，可只存少量非零值及其位置，减少存储。\ni/j非零项行列位置；x对应数值；dims为完整维度。\n课程示例记录的输出（本应用未运行验证）\n3 x 3 sparse Matrix of class \"dgCMatrix\"   \n[1,] 5 . .\n[2,] . . .\n[3,] . 7 .\n     [,1] [,2] [,3]\n[1,]    5    0    0\n[2,]    0    0    0\n[3,]    0    7    0\n稀疏不保证任何操作都更快；转为普通大矩阵可能失去内存优势。",
+      "code": "s <- Matrix::sparseMatrix(i=c(1,3),j=c(1,2),x=c(5,7),dims=c(3,3))\nprint(s); print(as.matrix(s))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K23",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 58–62。先修：K19、K21。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K24-concept-01",
+      "knowledgeId": "K24",
+      "type": "concept",
+      "format": "self",
+      "prompt": "数组与矩阵是什么关系？apply的MARGIN指定什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "数组把向量扩展到多维；矩阵是二维数组。apply沿指定维度保留分组、对其余维度汇总。\ndim列出每一维长度；矩阵MARGIN=1按行汇总、=2按列汇总。\napply混合类型数据框可能先转为字符矩阵；对混合列优先lapply。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K24",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 63–65、82。先修：K19。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K24-application-01",
+      "knowledgeId": "K24",
+      "type": "application",
+      "format": "self",
+      "prompt": "读出第二个切片，说明按第3维和按列汇总分别保留什么。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "数组把向量扩展到多维；矩阵是二维数组。apply沿指定维度保留分组、对其余维度汇总。\ndim列出每一维长度；矩阵MARGIN=1按行汇总、=2按列汇总。\n课程示例记录的输出（本应用未运行验证）\n[,1] [,2] [,3]\n[1,]    7    9   11\n[2,]    8   10   12\n[1] 21 57\n[1]  3  7 11\napply混合类型数据框可能先转为字符矩阵；对混合列优先lapply。",
+      "code": "a <- array(1:12,dim=c(2,3,2))\nprint(a[,,2]); print(apply(a,3,sum))\nm <- matrix(1:6,2); print(apply(m,2,sum))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K24",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 63–65、82。先修：K19。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K25-concept-01",
+      "knowledgeId": "K25",
+      "type": "concept",
+      "format": "self",
+      "prompt": "数据框的行、列分别代表什么？不同列能否有不同类型？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "数据框按列保存变量，同一列类型一致，不同列可不同；每行代表一个观测。\n各列长度应相容；显式stringsAsFactors=FALSE便于跨版本解释。\n现代R的data.frame默认不自动把字符转因子；含字符列的数据框转矩阵会统一类型。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K25",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 66–69；S4 第6章。先修：K04、K09、K19。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K25-application-01",
+      "knowledgeId": "K25",
+      "type": "application",
+      "format": "self",
+      "prompt": "根据str与summary说明各列类型、缺失数和观测数。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "数据框按列保存变量，同一列类型一致，不同列可不同；每行代表一个观测。\n各列长度应相容；显式stringsAsFactors=FALSE便于跨版本解释。\n课程示例记录的输出（本应用未运行验证）\n'data.frame':\t3 obs. of  3 variables:\n $ id   : int  1 2 3\n $ name : chr  \"A\" \"B\" \"C\"\n $ score: num  80 NA 90\n       id             name       score     \n Min.   :1.0   Length   :3   Min.   :80.0  \n 1st Qu.:1.5   N.unique :3   1st Qu.:82.5  \n Median :2.0   N.blank  :0   Median :85.0  \n Mean   :2.0   Min.nchar:1   Mean   :85.0  \n 3rd Qu.:2.5   Max.nchar:1   3rd Qu.:87.5  \n Max.   :3.0                 Max.   :90.0  \n                             NAs    :1     \n  Var1 Freq\n1    a    2\n2    b    1\n现代R的data.frame默认不自动把字符转因子；含字符列的数据框转矩阵会统一类型。",
+      "code": "d <- data.frame(id=1:3,name=c(\"A\",\"B\",\"C\"),score=c(80,NA,90),stringsAsFactors=FALSE)\nstr(d); print(summary(d)); print(as.data.frame(table(c(\"a\",\"a\",\"b\"))))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K25",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 66–69；S4 第6章。先修：K04、K09、K19。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K26-concept-01",
+      "knowledgeId": "K26",
+      "type": "concept",
+      "format": "self",
+      "prompt": "数据框中[、[[和$取列后的结果有什么差异？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "d[i,j]选行列；$或[[取单列内容；[保留列集合。先明确输出是数据框还是向量。\nrows为行条件；cols为列名称；增列值应与行数相容。\n直接d[d$score>85,]可能出现全NA行；先排除NA再比较。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K26",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 70、72。先修：K05、K06、K10、K25。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K26-application-01",
+      "knowledgeId": "K26",
+      "type": "application",
+      "format": "self",
+      "prompt": "读出pass与筛选结果，说明drop=FALSE和排除NA的作用。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "d[i,j]选行列；$或[[取单列内容；[保留列集合。先明确输出是数据框还是向量。\nrows为行条件；cols为列名称；增列值应与行数相容。\n课程示例记录的输出（本应用未运行验证）\nid score\n3  3    90\n  score\n1    80\n2    NA\n3    90\n直接d[d$score>85,]可能出现全NA行；先排除NA再比较。",
+      "code": "d <- data.frame(id=1:3,score=c(80,NA,90))\nd$pass <- !is.na(d$score) & d$score>=85\nprint(d[d$pass,c(\"id\",\"score\"),drop=FALSE])\nprint(d[\"score\"])",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K26",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 70、72。先修：K05、K06、K10、K25。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K27-concept-01",
+      "knowledgeId": "K27",
+      "type": "concept",
+      "format": "self",
+      "prompt": "按键合并前为什么要检查重复键？all.x控制什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "排序用同一行索引重排所有列；合并按键匹配。重复键可能产生一对多或多对多结果。\nby指定连接键；all.x保留左表全部键；all.y保留右表全部键。\n不要单独sort分数列再放回原表；合并前查重复键；明确写TRUE，避免课件TURE拼写。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K27",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 71、74；S4 第9章 PDF 143–159。先修：K14、K25、K26。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K27-application-01",
+      "knowledgeId": "K27",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明左连接保留的键与缺失位置，以及整行排序的顺序。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "排序用同一行索引重排所有列；合并按键匹配。重复键可能产生一对多或多对多结果。\nby指定连接键；all.x保留左表全部键；all.y保留右表全部键。\n课程示例记录的输出（本应用未运行验证）\nid score group\n1  1    80  <NA>\n2  2    90     A\n3  3    70     B\n  id score\n2  2    90\n1  1    80\n3  3    70\n不要单独sort分数列再放回原表；合并前查重复键；明确写TRUE，避免课件TURE拼写。",
+      "code": "x <- data.frame(id=1:3,score=c(80,90,70)); y <- data.frame(id=c(2,3),group=c(\"A\",\"B\"))\nz <- merge(x,y,by=\"id\",all.x=TRUE)\nprint(z); print(x[order(x$score,decreasing=TRUE),])",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K27",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 71、74；S4 第9章 PDF 143–159。先修：K14、K25、K26。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K28-concept-01",
+      "knowledgeId": "K28",
+      "type": "concept",
+      "format": "self",
+      "prompt": "删除、填补或保留缺失值前应做什么判断与记录？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "删除、填补和保留缺失各有代价；异常值要结合定义和原始记录判断，不能机械删除。\ncomplete.cases检查指定对象各列；填补前保存标记，记录填补规则。\n整表na.omit会因无关列缺失而删行；均值填补改变分布，不能当成普遍最优方案。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K28",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 73。先修：K06、K25、K26。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K28-application-01",
+      "knowledgeId": "K28",
+      "type": "application",
+      "format": "self",
+      "prompt": "指出缺失标记在哪一步保留、使用什么值填补，解释记录规则的原因。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "删除、填补和保留缺失各有代价；异常值要结合定义和原始记录判断，不能机械删除。\ncomplete.cases检查指定对象各列；填补前保存标记，记录填补规则。\n课程示例记录的输出（本应用未运行验证）\nid score was_missing\n1  1    80       FALSE\n2  2    90        TRUE\n3  3   100       FALSE\n整表na.omit会因无关列缺失而删行；均值填补改变分布，不能当成普遍最优方案。",
+      "code": "d <- data.frame(id=1:3,score=c(80,NA,100))\nd$was_missing <- is.na(d$score)\nd$score[d$was_missing] <- mean(d$score,na.rm=TRUE)\nprint(d)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K28",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 73。先修：K06、K25、K26。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K29-concept-01",
+      "knowledgeId": "K29",
+      "type": "concept",
+      "format": "self",
+      "prompt": "长表与宽表如何表示时间变量？转换时身份键有什么要求？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "宽表常把年份分散成列；长表把年份放一列、观测值放另一列。每条记录需有清楚的身份键。\nvarying为同一变量的多列；timevar时间列名；idvar观测标识；direction长或宽。\n转换前确认id+year唯一；重复键应先查明含义，再决定是否汇总。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K29",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 75–78；S4 第8章 PDF 125–142。先修：K25、K27。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K29-application-01",
+      "knowledgeId": "K29",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明varying、timevar、times与idvar怎样协作，将宽表转成长表再还原。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "宽表常把年份分散成列；长表把年份放一列、观测值放另一列。每条记录需有清楚的身份键。\nvarying为同一变量的多列；timevar时间列名；idvar观测标识；direction长或宽。\n课程示例记录的输出（本应用未运行验证）\nid year score\nA.2025  A 2025    80\nA.2026  A 2026    90\nB.2025  B 2025    70\nB.2026  B 2026    85\n       id score.2025 score.2026\nA.2025  A         80         90\nB.2025  B         70         85\n转换前确认id+year唯一；重复键应先查明含义，再决定是否汇总。",
+      "code": "w <- data.frame(id=c(\"A\",\"B\"),y2025=c(80,70),y2026=c(90,85))\nl <- reshape(w,varying=c(\"y2025\",\"y2026\"),v.names=\"score\",timevar=\"year\",times=c(2025,2026),idvar=\"id\",direction=\"long\")\nprint(l[order(l$id,l$year),])\nback <- reshape(l,idvar=\"id\",timevar=\"year\",direction=\"wide\")\nprint(back)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K29",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 75–78；S4 第8章 PDF 125–142。先修：K25、K27。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K30-concept-01",
+      "knowledgeId": "K30",
+      "type": "concept",
+      "format": "self",
+      "prompt": "分组变量与被汇总变量分别承担什么角色？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "按类别把观测拆组，在每组计算统计量，再组合结果。分组变量与被汇总变量承担不同角色。\nby为分组列组成的list；FUN为汇总函数；...传递na.rm等。\n公式接口默认缺失处理可能先删行；为清楚展示本例使用向量+分组列表接口。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K30",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 79–82；S4 第3章。先修：K13、K25、K28。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K30-application-01",
+      "knowledgeId": "K30",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明分组列表与汇总函数的对应关系，核对各组均值。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "按类别把观测拆组，在每组计算统计量，再组合结果。分组变量与被汇总变量承担不同角色。\nby为分组列组成的list；FUN为汇总函数；...传递na.rm等。\n课程示例记录的输出（本应用未运行验证）\ngroup  x\n1     A 90\n2     B 60\n A  B \n90 60\n公式接口默认缺失处理可能先删行；为清楚展示本例使用向量+分组列表接口。",
+      "code": "d <- data.frame(group=c(\"A\",\"A\",\"B\"),score=c(80,100,60))\nprint(aggregate(d$score,list(group=d$group),mean))\nprint(tapply(d$score,d$group,mean))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K30",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 79–82；S4 第3章。先修：K13、K25、K28。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K31-concept-01",
+      "knowledgeId": "K31",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "列表L[1]得到什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "[保留列表结构，[[取出单个组件。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K31",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 83–87；S4 第15章 PDF 239–243。先修：K10、K25。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "子列表",
+        "总是数值向量",
+        "第一个名称的字符值"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K31-application-01",
+      "knowledgeId": "K31",
+      "type": "application",
+      "format": "self",
+      "prompt": "解释L[1]、L[[1]]与L$meta$course的结果结构。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "列表像可装不同对象的盒子；[取出一个子列表，[[取出其中一个对象，$按名称取对象。\ni为位置或名称；[[只取一个组件，也可用路径访问嵌套对象。\n课程示例记录的输出（本应用未运行验证）\n$scores\n[1] 80 90\n\n[1] 80 90\n[1] \"R\"\nList of 3\n $ scores: num [1:2] 80 90\n $ meta  :List of 1\n  ..$ course: chr \"R\"\n $ n     : int 2\nL[1]仍是列表；L[[1]]可能是向量、矩阵或另一个列表。",
+      "code": "L <- list(scores=c(80,90),meta=list(course=\"R\"))\nprint(L[1]); print(L[[1]]); print(L$meta$course)\nL$n <- length(L$scores); str(L)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K31",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 83–87；S4 第15章 PDF 239–243。先修：K10、K25。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K32-concept-01",
+      "knowledgeId": "K32",
+      "type": "concept",
+      "format": "self",
+      "prompt": "lapply、sapply与vapply对结果结构有什么承诺？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "lapply逐元素调用函数，总返回列表；sapply尝试简化；vapply预先声明每项结果类型和长度。\nFUN.VALUE为结果模板，如numeric(1)；...传入函数参数。\nsapply的结果结构可能随数据变化；需要稳定接口时优先vapply。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K32",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 88–90；S4 第16章 PDF 258–260。先修：K13、K31。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K32-application-01",
+      "knowledgeId": "K32",
+      "type": "application",
+      "format": "self",
+      "prompt": "比较同一组输入经过lapply、sapply和vapply后的结构与数值。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "lapply逐元素调用函数，总返回列表；sapply尝试简化；vapply预先声明每项结果类型和长度。\nFUN.VALUE为结果模板，如numeric(1)；...传入函数参数。\n课程示例记录的输出（本应用未运行验证）\n$a\n[1] 2\n\n$b\n[1] 4\n\na b \n2 4 \na b \n2 4\nsapply的结果结构可能随数据变化；需要稳定接口时优先vapply。",
+      "code": "L <- list(a=c(1,3),b=c(2,6))\nprint(lapply(L,mean)); print(sapply(L,mean))\nprint(vapply(L,mean,numeric(1)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K32",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 88–90；S4 第16章 PDF 258–260。先修：K13、K31。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K33-concept-01",
+      "knowledgeId": "K33",
+      "type": "concept",
+      "format": "self",
+      "prompt": "mapply怎样配对多个输入？会自动按名称对齐吗？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "mapply同时遍历多个输入，把同位置元素传给函数。价格列表和数量列表必须先对齐。\n...为多个变化的输入；MoreArgs为各次固定参数；SIMPLIFY控制简化。\n同名列表不会自动按名称重排；mapply按位置遍历，长度不等也会循环。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K33",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 91。先修：K11、K31、K32。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K33-application-01",
+      "knowledgeId": "K33",
+      "type": "application",
+      "format": "self",
+      "prompt": "解释名称与长度检查为什么发生在mapply之前，核对每年的收入。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "mapply同时遍历多个输入，把同位置元素传给函数。价格列表和数量列表必须先对齐。\n...为多个变化的输入；MoreArgs为各次固定参数；SIMPLIFY控制简化。\n课程示例记录的输出（本应用未运行验证）\ny2025 y2026 \n       80   320\n同名列表不会自动按名称重排；mapply按位置遍历，长度不等也会循环。",
+      "code": "price <- list(y2025=c(2,3),y2026=c(4,5))\namount <- list(y2025=c(10,20),y2026=c(30,40))\nstopifnot(identical(names(price),names(amount)), identical(lengths(price),lengths(amount)))\nincome <- mapply(function(p,n) sum(p*n),price,amount)\nprint(income)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K33",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 91。先修：K11、K31、K32。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K34-concept-01",
+      "knowledgeId": "K34",
+      "type": "concept",
+      "format": "self",
+      "prompt": "do.call、Reduce与rapply分别采用什么处理方式？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "do.call把列表展开为一次函数调用的参数；Reduce把二元函数反复用于累计结果；rapply用于递归列表。\nargs是参数列表；Reduce依次合并累计值与下一项；init为可选初值。\nReduce(merge,...)可能不断减少匹配键或扩大重复键；须明确连接方式与键。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K34",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 92–94；S3 PDF 88 扩展函数线索。先修：K27、K31、K32。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K34-application-01",
+      "knowledgeId": "K34",
+      "type": "application",
+      "format": "self",
+      "prompt": "逐段区分一次展开调用、二元累计和嵌套递归处理。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "do.call把列表展开为一次函数调用的参数；Reduce把二元函数反复用于累计结果；rapply用于递归列表。\nargs是参数列表；Reduce依次合并累计值与下一项；init为可选初值。\n课程示例记录的输出（本应用未运行验证）\nid  v\n1  1 10\n2  2 20\n[1] 12 15 18\n$a\n[1] 2\n\n$b\n$b$c\n[1] 4\nReduce(merge,...)可能不断减少匹配键或扩大重复键；须明确连接方式与键。",
+      "code": "L <- list(data.frame(id=1,v=10),data.frame(id=2,v=20))\nprint(do.call(rbind,L))\nprint(Reduce(`+`,list(1:3,4:6,7:9)))\nprint(rapply(list(a=1,b=list(c=2)),function(x) x*2,how=\"replace\"))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K34",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 92–94；S3 PDF 88 扩展函数线索。先修：K27、K31、K32。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K35-concept-01",
+      "knowledgeId": "K35",
+      "type": "concept",
+      "format": "self",
+      "prompt": "自定义函数应如何约定输入、边界和返回值？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "函数把可重复的处理步骤起名；输入参数是接口，返回值是结果。先约定输入类型和边界。\n默认参数在调用时可覆盖；stop给出明确错误；最后一个表达式也可隐式返回。\n函数不要依赖没有写进参数的外部对象；全缺失输入的行为需要说明。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K35",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S4 第14章 PDF 214–229。先修：K05、K06、K13。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K35-application-01",
+      "knowledgeId": "K35",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明safe_mean怎样检查参数并传递na.rm，指出全缺失输入需要的约定。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "函数把可重复的处理步骤起名；输入参数是接口，返回值是结果。先约定输入类型和边界。\n默认参数在调用时可覆盖；stop给出明确错误；最后一个表达式也可隐式返回。\n课程示例记录的输出（本应用未运行验证）\n[1] 3\n函数不要依赖没有写进参数的外部对象；全缺失输入的行为需要说明。",
+      "code": "safe_mean <- function(x,na.rm=FALSE) {\n        if (!is.numeric(x)) stop(\"x must be numeric\")\n        mean(x,na.rm=na.rm)\n       }\n        print(safe_mean(c(2,NA,4),na.rm=TRUE))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K35",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S4 第14章 PDF 214–229。先修：K05、K06、K13。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K36-concept-01",
+      "knowledgeId": "K36",
+      "type": "concept",
+      "format": "self",
+      "prompt": "if的条件有什么约束？ifelse怎样选择结果？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "if/else选择执行哪一段代码，条件必须是一个非缺失逻辑值；ifelse按元素选择值。\ncondition长度为1且不是NA；test可以是向量。\n不能写if(c(TRUE,FALSE))；ifelse可能改变因子或日期的属性，初学先用于普通数值/字符结果。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K36",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S4 第14章 PDF 219–223。先修：K05、K06、K35。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K36-application-01",
+      "knowledgeId": "K36",
+      "type": "application",
+      "format": "self",
+      "prompt": "区分单值if分支与向量ifelse结果，解释缺失条件的传播。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "if/else选择执行哪一段代码，条件必须是一个非缺失逻辑值；ifelse按元素选择值。\ncondition长度为1且不是NA；test可以是向量。\n课程示例记录的输出（本应用未运行验证）\n[1] \"pass\"\n[1] \"fail\" \"pass\" NA\n不能写if(c(TRUE,FALSE))；ifelse可能改变因子或日期的属性，初学先用于普通数值/字符结果。",
+      "code": "score <- 80\nif (score>=60) { print(\"pass\") } else { print(\"fail\") }\nprint(ifelse(c(50,80,NA)>=60,\"pass\",\"fail\"))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K36",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S4 第14章 PDF 219–223。先修：K05、K06、K35。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K37-concept-01",
+      "knowledgeId": "K37",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "处理长度可能为0的向量x时，哪个循环索引更合适？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "seq_along对空输入返回integer(0)。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K37",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S4 第16章 PDF 249–255。先修：K09、K31、K35、K36。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null,
+      "choices": [
+        "seq_along(x)",
+        "1:length(x)",
+        "1:0"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "K37-application-01",
+      "knowledgeId": "K37",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明预分配、seq_along、while更新条件与空输入的行为。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "for遍历已有序列，while反复检查条件。循环前分配结果空间，防止空向量和无限循环。\nseq_along为空输入返回integer(0)；break结束循环；next跳到下一次。\n课程示例记录的输出（本应用未运行验证）\n[1]  4 16 36\n[1] 3\ninteger(0)\n用1:length(x)处理空向量会遍历1和0；while循环必须让条件最终改变。",
+      "code": "x <- c(2,4,6); out <- numeric(length(x))\nfor (i in seq_along(x)) { out[i] <- x[i]^2 }\nprint(out)\ni <- 0L; while (i<3L) { i <- i+1L }; print(i)\nprint(seq_along(numeric(0)))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K37",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S4 第16章 PDF 249–255。先修：K09、K31、K35、K36。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K38-concept-01",
+      "knowledgeId": "K38",
+      "type": "concept",
+      "format": "self",
+      "prompt": "CSV导入前应明确什么？row.names=FALSE避免什么？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "文件路径指定数据位置；明确分隔符、编码和缺失表示，再检查列类型与行数。\nfileEncoding为读取源文件编码；row.names=FALSE避免写出额外行名列。\nWindows路径可用C:/folder/file.csv或双反斜杠；编码应依据实际文件，不能一律指定UTF-8。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K38",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 67；S4 第7章。先修：K08、K25。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K38-application-01",
+      "knowledgeId": "K38",
+      "type": "application",
+      "format": "self",
+      "prompt": "按顺序说明临时文件写出、读入与列检查，解释缺失表示和行名参数。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "文件路径指定数据位置；明确分隔符、编码和缺失表示，再检查列类型与行数。\nfileEncoding为读取源文件编码；row.names=FALSE避免写出额外行名列。\n课程示例记录的输出（本应用未运行验证）\nid score\n1  1    80\n2  2    NA\nWindows路径可用C:/folder/file.csv或双反斜杠；编码应依据实际文件，不能一律指定UTF-8。",
+      "code": "p <- tempfile(fileext=\".csv\")\nd <- data.frame(id=1:2,score=c(80,NA))\nwrite.csv(d,p,row.names=FALSE,na=\"\")\nz <- read.csv(p,na.strings=\"\",stringsAsFactors=FALSE)\nprint(z); unlink(p)",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K38",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 67；S4 第7章。先修：K08、K25。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K39-concept-01",
+      "knowledgeId": "K39",
+      "type": "concept",
+      "format": "self",
+      "prompt": "综合数据清洗应串联哪些步骤？报告应交代哪些数据条件？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "把类型转换、缺失检查、筛选、排序和分组汇总串起来，数据为教学模拟，非课件电影原始数据。\nscore为0–10分；boxoffice为教学设定的万元；NA为缺失。\n不能把模拟结果当真实电影结论；报告应列出有效样本数、缺失数与单位。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K39",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 3–8、66–82；本任务为原创模拟。先修：K08、K14、K18、K26、K27、K28、K30。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K39-application-01",
+      "knowledgeId": "K39",
+      "type": "application",
+      "format": "self",
+      "prompt": "按代码顺序列出类型转换、非缺失筛选、排序和分组均值，说明单位与模拟数据范围。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "把类型转换、缺失检查、筛选、排序和分组汇总串起来，数据为教学模拟，非课件电影原始数据。\nscore为0–10分；boxoffice为教学设定的万元；NA为缺失。\n课程示例记录的输出（本应用未运行验证）\nid   name score\n4  4 Film D     9\n1  1 Film A     8\n5  5 Film E     7\n    type x\n1 comedy 7\n2  drama 9\n不能把模拟结果当真实电影结论；报告应列出有效样本数、缺失数与单位。",
+      "code": "d <- data.frame(id=1:5,name=c(\"Film A\",\"Film B\",\"Film C\",\"Film D\",\"Film E\"),type=c(\"comedy\",\"drama\",\"comedy\",\"drama\",\"comedy\"),date=c(\"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\"),score=c(8,NA,6,9,7),boxoffice=c(100,200,150,120,80))\n       d$date <- as.Date(d$date)\n       keep <- d[!is.na(d$score) & d$score>=7,]\n       keep <- keep[order(keep$score,decreasing=TRUE),]\n       print(keep[,c(\"id\",\"name\",\"score\")])\n       print(aggregate(d$score,list(type=d$type),mean,na.rm=TRUE))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K39",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 3–8、66–82；本任务为原创模拟。先修：K08、K14、K18、K26、K27、K28、K30。核验：已实测通过。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K40-concept-01",
+      "knowledgeId": "K40",
+      "type": "concept",
+      "format": "self",
+      "prompt": "group_by与summarise各负责什么？.groups=\"drop\"有什么作用？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "用group_by指定分组，再summarise生成每组汇总；本例明确.groups=\"drop\"避免结果继续携带分组。\n...写分组变量或命名汇总表达式；.groups控制结果分组。\n课件%>%来自magrittr及其重导出；基础管道|>需R≥4.1，二者不应机械替换所有写法。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K40",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 80–81；S4 第3、13章；O1。先修：K25、K30、K35。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K40-application-01",
+      "knowledgeId": "K40",
+      "type": "application",
+      "format": "self",
+      "prompt": "按课程参数对照解释分组与汇总，预测A组2、B组5的依据。代码未运行验证。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "用group_by指定分组，再summarise生成每组汇总；本例明确.groups=\"drop\"避免结果继续携带分组。\n...写分组变量或命名汇总表达式；.groups控制结果分组。\n参考课程解释与参数推导，扩展包示例未运行验证。\n课件%>%来自magrittr及其重导出；基础管道|>需R≥4.1，二者不应机械替换所有写法。",
+      "code": "d <- data.frame(g=c(\"A\",\"A\",\"B\"),x=c(1,3,5))\ng <- dplyr::group_by(d,g)\nprint(dplyr::summarise(g,m=mean(x),.groups=\"drop\"))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K40",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 80–81；S4 第3、13章；O1。先修：K25、K30、K35。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K41-concept-01",
+      "knowledgeId": "K41",
+      "type": "concept",
+      "format": "self",
+      "prompt": "pivot_longer与pivot_wider怎样对应长宽表转换？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "新代码可用pivot_longer/pivot_wider表示长宽表转换；教材gather/spread的思路可对应学习。\ncols指定展开列；names_to/values_to指定长表列名；names_from/values_from指定宽表来源。\nid+year不唯一时pivot_wider可能生成列表列；不要未经判断直接取均值。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K41",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S4 第8章；O2、O3；现代补充。先修：K25、K29。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K41-application-01",
+      "knowledgeId": "K41",
+      "type": "application",
+      "format": "self",
+      "prompt": "根据输入说明长表应有多少行及列含义，再说明还原宽表需要的键。代码未运行验证。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "新代码可用pivot_longer/pivot_wider表示长宽表转换；教材gather/spread的思路可对应学习。\ncols指定展开列；names_to/values_to指定长表列名；names_from/values_from指定宽表来源。\n参考课程解释与参数推导，扩展包示例未运行验证。\nid+year不唯一时pivot_wider可能生成列表列；不要未经判断直接取均值。",
+      "code": "w <- data.frame(id=c(\"A\",\"B\"),y2025=c(80,70),y2026=c(90,85))\nl <- tidyr::pivot_longer(w,cols=c(y2025,y2026),names_to=\"year\",values_to=\"score\")\nprint(l); print(tidyr::pivot_wider(l,names_from=year,values_from=score))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K41",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S4 第8章；O2、O3；现代补充。先修：K25、K29。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K42-concept-01",
+      "knowledgeId": "K42",
+      "type": "concept",
+      "format": "self",
+      "prompt": "怎样识别课件中的melt、dcast与ddply？为什么明确包名前缀？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "辨认课件melt/dcast和ddply，便于解释历史代码；同一任务也可用基础R或现行tidyverse写法。\nid.vars为身份列；formula左右侧决定宽表行和列；value.var明确数值列。\nplyr和dplyr部分函数同名；使用包名前缀；本例依赖reshape2与plyr，未安装时不应声称已运行。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K42",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 76–79。先修：K29、K30。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K42-application-01",
+      "knowledgeId": "K42",
+      "type": "application",
+      "format": "self",
+      "prompt": "将melt/dcast/ddply分别对应到长表、宽表与分组汇总，说明各包依赖。代码未运行验证。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "辨认课件melt/dcast和ddply，便于解释历史代码；同一任务也可用基础R或现行tidyverse写法。\nid.vars为身份列；formula左右侧决定宽表行和列；value.var明确数值列。\n参考课程解释与参数推导，扩展包示例未运行验证。\nplyr和dplyr部分函数同名；使用包名前缀；本例依赖reshape2与plyr，未安装时不应声称已运行。",
+      "code": "w <- data.frame(id=c(\"A\",\"B\"),y2025=c(80,70),y2026=c(90,85))\nl <- reshape2::melt(w,id.vars=\"id\",variable.name=\"year\",value.name=\"score\")\nprint(reshape2::dcast(l,id~year,value.var=\"score\"))\nprint(plyr::ddply(l,\"id\",function(z) data.frame(m=mean(z$score))))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K42",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 76–79。先修：K29、K30。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K43-concept-01",
+      "knowledgeId": "K43",
+      "type": "concept",
+      "format": "self",
+      "prompt": "lubridate的ymd、year、month各做什么？标签受什么环境因素影响？",
+      "hint": "回忆课程解释中的对象、操作目标与适用条件。",
+      "reference": "lubridate简化常见日期解析和成分提取；语言相关标签与时区仍需明确。\nymd按年月日顺序解析；wday标签可受locale影响。\n不要把日期显示格式误认为底层类型；不同地区的月日顺序可能不同。",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K43",
+          "field": "解释、参数说明、易错提醒（改编对照题）",
+          "locator": "S3 PDF 25；S4 第12章。先修：K08。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K43-application-01",
+      "knowledgeId": "K43",
+      "type": "application",
+      "format": "self",
+      "prompt": "说明ymd解析和年、月提取的预期含义，并用基础format写出月份提取方法。代码未运行验证。",
+      "hint": "逐行写出输入对象、函数参数与结果结构，再与课程示例对照。",
+      "reference": "lubridate简化常见日期解析和成分提取；语言相关标签与时区仍需明确。\nymd按年月日顺序解析；wday标签可受locale影响。\n参考课程解释与参数推导，扩展包示例未运行验证。\n不要把日期显示格式误认为底层类型；不同地区的月日顺序可能不同。",
+      "code": "d <- lubridate::ymd(\"2026-11-11\")\nprint(lubridate::year(d)); print(lubridate::month(d))",
+      "sourceRefs": [
+        {
+          "knowledgeId": "K43",
+          "field": "运行示例、实际输出、易错提醒（改编对照题）",
+          "locator": "S3 PDF 25；S4 第12章。先修：K08。核验：未实测：缺少扩展包。",
+          "adapted": true
+        }
+      ],
+      "variantOf": null
+    },
+    {
+      "id": "K01-concept-variant-01",
+      "knowledgeId": "K01",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "执行这段代码后，均值应为多少？",
+      "code": "x <- 2:6\nmean(x)",
+      "hint": "",
+      "reference": "2、3、4、5、6的平均值为4。",
+      "choices": [
+        "4",
+        "3",
+        "5"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K01",
+          "field": "课程解释与运行示例变式",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K01-concept-01"
+    },
+    {
+      "id": "K04-concept-variant-01",
+      "knowledgeId": "K04",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "这个原子向量的底层类型是什么？",
+      "code": "c(2, \"3\")",
+      "hint": "",
+      "reference": "原子向量统一为字符类型。",
+      "choices": [
+        "character",
+        "double",
+        "list"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K04",
+          "field": "解释、运行示例变式",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K04-concept-01"
+    },
+    {
+      "id": "K06-concept-variant-01",
+      "knowledgeId": "K06",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "这次计算的均值应是多少？",
+      "code": "mean(c(60, NA, 80), na.rm=TRUE)",
+      "hint": "",
+      "reference": "移除缺失项后，60和80的均值为70。",
+      "choices": [
+        "70",
+        "NA",
+        "140"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K06",
+          "field": "content/supplements/K06.md 基础例题",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K06-concept-01"
+    },
+    {
+      "id": "K07-concept-variant-01",
+      "knowledgeId": "K07",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "怎样按标签得到数值30和40？",
+      "code": "g <- factor(c(\"30\", \"40\"))",
+      "hint": "",
+      "reference": "先取标签文本，再转数值，避免内部编码。",
+      "choices": [
+        "as.numeric(as.character(g))",
+        "as.numeric(g)",
+        "levels(g) <- NULL"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K07",
+          "field": "运行示例变式",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K07-concept-01"
+    },
+    {
+      "id": "K10-concept-variant-01",
+      "knowledgeId": "K10",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "which(x>4)返回哪个位置？",
+      "code": "x <- c(a=4, b=2, c=8)",
+      "hint": "",
+      "reference": "第3项8满足条件，位置为3。",
+      "choices": [
+        "3",
+        "2",
+        "8"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K10",
+          "field": "运行示例变式",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K10-concept-01"
+    },
+    {
+      "id": "K11-concept-variant-01",
+      "knowledgeId": "K11",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "结果依次为什么？",
+      "code": "c(2,4,6,8)+c(1,2)",
+      "hint": "",
+      "reference": "短向量1,2按位置循环。",
+      "choices": [
+        "3,6,7,10",
+        "3,5,8,10",
+        "3,6,9,12"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K11",
+          "field": "运行示例变式",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K11-concept-01"
+    },
+    {
+      "id": "K31-concept-variant-01",
+      "knowledgeId": "K31",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "怎样直接取出分数向量？",
+      "code": "L <- list(scores=c(80,90), meta=list(course=\"R\"))",
+      "hint": "",
+      "reference": "[[取出组件，结果是分数向量。",
+      "choices": [
+        "L[[\"scores\"]]",
+        "L[\"scores\"]",
+        "names(L)"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K31",
+          "field": "运行示例变式",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K31-concept-01"
+    },
+    {
+      "id": "K37-concept-variant-01",
+      "knowledgeId": "K37",
+      "type": "concept",
+      "format": "choice",
+      "prompt": "这段表达式返回什么？",
+      "code": "seq_along(numeric(0))",
+      "hint": "",
+      "reference": "空输入对应空索引，可使for循环执行0次。",
+      "choices": [
+        "integer(0)",
+        "c(1,0)",
+        "NA"
+      ],
+      "correctIndex": 0,
+      "sourceRefs": [
+        {
+          "knowledgeId": "K37",
+          "field": "运行示例对照",
+          "adapted": true
+        }
+      ],
+      "variantOf": "K37-concept-01"
+    }
+  ]
+}
