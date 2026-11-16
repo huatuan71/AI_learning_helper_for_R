@@ -106,6 +106,6 @@ def test_cors():
 
 def test_injected_failure(monkeypatch):
     def fail(*args): raise RuntimeError('test-only simulated failure')
-    monkeypatch.setattr('app.main.answer',fail)
+    monkeypatch.setattr('app.api.chat.answer',fail)
     r=client.post('/api/chat',json={'question':'NA'})
     assert r.status_code==500 and r.json()['error']['code']=='INTERNAL_ERROR'
