@@ -24,7 +24,7 @@
 
 确认按钮随所选类型显示“导出完整档案”或“导出对话”。导出失败时可在面板内重试，关闭后焦点返回原入口。课程离线包通过“保存离线资料”下载。
 
-学习记录的概览、复习、小结、记录使用统一宽度。学习页固定纵向滚动条占位，切换页签及前进后退均从顶部展示，页面内滚动正常。“更多”菜单使用独立浮动层实现页面背景磨砂，支持浅色与知识地图深色主题。离线资源修复版本为 `learning-export-v1`，已有离线包的设备在“设置与资料”点击“更新离线资料”，完成后刷新。
+学习记录的概览、复习、小结、记录使用统一宽度。学习页固定纵向滚动条占位，切换页签及前进后退均从顶部展示，页面内滚动正常。“更多”菜单使用独立浮动层实现页面背景磨砂，支持浅色与知识地图深色主题。菜单固定在视口中，打开及窗口尺寸改变时对齐导航，页面滚动期间保持位置；窗口高度不足时滚动菜单内部。导出面板使用纵向整行选项、分层说明和底部通栏按钮，支持方向键切换，矮窗口内可滚动。离线资源修复版本为 `learning-export-dialog-v1`，已有离线包的设备在“设置与资料”点击“更新离线资料”，完成后刷新。
 
 ### 离线使用与安装
 
@@ -163,6 +163,7 @@ npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 open http:/
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_check.js"
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_map_files.js"
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_glass_ui.js"
+npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-v3 run-code --filename "成员三/ai_tutor/tests/browser_menu_fixed.js"
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-mobile-map open http://127.0.0.1:8000/#/knowledge --device "Pixel 7"
 npx.cmd --yes --package @playwright/cli playwright-cli -s=r-tutor-mobile-map run-code --filename "成员三/ai_tutor/tests/browser_mobile_map.js"
 ```

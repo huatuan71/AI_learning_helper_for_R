@@ -108,6 +108,8 @@ def test_whitelist_and_dependency_inventory():
 
 def test_bootstrap_contract():
     bootstrap = (ROOT / 'static/bootstrap.js').read_text(encoding='utf-8')
-    assert "const build = 'learning-v1'" in bootstrap
+    html = (ROOT / 'static/index.html').read_text(encoding='utf-8')
+    build = re.search(r'/static/bootstrap\.js\?v=([^"\s]+)', html).group(1)
+    assert f"const build = '{build}'" in bootstrap
     assert 'void registerOffline()' in bootstrap
     assert bootstrap.index('void registerOffline()') < bootstrap.index('await import(')

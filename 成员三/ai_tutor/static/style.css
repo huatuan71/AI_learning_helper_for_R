@@ -252,6 +252,7 @@ summary:hover {
   z-index:50;
   max-width:calc(100vw - 24px);
   overflow-y:auto;
+  overscroll-behavior:contain;
 }
 .popover a,.popover button {
   display:block;
@@ -1033,16 +1034,50 @@ dialog::backdrop {
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
 }
-#export-dialog { width:480px; }
-#export-options { padding:0; margin:20px 0; border:0; }
-#export-options legend { font-size:14px; color:var(--muted); margin-bottom:8px; }
-.export-option { display:flex; align-items:flex-start; gap:12px; padding:14px; margin:8px 0; border:1px solid var(--line); border-radius:16px; cursor:pointer; }
-.export-option:has(input:checked) { border-color:var(--blue); background:rgba(0,113,227,.05); }
-.export-option input { width:20px; height:20px; flex-shrink:0; margin:3px 0 0; accent-color:var(--blue); }
-.export-option strong { display:block; font-size:16px; }
-.export-option small { display:block; margin-top:4px; font-size:13px; line-height:1.6; color:var(--muted); }
-#export-feedback { color:#a12e23; font-size:14px; }
+/* Export panel uses the existing glass surface, 24/16/14px type and 12/24px spacing. */
+#export-dialog {
+  width:520px;
+  max-height:calc(100dvh - 32px);
+  padding:28px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  font-family:var(--font-ui);
+}
+#export-dialog .dialog-heading { margin:0 0 24px; gap:16px; }
+#export-dialog .dialog-heading h2 { font-size:24px; letter-spacing:-.025em; }
+#export-close { flex-shrink:0; color:var(--muted); border-radius:999px; }
+#export-close:hover { color:var(--ink); background:rgba(29,29,31,.06); }
+#export-options { min-width:0; padding:0; margin:0; border:0; }
+.export-option {
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  width:100%;
+  padding:18px;
+  border:1px solid rgba(29,29,31,.12);
+  border-radius:18px;
+  background:rgba(255,255,255,.38);
+  cursor:pointer;
+}
+.export-option + .export-option { margin-top:12px; }
+.export-option:hover { background:rgba(255,255,255,.7); }
+.export-option:has(input:checked) { border-color:var(--blue); background:rgba(0,113,227,.07); }
+.export-option:has(input:focus-visible) { outline:3px solid var(--blue); outline-offset:3px; }
+.export-option input { width:20px; height:20px; flex-shrink:0; margin:2px 0 0; accent-color:var(--blue); }
+.export-option input:focus-visible { outline:none; }
+.export-option-copy { min-width:0; }
+.export-option strong { display:block; font-size:16px; font-weight:600; line-height:1.5; }
+.export-option small { display:block; margin-top:5px; font-size:14px; line-height:1.65; color:var(--muted); overflow-wrap:anywhere; text-wrap:pretty; }
+#export-dialog .dialog-actions { display:flex; margin-top:24px; }
+#export-download { width:100%; min-height:48px; font-size:16px; }
+#export-feedback { margin-top:16px; color:#a12e23; font-size:14px; line-height:1.6; overflow-wrap:anywhere; }
 #export-feedback:empty { display:none; }
+@media(max-width:520px) {
+  #export-dialog { padding:20px; border-radius:24px; }
+  #export-dialog .dialog-heading { margin-bottom:20px; gap:8px; }
+  #export-dialog .dialog-heading h2 { font-size:22px; }
+  .export-option { padding:16px; gap:12px; }
+}
 .dialog-heading {
   display:flex;
   align-items:center;

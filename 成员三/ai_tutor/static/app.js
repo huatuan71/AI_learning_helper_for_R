@@ -183,8 +183,11 @@ function setCode(value) {
   $('code-toggle').textContent = value ? '收起代码' : '添加代码';
   $('code-toggle').setAttribute('aria-expanded', String(value));
 }
-// A body-level floating layer can blur the page outside the navigation's backdrop root.
-document.body.append($('more-panel'));
+// Enforce viewport positioning even when an older cached stylesheet is still loaded.
+const morePanel = $('more-panel');
+morePanel.style.position = 'fixed';
+morePanel.style.right = 'auto';
+document.body.append(morePanel);
 function positionMore() {
   const panel = $('more-panel');
   if (panel.hidden) return;
@@ -196,11 +199,13 @@ function positionMore() {
   panel.style.maxHeight = Math.max(0, innerHeight - top - 12) + 'px';
 }
 window.addEventListener('resize', positionMore);
-document.addEventListener('scroll', positionMore, {capture:true, passive:true});
 function setMore(value, focus = false) {
   $('more-panel').hidden = !value;
   $('more-toggle').setAttribute('aria-expanded', String(value));
-  if (value) positionMore();
+  if (value) {
+    $('more-panel').scrollTop = 0;
+    positionMore();
+  }
   if (focus) (value ? $('more-panel').querySelector('a') : $('more-toggle')).focus();
 }
 let exportReturnFocus = null;

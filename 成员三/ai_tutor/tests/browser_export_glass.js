@@ -133,6 +133,34 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
       await open('more');
       const dialog = await page.locator('#export-dialog').boundingBox();
       check(dialog.width <= width - 24 && dialog.height <= (width === 390 ? 844 : 1000), `${width}px export dialog fits the screen`);
+      const layout = await page.locator('#export-options').evaluate(fieldset => {
+        const options = [...fieldset.querySelectorAll('.export-option')];
+        const boxes = options.map(option => {
+          const box = option.getBoundingClientRect();
+          const title = option.querySelector('strong').getBoundingClientRect();
+          const description = option.querySelector('small').getBoundingClientRect();
+          return {x:box.x,top:box.top,bottom:box.bottom,width:box.width,
+            titleBottom:title.bottom,descriptionTop:description.top,
+            descriptionSize:parseFloat(getComputedStyle(option.querySelector('small')).fontSize)};
+        });
+        return {border:parseFloat(getComputedStyle(fieldset).borderWidth),boxes,
+          blur:getComputedStyle(fieldset.closest('dialog')).backdropFilter};
+      });
+      check(layout.border === 0 && layout.boxes[1].top >= layout.boxes[0].bottom+10,
+        `${width}px export options form separate rows without a fieldset frame`);
+      check(layout.boxes.every(box => Math.abs(box.width-layout.boxes[0].width)<1 && Math.abs(box.x-layout.boxes[0].x)<1),
+        `${width}px export options use the same full-row alignment`);
+      check(layout.boxes.every(box => box.descriptionTop >= box.titleBottom+3 && box.descriptionSize >= 14),
+        `${width}px option descriptions have readable type and their own line`);
+      check(layout.blur.includes('blur(30px)'), `${width}px export dialog uses the shared frosted surface`);
+      const downloadBox = await page.locator('#export-download').boundingBox();
+      check(downloadBox.height >= 44 && downloadBox.width >= layout.boxes[0].width-1,
+        `${width}px export action has a full-width accessible target`);
+      await page.locator('#export-conversations-description').click();
+      check(await page.getByRole('radio',{name:'对话记录',exact:true}).isChecked(), `${width}px clicking an option description selects the whole row`);
+      await page.locator('#export-format-conversations').press('ArrowUp');
+      check(await page.getByRole('radio',{name:'完整档案',exact:true}).isChecked() &&
+        await page.locator('#export-download').textContent() === '导出完整档案', `${width}px arrow keys switch the native radio group and action`);
       await page.keyboard.press('Tab');
       check(await page.evaluate(() => !!document.activeElement.closest('#export-dialog')), `${width}px modal keyboard focus stays inside`);
       await page.screenshot({path:`output/playwright/export-dialog-${width}.png`});
@@ -141,6 +169,16 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
       check(await page.locator('#more-toggle').evaluate(node => node === document.activeElement), `${width}px menu-origin export restores the more button focus`);
       check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px has no horizontal overflow`);
     }
+    await page.setViewportSize({width:390,height:360});
+    await open('more');
+    const short = await page.locator('#export-dialog').boundingBox();
+    check(short.y >= 15 && short.y+short.height <= 345, 'short viewport keeps the export panel inside the screen');
+    await page.locator('#export-download').scrollIntoViewIfNeeded();
+    const shortAction = await page.locator('#export-download').boundingBox();
+    check(await page.locator('#export-dialog').evaluate(node => node.scrollTop>0) && shortAction.y >= 0 && shortAction.y+shortAction.height <= 360,
+      'short viewport can scroll to the export action inside the panel');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => !document.querySelector('#export-dialog').open);
     await page.setViewportSize({width:1440,height:1000});
     await route('knowledge');
     await page.locator('#more-toggle').click();

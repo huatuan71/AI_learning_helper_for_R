@@ -4,7 +4,7 @@ import {registerOffline} from './offline.js?v=learning-v1';
 
 window.THREE = THREE;
 void registerOffline();
-const build = 'learning-v1';
+const build = 'learning-export-dialog-v1';
 await import(`./knowledge-map.js?v=${build}`);
 await import(`./liquid-scene.js?v=${build}`);
 await import(`./r-file.js?v=${build}`);
