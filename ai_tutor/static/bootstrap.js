@@ -2,4 +2,4 @@
 import {registerOffline} from './offline.js?v=learning-v1';
 
 void registerOffline();
-await import('./app.js?v=learning-ui-v2');
+await import('./app.js?v=model-notice-v1');

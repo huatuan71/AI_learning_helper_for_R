@@ -157,7 +157,7 @@ summary:hover {
   width:var(--viewport-width,100vw);
   left:0;
   top:0;
-  z-index:30;
+  z-index:70;
   padding:14px 16px 16px;
   background:transparent;
   border:0;
@@ -249,7 +249,7 @@ summary:hover {
   backdrop-filter:blur(28px) saturate(155%);
   -webkit-backdrop-filter:blur(28px) saturate(155%);
   padding:8px;
-  z-index:50;
+  z-index:80;
   max-width:calc(100vw - 24px);
   overflow-y:auto;
   overscroll-behavior:contain;
@@ -1000,24 +1000,46 @@ summary:hover {
 }
 #status {
   position:fixed;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 14px;
   top:calc(var(--header) + 12px);
   bottom:auto;
   left:50%;
   transform:translateX(-50%);
   max-width:calc(100% - 32px);
   width:max-content;
-  background:#1d1d1f;
+  background:rgba(25,35,52,.78);
   color:white;
   padding:10px 20px;
-  border-radius:14px;
-  box-shadow:0 5px 24px #0002;
+  border:1px solid rgba(255,255,255,.32);
+  border-radius:20px;
+  box-shadow:0 16px 40px rgba(10,20,32,.2),inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter:blur(24px) saturate(155%);
+  -webkit-backdrop-filter:blur(24px) saturate(155%);
   z-index:60;
   font-size:14px;
   pointer-events:none;
 }
 #status.error {
-  background:#8a3025;
+  background:rgba(125,39,31,.84);
 }
+#status-message { flex:1 1 200px; min-width:0; overflow-wrap:anywhere; }
+#status-action {
+  flex-shrink:0;
+  margin-left:auto;
+  pointer-events:auto;
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.36);
+  border-radius:999px;
+  min-height:44px;
+  padding:8px 16px;
+  font-size:14px;
+}
+#status-action:hover { background:rgba(255,255,255,.24); }
+#status-action:focus-visible { outline:3px solid #fff; outline-offset:3px; }
 dialog {
   border:1px solid var(--glass-line);
   border-radius:26px;

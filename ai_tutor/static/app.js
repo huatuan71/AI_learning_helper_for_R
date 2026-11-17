@@ -1,8 +1,8 @@
 'use strict';
 import {requestJson as api, streamAnswer as streamApi} from './api-client.js?v=ascii-v1';
 import {createAnswerRenderer, firstSentence} from './answer-renderer.js?v=ascii-v1';
-import {LiquidKnowledgeScene} from './liquid-scene.js?v=ascii-v1';
-import {ModelSettings} from './model-settings.js?v=ascii-v1';
+import {LiquidKnowledgeScene} from './liquid-scene.js?v=knowledge-camera-v1';
+import {ModelSettings} from './model-settings.js?v=model-notice-v1';
 import {RFileInput} from './r-file.js?v=ascii-v1';
 
 const {codeBlock, renderTeachingBody} = createAnswerRenderer(status);
@@ -71,8 +71,11 @@ function details(title, cls = '') {
   node.append(el('summary', title));
   return node;
 }
-function status(text = '', error = false) {
-  $('status').textContent = text;
+function status(text = '', error = false, action = null) {
+  $('status-message').textContent = text;
+  $('status-action').hidden = !action;
+  $('status-action').textContent = action?.label || '';
+  $('status-action').onclick = action?.run || null;
   $('status').hidden = !text;
   $('status').classList.toggle('error', error);
 }
@@ -112,12 +115,14 @@ function liveAnswer(question, review) {
 }
 function showError(error) {
   if (error.name === 'AbortError') { status('请求已取消。'); return; }
-  if (error.code === 'SESSION_EXPIRED' || error.code === 'CONFIG_REQUIRED') {
+  const needsConfiguration = error.code === 'SESSION_EXPIRED' || error.code === 'CONFIG_REQUIRED';
+  if (needsConfiguration) {
     modelSettings.refresh().catch(() => {});
   }
   const message = error.name === 'TypeError' ? '无法连接本地服务，请启动服务后重试。' :
     error.name === 'TimeoutError' ? '请求超时，请重试。' : error.message;
-  status(message + (error.requestId ? '（请求编号 ' + error.requestId + '）' : ''), true);
+  status(message + (error.requestId ? '（请求编号 ' + error.requestId + '）' : ''), true,
+    needsConfiguration ? {label:'配置模型', run:event => modelSettings.open(event.currentTarget)} : null);
 }
 function setBusy(value) {
   busy = value;

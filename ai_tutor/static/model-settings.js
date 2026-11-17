@@ -10,13 +10,16 @@ export class ModelSettings {
     this.feedback = document.getElementById('model-feedback');
     this.key = document.getElementById('model-key');
     this.working = false;
+    this.returnFocus = document.getElementById('more-toggle');
     document.getElementById('model-open').onclick = () => this.open();
     document.getElementById('model-close').onclick = () => this.dialog.close();
     this.dialog.addEventListener('close', () => {
       this.key.value = '';
       this.key.type = 'password';
       document.getElementById('model-key-toggle').textContent = '显示';
-      document.getElementById('more-toggle').focus();
+      const target = this.returnFocus?.isConnected && this.returnFocus.getClientRects().length
+        ? this.returnFocus : document.getElementById('more-toggle');
+      target.focus({preventScroll:true});
     });
     document.getElementById('model-provider').onchange = () => {
       this.key.value = '';
@@ -48,6 +51,7 @@ export class ModelSettings {
       document.getElementById('model-mode').value = 'mock';
       this.updateFields();
       this.message('密钥已清除，已切换模拟模式。');
+      this.notify();
     });
     this.ready = this.load();
   }
@@ -88,7 +92,8 @@ export class ModelSettings {
     this.config = config;
     document.getElementById('runtime-mode').textContent =
       {mock: '模拟版', ai: '真实AI', search: '搜索已开启'}[config.mode] || '模拟版';
-    if (config.expired) this.notify('模型配置已到期或服务已重启，请打开模型设置重新配置。', true);
+    if (config.expired) this.notify('模型配置已到期或服务已重启，请重新配置。', true,
+      {label:'配置模型', run:event => this.open(event.currentTarget)});
   }
 
   async refresh() {
@@ -123,7 +128,8 @@ export class ModelSettings {
     }
   }
 
-  async open() {
+  async open(trigger = document.getElementById('more-toggle')) {
+    this.returnFocus = trigger;
     await this.ready;
     if (!this.providers.length) await this.load();
     try { await this.refresh(); } catch { this.message('无法读取服务器配置，请稍后重试。', true); }
@@ -169,6 +175,7 @@ export class ModelSettings {
     document.getElementById('model-key-toggle').textContent = '显示';
     this.key.placeholder = config.configured ? '已配置 · 末尾 ' + config.key_suffix : '填写当前厂商的API Key';
     this.message('设置已应用。密钥将在会话空闲30分钟或服务重启后清除。');
+    this.notify();
   }
 
   message(text, error = false) {

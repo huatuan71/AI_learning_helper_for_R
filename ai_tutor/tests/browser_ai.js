@@ -246,6 +246,89 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     await openSettings();
     await page.keyboard.press('Escape');
     check(await page.locator('#model-dialog').isHidden(), 'keyboard close under reduced motion');
+    // An unknown session cookie reproduces the state after a server restart.
+    await page.context().addCookies([{name:'r_tutor_session', value:'expired-browser-notice-test', url:baseUrl}]);
+    await page.reload();
+    await page.locator('#status-action').waitFor({state:'visible'});
+    check((await page.locator('#status-message').textContent()).includes('已到期或服务已重启'), 'expired session shows a configuration shortcut on load');
+    for (const width of [1440,390]) {
+      await page.setViewportSize({width,height:width === 390 ? 844 : 1000});
+      check(await page.locator('#status').evaluate(node => {
+        const style = getComputedStyle(node);
+        const alpha = Number(style.backgroundColor.match(/[\d.]+/g).at(-1));
+        return alpha < 1 && style.backdropFilter.includes('blur(24px)');
+      }), `${width}px error notification uses tinted frosted glass`);
+      const notice = await page.locator('#status').boundingBox();
+      const action = await page.locator('#status-action').boundingBox();
+      check(notice.x >= 0 && notice.x + notice.width <= width && action.height >= 44 &&
+        action.x >= notice.x && action.x + action.width <= notice.x + notice.width,
+        `${width}px configuration shortcut fits the notice and remains tappable`);
+      await page.screenshot({path:`output/playwright/model-notice-${width}.png`});
+    }
+    await page.locator('#status-action').focus();
+    await page.keyboard.press('Enter');
+    await page.locator('#model-dialog').waitFor({state:'visible'});
+    check(await page.locator('#model-mode').evaluate(node => node === document.activeElement), 'notification shortcut opens and focuses existing model settings');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.activeElement === document.querySelector('#status-action'));
+    check(await page.locator('#status-action').evaluate(node => node === document.activeElement), 'closing shortcut settings restores notification focus');
+    await page.locator('#status-action').click();
+    await page.locator('#model-dialog').waitFor({state:'visible'});
+    await page.locator('#model-apply').click();
+    await waitFeedback('设置已应用');
+    check(await page.locator('#status').isHidden(), 'applying settings clears the expired notification');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.activeElement === document.querySelector('#more-toggle'));
+    check(await page.locator('#more-toggle').evaluate(node => node === document.activeElement), 'cleared notification returns focus to the navigation');
+    for (const code of ['SESSION_EXPIRED','CONFIG_REQUIRED']) {
+      const rejectChat = route => route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({
+        request_id:'notice-test',error:{code,message:'请重新配置模型 <img src=x onerror=window.noticeAttack=1>'}
+      })});
+      await page.route('**/api/chat', rejectChat);
+      await page.locator('#question').fill('模型配置失效测试');
+      await page.locator('#send').click();
+      await page.waitForFunction(() => !document.querySelector('#send').disabled && document.querySelector('#status-message').textContent.includes('notice-test'));
+      check(await page.locator('#status-action').isVisible(), `${code} request failure includes the configuration shortcut`);
+      check(await page.evaluate(() => !document.querySelector('#status img') && !window.noticeAttack), `${code} notification uses safe text`);
+      await page.locator('#status-action').click();
+      await page.locator('#model-dialog').waitFor({state:'visible'});
+      await page.keyboard.press('Escape');
+      await page.unroute('**/api/chat',rejectChat);
+    }
+    await openSettings();
+    await setConfig('deepseek');
+    await page.keyboard.press('Escape');
+    const rejectStream = route => route.fulfill({status:200,contentType:'text/event-stream',body:
+      'event: error\ndata: '+JSON.stringify({request_id:'stream-notice-test',error:{code:'SESSION_EXPIRED',message:'模型配置已到期'}})+'\n\n'});
+    await page.route('**/api/chat/stream',rejectStream);
+    await page.locator('#question').fill('流式模型配置失效测试');
+    await page.locator('#send').click();
+    await page.waitForFunction(() => !document.querySelector('#send').disabled && document.querySelector('#status-message').textContent.includes('stream-notice-test'));
+    check(await page.locator('#status-action').isVisible(), 'streamed configuration failure also offers the shortcut');
+    await page.locator('#status-action').click();
+    await page.locator('#model-dialog').waitFor({state:'visible'});
+    await page.locator('#model-clear').click();
+    await waitFeedback('密钥已清除');
+    check(await page.locator('#status').isHidden(), 'clearing configuration removes the expired notification');
+    await page.keyboard.press('Escape');
+    await page.unroute('**/api/chat/stream',rejectStream);
+    await page.locator('#question').fill('');
+    await page.locator('#send').click();
+    check(await page.locator('#status-action').isHidden(), 'ordinary feedback removes stale configuration actions');
+    await page.locator('#code-toggle').click();
+    await page.locator('#code').fill('# '+ 'x'.repeat(10000));
+    await page.locator('#send').click();
+    await page.waitForFunction(() => document.querySelector('#status-message').textContent.includes('超过10000'));
+    check(await page.locator('#status').evaluate(node => getComputedStyle(node).backdropFilter.includes('blur(24px)')),
+      'ordinary validation errors share the frosted notification surface');
+    const noticeExport = page.waitForEvent('download');
+    await page.locator('#more-toggle').click();
+    await page.locator('#export').click();
+    await page.locator('#export-download').click();
+    await noticeExport;
+    await page.waitForFunction(() => document.querySelector('#status-message').textContent.includes('已导出'));
+    check(await page.locator('#status').evaluate(node => !node.classList.contains('error') &&
+      getComputedStyle(node).backdropFilter.includes('blur(24px)')), 'ordinary success feedback uses the same glass with its own color');
     check(errors.length === 0, 'no uncaught AI browser errors');
     return {passed: checks.length, checks, errors, fixture: 'MockTransport only, '+baseUrl};
   } finally {

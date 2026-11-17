@@ -11,15 +11,16 @@ import {KnowledgeMap as StaticKnowledgeMap} from './knowledge-map.js?v=ascii-v1'
 
 const CONFIG = Object.freeze({
   camera: {
-    position: new THREE.Vector3(0, 11.5, 24),
+    position: new THREE.Vector3(0, 20.5, 28),
     target: new THREE.Vector3(0, 0.5, -15),
     fov: 43,
     focusDistance: 5.4,
     transitionMs: 1250,
     minRadius: 25,
-    maxRadius: 56,
-    minPitch: 0.08,
-    maxPitch: 0.62,
+    maxRadius: 65,
+    minPitch: 0.10,
+    maxPitch: 1.25,
+    dragSensitivity: 0.0017,
   },
   ocean: {
     desktopGrid: [176, 100],
@@ -41,12 +42,10 @@ const CONFIG = Object.freeze({
     ior: 1.0,
     dispersion: 0.9,
   },
-  clusterRing: {centerX:0,centerZ:-15,radiusX:18,radiusZ:12.2,startAngle:-Math.PI/2},
+  clusterRing: {centerX:0,centerZ:-15,radius:16.5,startAngle:-Math.PI/2},
   revolution: {
     angularSpeed:0.025,
     dragSensitivity:0.003,
-    tiltSensitivity:0.0017,
-    tiltLimit:Math.PI / 10,
     oceanClearance:0.2,
     resumeDelayMs:1000,
   },
@@ -198,7 +197,6 @@ export class LiquidKnowledgeScene extends StaticKnowledgeMap {
     this.savedView = null;
     this.orbitPhase = 0;
     this.fieldYaw = 0;
-    this.fieldTilt = 0;
     this.isDragging = false;
     this.resumeOrbitAt = 0;
     this.elapsedSeconds = 0;
@@ -326,8 +324,8 @@ export class LiquidKnowledgeScene extends StaticKnowledgeMap {
     groups.forEach((group,unitIndex)=>{
       const ring=CONFIG.clusterRing;
       const groupAngle=ring.startAngle+(Math.PI*2*unitIndex/this.units.length);
-      const centerX=ring.centerX+Math.cos(groupAngle)*ring.radiusX;
-      const centerZ=ring.centerZ+Math.sin(groupAngle)*ring.radiusZ;
+      const centerX=ring.centerX+Math.cos(groupAngle)*ring.radius;
+      const centerZ=ring.centerZ+Math.sin(groupAngle)*ring.radius;
       const radius=group.length<=4?2.65:group.length<=6?3.45:4.35;
       group.forEach((item,index)=>{
         const angle=(Math.PI*2*index/group.length)+groupAngle*.36;
@@ -388,7 +386,7 @@ export class LiquidKnowledgeScene extends StaticKnowledgeMap {
       event.preventDefault();
       const captureTarget=label||canvas;
       down={pointerId:event.pointerId,pointerType:event.pointerType,x:event.clientX,y:event.clientY,
-        yaw:this.fieldYaw,pitch:this.fieldTilt,dragged:false,knowledgeId:label?.dataset.id||null,captureTarget};
+        yaw:this.fieldYaw,pitch:this.orbitPitch,dragged:false,knowledgeId:label?.dataset.id||null,captureTarget};
       this.isDragging = true;
       captureTarget.setPointerCapture(event.pointerId);
       canvas.classList.add('is-dragging');canvas.style.cursor='grabbing';
@@ -415,7 +413,12 @@ export class LiquidKnowledgeScene extends StaticKnowledgeMap {
         if(down.dragged){
           event.preventDefault();
           this.fieldYaw = down.yaw + dx * CONFIG.revolution.dragSensitivity;
-          this.fieldTilt = THREE.MathUtils.clamp(down.pitch + dy * CONFIG.revolution.tiltSensitivity, -CONFIG.revolution.tiltLimit, CONFIG.revolution.tiltLimit);
+          this.orbitPitch = THREE.MathUtils.clamp(
+            down.pitch + dy * CONFIG.camera.dragSensitivity,
+            CONFIG.camera.minPitch,
+            CONFIG.camera.maxPitch,
+          );
+          this.applyOrbit();
           canvas.style.cursor='grabbing';this.requestFrame();return;
         }
       }
@@ -465,7 +468,6 @@ export class LiquidKnowledgeScene extends StaticKnowledgeMap {
     this.focusAmount=0;this.visualFocusId=null;this.savedView=null;this.transition=null;
     this.orbitPhase = 0;
     this.fieldYaw = 0;
-    this.fieldTilt = 0;
     this.resumeOrbitAt = performance.now() + CONFIG.revolution.resumeDelayMs;
     this.updateOrbs(this.elapsedSeconds, !this.reducedMotion.matches);
     this.filter(false);
@@ -642,17 +644,14 @@ export class LiquidKnowledgeScene extends StaticKnowledgeMap {
   updateOrbs(seconds,animate) {
     const angle = this.orbitPhase + this.fieldYaw;
     const cosine = Math.cos(angle), sine = Math.sin(angle);
-    const tiltCosine = Math.cos(this.fieldTilt), tiltSine = Math.sin(this.fieldTilt);
     let lowestOrbBottom = Infinity;
     for (const slot of this.orbSlots) {
       const x = slot.base.x - this.fieldCenter.x;
-      const y = slot.base.y - this.fieldCenter.y;
       const z = slot.base.z - this.fieldCenter.z;
-      const rotatedZ = -x * sine + z * cosine;
       slot.orbitPosition.set(
         this.fieldCenter.x + x * cosine + z * sine,
-        this.fieldCenter.y + y * tiltCosine - rotatedZ * tiltSine,
-        this.fieldCenter.z + y * tiltSine + rotatedZ * tiltCosine,
+        slot.base.y,
+        this.fieldCenter.z - x * sine + z * cosine,
       );
       // Reserve room for liquid deformation, hover enlargement and vertical floating.
       const orbExtent = slot.baseScale * (1 + CONFIG.liquid.waveStrength) + 0.25;
