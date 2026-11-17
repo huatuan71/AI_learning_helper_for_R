@@ -45,7 +45,7 @@ class RequestContextMiddleware:
                 headers = MutableHeaders(scope=message)
                 headers['X-Request-ID'] = request.state.request_id
                 headers['X-Content-Type-Options'] = 'nosniff'
-                if request.url.path.startswith('/api/ai'):
+                if request.url.path.startswith('/api/ai') or request.url.path == '/api/learning/summary':
                     headers['Cache-Control'] = 'no-store'
             await send(message)
 

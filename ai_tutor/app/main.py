@@ -10,6 +10,7 @@ from .ai.schemas import AIError
 from .ai.sessions import SessionStore
 from .api.chat import router as chat_router
 from .api.course import router as course_router
+from .api.learning_summary import router as learning_summary_router
 from .api.pages import router as pages_router
 from .config import APP_VERSION, STATIC_ROOT, cors_origins
 from .http import RequestContextMiddleware, ai_error, http_error, validation
@@ -46,6 +47,7 @@ def create_app():
     application.include_router(ai_router)
     application.include_router(course_router)
     application.include_router(chat_router)
+    application.include_router(learning_summary_router)
     application.include_router(pages_router)
     application.mount('/static', StaticFiles(directory=STATIC_ROOT), name='static')
     return application
