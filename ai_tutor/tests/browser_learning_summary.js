@@ -104,6 +104,10 @@ async function run(page, baseUrl, outputDir) {
   let responseMode = 'failure';
   let pending;
   let pendingStarted;
+  const waitForDelayedRequest = () => new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(Error('延迟请求未到达模拟接口')), 10000);
+    pendingStarted = () => {clearTimeout(timer); resolve();};
+  });
   const pendingResponse = () => new Promise(resolve => {pending = resolve; pendingStarted?.();});
   const handler = async route => {
     calls++;
@@ -161,7 +165,7 @@ async function run(page, baseUrl, outputDir) {
   await page.locator('#model-close').click();
   responseMode = 'delayed';
   const callsBefore = calls;
-  let started = new Promise(resolve => {pendingStarted = resolve;});
+  let started = waitForDelayedRequest();
   await page.locator('#ai-summary-generate').click();
   await started;
   await page.locator('#ai-summary-cancel').waitFor({state:'visible'});
@@ -174,7 +178,7 @@ async function run(page, baseUrl, outputDir) {
   await store(store => store.recordVisit('K06'));
   await page.locator('.lc-ai-stale').waitFor();
   check((await page.locator('.lc-ai-stale').textContent()).includes('先前的记录'), 'new evidence marks the summary as stale');
-  started = new Promise(resolve => {pendingStarted = resolve;});
+  started = waitForDelayedRequest();
   await page.locator('#ai-summary-generate').click();
   await started;
   await page.locator('#ai-summary-cancel').waitFor({state:'visible'});
@@ -230,6 +234,23 @@ async function run(page, baseUrl, outputDir) {
   await page.locator('.lc-ai-missing').first().waitFor();
   check(await page.locator('.lc-ai-missing').first().isDisabled(), 'imported historical summary disables missing evidence locations');
   check(await page.locator('#learning-ai-summary').getByRole('button', {name:'返回对话', exact:true}).count() === 0, 'missing source cannot open an unrelated conversation');
+  await store(store => store.resetLearningData());
+  await page.evaluate(async record => {
+    const {learningStore} = await import('/static/learning-store.js?v=learning-v1');
+    await learningStore.ingestConversation(record);
+  }, original.conversations[0].record);
+  await reload();
+  await page.route('**/api/learning/summary', handler);
+  responseMode = 'delayed';
+  started = waitForDelayedRequest();
+  await page.locator('#ai-summary-generate').click();
+  await started;
+  await store(store => store.clearConversations());
+  await ready();
+  pending?.();
+  await page.getByText('生成期间来源已被清除，本次总结未保存', {exact:true}).waitFor();
+  check((await snapshot()).summaries.length === 0, 'late result after source deletion preserves the local validation message');
+  await page.unroute('**/api/learning/summary', handler);
   check(errors.length === 0, 'browser has no uncaught JavaScript errors');
   return {passed:checks.length, checks, errors, browser:{desktop:{width:1440,height:1000}, narrow:{width:390,height:844}, timezone:'Asia/Shanghai'}};
 }

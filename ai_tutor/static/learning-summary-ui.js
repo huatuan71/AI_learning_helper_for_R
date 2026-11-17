@@ -170,6 +170,7 @@ export class LearningSummaryUI {
     try {
       const signal = AbortSignal.any([job.controller.signal, AbortSignal.timeout(70000)]);
       const response = await requestJson('/api/learning/summary', job.input, {signal});
+      job.receivedResponse = true;
       if (job.cancelled || signal.aborted) return;
       if (response.status === 'no_data') {
         this.finishMessage(job, '这段时间还没有可用于总结的学习记录。');
@@ -187,7 +188,7 @@ export class LearningSummaryUI {
       else {
         const needsConfig = ['CONFIG_REQUIRED','SESSION_EXPIRED','CONFIG_CHANGED'].includes(error.code);
         const message = error.name === 'TimeoutError' ? '生成超时，请重试。' :
-          error.name === 'TypeError' ? '无法连接服务，请检查网络后重试。' : error.message || '生成失败，请重试。';
+          error.name === 'TypeError' && !job.receivedResponse ? '无法连接服务，请检查网络后重试。' : error.message || '生成失败，请重试。';
         this.finishMessage(job, message, true);
         if (needsConfig) {
           this.notify?.(message, true, {label:'配置模型', run:event => this.openModelSettings(event.currentTarget)});
