@@ -1,15 +1,18 @@
 import {
-  createCard, scheduleReview, normalizeAttempt, normalizeTime, assertKnowledgeId, compareAttempts,
+  createCard, scheduleReview, normalizeAttempt, normalizeTime, assertKnowledgeId, compareAttempts, localDay,
 } from './review-scheduler.js?v=learning-v1';
+import {
+  normalizeSummaryPeriod, summaryCacheKey, summaryDigest, summaryEvidenceMetadata, summaryMatches, EVIDENCE_POLICY_VERSION,
+} from './learning-summary-data.js?v=ai-summary-v1';
 
 const DATABASE = 'r-language-tutor-learning';
-const DATABASE_VERSION = 1;
-const SCHEMA_VERSION = 1;
-const TABLES = ['conversations', 'events', 'cards', 'attempts', 'bookmarks', 'settings', 'course'];
+const DATABASE_VERSION = 2;
+const SCHEMA_VERSION = 2;
+const TABLES = ['conversations', 'events', 'cards', 'attempts', 'bookmarks', 'settings', 'course', 'summaries'];
 const PERSONAL_TABLES = TABLES.filter(name => name !== 'course');
 const LIMITS = Object.freeze({
   archiveBytes: 20 * 1024 * 1024,
-  conversations: 100_000, events: 200_000, cards: 86, attempts: 100_000, bookmarks: 100_043,
+  conversations: 100_000, events: 200_000, cards: 86, attempts: 100_000, bookmarks: 100_043, summaries: 100,
   text: 100_000, list: 1000, id: 200,
 });
 const DEFAULT_SETTINGS = Object.freeze({ dailyLimit: 6 });
@@ -181,6 +184,139 @@ function validateSettings(value) {
   return { dailyLimit: value.dailyLimit };
 }
 
+function summaryTime(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,6})?Z$/.test(value)) {
+    throw new TypeError('总结时间必须为 UTC ISO 8601');
+  }
+  const normalized = normalizeTime(new Date(value).toISOString());
+  if (normalized.slice(0, 19) !== value.slice(0, 19)) throw new TypeError('总结时间无效');
+  return normalized;
+}
+
+function summaryText(value, name, max) {
+  if (typeof value !== 'string' || !value.trim()) throw new TypeError(`${name} 必须为非空文本`);
+  const points = Array.from(value);
+  if (points.length > max || points.some(point => /^[\uD800-\uDFFF]$/.test(point))) throw new TypeError(`${name} 的Unicode文本或长度无效`);
+  return value;
+}
+
+function summaryCount(value, name, max = Number.MAX_SAFE_INTEGER) {
+  if (!Number.isSafeInteger(value) || value < 0 || value > max) throw new TypeError(`${name} 必须为范围内非负整数`);
+  return value;
+}
+
+function validateSummaryCoverage(value) {
+  object(value, '总结覆盖范围');
+  const total = summaryCount(value.total_evidence_count, '证据总量');
+  const included = summaryCount(value.included_evidence_count, '摘录数量', 50);
+  if (included > total || typeof value.truncated !== 'boolean' || (included < total && !value.truncated) ||
+      value.policy_version !== EVIDENCE_POLICY_VERSION) {
+    throw new TypeError('总结覆盖范围无效');
+  }
+  return { total_evidence_count: total, included_evidence_count: included, truncated: value.truncated,
+    policy_version: string(value.policy_version, '摘录策略版本', 100, false) };
+}
+
+function validateSummaryEvidence(value) {
+  const ids = new Set();
+  return array(value, '总结来源', 50).map(item => {
+    object(item, '总结来源');
+    const id = string(item.id, '证据ID', 202, false);
+    const source = string(item.source_id, '原始记录ID', 200, false);
+    if (!['conversation', 'attempt', 'event'].includes(item.kind) || id !== `${item.kind[0]}:${source}` || ids.has(id)) {
+      throw new TypeError('总结来源类型、稳定ID或重复数据无效');
+    }
+    ids.add(id);
+    const knowledge = array(item.knowledge_ids, '来源知识点', 43).map(assertKnowledgeId);
+    if (new Set(knowledge).size !== knowledge.length) throw new TypeError('总结来源含重复知识点');
+    return { id, source_id: source, kind: item.kind, at: normalizeTime(item.at), knowledge_ids: knowledge };
+  });
+}
+
+function validateSummaryResponse(value, evidence) {
+  object(value, '总结响应');
+  if (value.status !== 'ok' || value.mode !== 'ai') throw new TypeError('只能保存成功生成的AI总结');
+  summaryCacheKey(value);
+  const period = normalizeSummaryPeriod(value.period);
+  const coverage = validateSummaryCoverage(value.coverage);
+  if (!coverage.total_evidence_count || evidence.length !== coverage.included_evidence_count) throw new TypeError('总结来源数量不符');
+  for (const item of evidence) {
+    const day = localDay(item.at, period.time_zone);
+    if (day < period.start_date || day > period.end_date) throw new TypeError('总结来源时间超出日期范围');
+  }
+  const byId = new Map(evidence.map(item => [item.id, item]));
+  const payload = object(value.summary, '总结内容');
+  const summary = { overview: summaryText(payload.overview, '总结概述', 1200) };
+  for (const [key, fields] of [['topics', ['observation']], ['review_priorities', ['reason']], ['next_actions', ['action', 'reason']]]) {
+    summary[key] = array(payload[key], key, 10).map(item => {
+      object(item, key);
+      const knowledge_id = assertKnowledgeId(item.knowledge_id);
+      const evidence_ids = array(item.evidence_ids, '总结引用', 10).map(id => string(id, '引用ID', 202, false));
+      if (!evidence_ids.length || new Set(evidence_ids).size !== evidence_ids.length ||
+          evidence_ids.some(id => !byId.get(id)?.knowledge_ids.includes(knowledge_id))) {
+        throw new TypeError('总结引用不存在或与知识点不符');
+      }
+      const result = { knowledge_id, evidence_ids };
+      for (const field of fields) result[field] = summaryText(item[field], field, 600);
+      return result;
+    });
+  }
+  summary.uncertainties = array(payload.uncertainties, '总结局限', 10).map(item => summaryText(item, '总结局限', 600));
+  const usage = object(value.usage, '总结用量');
+  const safeUsage = {};
+  for (const key of ['input_tokens', 'output_tokens', 'total_tokens']) {
+    if (usage[key] !== undefined) safeUsage[key] = summaryCount(usage[key], key);
+  }
+  summaryCount(value.duration_ms, '总结耗时');
+  return {
+    request_id: string(value.request_id, '总结请求ID', 128, false), status: 'ok', mode: 'ai',
+    provider: value.provider, model: value.model, prompt_version: value.prompt_version,
+    input_fingerprint: value.input_fingerprint, generated_at: summaryTime(value.generated_at),
+    period, coverage, usage: safeUsage, duration_ms: value.duration_ms, summary,
+  };
+}
+
+async function prepareSummary(response, metadata) {
+  const evidence = validateSummaryEvidence(metadata);
+  const safeResponse = validateSummaryResponse(response, evidence);
+  const id = `summary:${await summaryDigest(JSON.parse(summaryCacheKey(safeResponse)))}`;
+  return { id, response: safeResponse, input_fingerprint: safeResponse.input_fingerprint,
+    period: safeResponse.period, provider: safeResponse.provider, model: safeResponse.model,
+    prompt_version: safeResponse.prompt_version, generated_at: safeResponse.generated_at, evidence };
+}
+
+async function validateSavedSummary(value) {
+  object(value, '已保存总结');
+  const result = await prepareSummary(value.response, value.evidence);
+  for (const key of ['id', 'input_fingerprint', 'period', 'provider', 'model', 'prompt_version']) {
+    if (canonical(value[key]) !== canonical(result[key])) throw new TypeError('已保存总结元数据不符');
+  }
+  if (summaryTime(value.generated_at) !== result.generated_at) throw new TypeError('总结生成时间不符');
+  return result;
+}
+
+function mergeSummaries(existing, incoming) {
+  const merged = new Map(existing.map(item => [item.id, item]));
+  let imported = 0;
+  let duplicates = 0;
+  for (const item of incoming) {
+    const saved = merged.get(item.id);
+    if (saved) duplicates += 1;
+    else imported += 1;
+    if (!saved || saved.generated_at < item.generated_at ||
+        (saved.generated_at === item.generated_at && canonical(saved) < canonical(item))) merged.set(item.id, item);
+  }
+  const rows = [...merged.values()].sort((a, b) => b.generated_at.localeCompare(a.generated_at) || a.id.localeCompare(b.id))
+    .slice(0, LIMITS.summaries);
+  return { rows, imported, duplicates };
+}
+
+function personalSizeCheck(rows) {
+  const { course, ...data } = snapshotOf(rows);
+  sizeCheck({ app: 'r-language-tutor', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(),
+    knowledgeVersion: course?.version || 'unknown', data });
+}
+
 function validateCourse(value) {
   object(value, '课程快照');
   sizeCheck(value);
@@ -292,7 +428,7 @@ function rebuild(data) {
 async function validateArchive(value) {
   object(value, '档案');
   sizeCheck(value);
-  if (value.app !== 'r-language-tutor' || value.schemaVersion !== SCHEMA_VERSION) throw new TypeError('档案应用标识或schema版本不兼容');
+  if (value.app !== 'r-language-tutor' || ![1, SCHEMA_VERSION].includes(value.schemaVersion)) throw new TypeError('档案应用标识或schema版本不兼容');
   normalizeTime(value.exportedAt);
   string(value.knowledgeVersion, '知识版本', LIMITS.id, false);
   const source = object(value.data, '学习档案');
@@ -308,6 +444,7 @@ async function validateArchive(value) {
     attempts: array(source.attempts, '作答', LIMITS.attempts).map(normalizeAttempt),
     bookmarks: array(source.bookmarks, '收藏', LIMITS.bookmarks).map(validateBookmark),
     settings: validateSettings(source.settings),
+    summaries: value.schemaVersion === 1 ? [] : await Promise.all(array(source.summaries, 'AI总结', LIMITS.summaries).map(validateSavedSummary)),
   };
 }
 
@@ -358,7 +495,7 @@ async function openDatabase() {
             database.createObjectStore(name, { keyPath: 'id' });
           const indexes = {
             conversations: ['record.time'], events: ['knowledgeId', 'at'], cards: ['knowledgeId', 'dueAt'],
-            attempts: ['cardId', 'at'], bookmarks: ['conversationId'], settings: [], course: [],
+            attempts: ['cardId', 'at'], bookmarks: ['conversationId'], settings: [], course: [], summaries: ['generated_at'],
           };
           for (const key of indexes[name]) {
             if (!store.indexNames.contains(key)) store.createIndex(key, key);
@@ -427,6 +564,7 @@ function snapshotOf(rows) {
     attempts: rows.attempts.map(publicAttempt).sort(compareAttempts),
     bookmarks: rows.bookmarks.sort((a, b) => a.id.localeCompare(b.id)),
     settings: rows.settings[0]?.value || { ...DEFAULT_SETTINGS }, course: rows.course[0]?.value || null,
+    summaries: rows.summaries.sort((a, b) => b.generated_at.localeCompare(a.generated_at) || a.id.localeCompare(b.id)),
   };
 }
 
@@ -515,8 +653,45 @@ export const learningStore = Object.freeze({
     const settings = validateSettings(value);
     await transaction('readwrite', rows => { rows.settings = [{ id: 'current', value: settings }]; });
   },
+  async saveSummary(response, input) {
+    if (!input || canonical(normalizeSummaryPeriod(input.period)) !== canonical(normalizeSummaryPeriod(response.period)) ||
+        input.input_fingerprint !== response.input_fingerprint || canonical(input.coverage) !== canonical(response.coverage)) {
+      throw new TypeError('总结响应与原始请求不符');
+    }
+    const summary = await prepareSummary(response, summaryEvidenceMetadata(input));
+    return transaction('readwrite', rows => {
+      const sources = { conversation: new Set(rows.conversations.map(item => item.id)),
+        event: new Set(rows.events.map(item => item.id)), attempt: new Set(rows.attempts.map(item => item.id)) };
+      if (summary.evidence.some(item => !sources[item.kind].has(item.source_id))) {
+        throw new TypeError('生成期间来源已被清除，本次总结未保存');
+      }
+      rows.summaries = mergeSummaries(rows.summaries, [summary]).rows;
+      personalSizeCheck(rows);
+      return rows.summaries.find(item => item.id === summary.id) || summary;
+    });
+  },
+  async getSummary(id) {
+    string(id, '总结ID', 72, false);
+    return transaction('readonly', rows => rows.summaries.find(item => item.id === id) || null);
+  },
+  async findSummary(input, config) {
+    summaryCacheKey(input, config);
+    return transaction('readonly', rows => rows.summaries.find(item => summaryMatches(item, input, config)) || null);
+  },
+  async listSummaries(period = null) {
+    const target = period && canonical(normalizeSummaryPeriod(period));
+    return transaction('readonly', rows => rows.summaries.filter(item => !target || canonical(item.period) === target)
+      .sort((a, b) => b.generated_at.localeCompare(a.generated_at) || a.id.localeCompare(b.id)));
+  },
+  async deleteSummary(id) {
+    string(id, '总结ID', 72, false);
+    await transaction('readwrite', rows => { rows.summaries = rows.summaries.filter(item => item.id !== id); });
+  },
   async clearConversations() {
     await transaction('readwrite', rows => {
+      const eventIds = new Set(rows.events.filter(item => item.conversationId).map(item => item.id));
+      rows.summaries = rows.summaries.filter(item => !item.evidence.some(source => source.kind === 'conversation' ||
+        (source.kind === 'event' && eventIds.has(source.source_id))));
       rows.conversations = [];
       rows.bookmarks = rows.bookmarks.filter(item => !item.conversationId);
     });
@@ -566,8 +741,13 @@ export const learningStore = Object.freeze({
         }
       }
       rows.settings = [{ id: 'current', value: incoming.settings }];
+      const summaries = mergeSummaries(rows.summaries, incoming.summaries);
+      rows.summaries = summaries.rows;
+      imported += summaries.imported;
+      duplicates += summaries.duplicates;
       rebuild(rows);
       if (rows.cards.length > LIMITS.cards) throw new RangeError('复习卡数量超过课程上限');
+      personalSizeCheck(rows);
       return { imported, duplicates };
     });
   },
