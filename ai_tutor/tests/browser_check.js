@@ -175,6 +175,8 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     await route('history'); await page.locator('[data-learning-tab=records]').click();
     const downloadPromise = page.waitForEvent('download');
     await page.locator('#history-export').click();
+    await page.locator('#export-format-conversations').check();
+    await page.locator('#export-download').click();
     const download = await downloadPromise; await download.saveAs('output/playwright/v3-records.json');
     check(download.suggestedFilename().endsWith('.json'),'export JSON');
     await more('当前版本说明');

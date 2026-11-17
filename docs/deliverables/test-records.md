@@ -1,3 +1,59 @@
+# 目录迁移后的学习界面修复验收 · 2026年11月17日
+
+本轮针对仓库根目录 `ai_tutor/`，补回目录迁移后缺失的统一导出、学习页签对齐、固定磨砂菜单和导出弹窗。使用迁移后的原生 ES 模块入口与英文下载文件名，未重新建立旧的“成员三”目录。以下是本轮实际执行结果，后面的历史记录保留其原验收范围。
+
+## 修复与核对
+
+- “更多”、学习记录的“记录”页和“设置与资料 → 学习档案”统一使用“导出学习档案”面板。每次打开默认完整档案，也能选择对话记录。三个入口导出的完整个人数据一致，既有导入器可以恢复且重复导入不增加重复数据。
+- 完整档案为 `r-tutor-learning-archive.json`，包含对话、学习事件、复习卡片、作答、收藏和设置。对话为 `r-tutor-conversations.json`，保留原对话格式。课程离线资料继续独立保存。
+- 导出弹窗使用现有磨砂材质，去除原生 fieldset 外框。两种选项纵向排列，标题和说明分行，支持整行选择、原生方向键、明确焦点、关闭后返回入口焦点。窄屏和矮窗口可在弹窗内滚动，失败后保留面板并允许重试。
+- “更多”菜单移至 body 层，固定在导航下方，脱离导航的 backdrop-filter 层。真实滚轮滚动背景时坐标保持不变，矮窗口仅滚动菜单内部，重新打开从首项开始。浅色和知识地图深色模式均使用半透明磨砂背景。
+- 学习记录的四个页签统一保留纵向滚动条空间，标题、页签和导航在长短页面间保持对齐。切换页签即时回到顶部，浏览器前后退、键盘和减少动画行为仍有效。
+- UI 资源及离线资源标识更新为 `learning-ui-v2`。已下载旧离线包时，联网选择“更新离线资料”，成功后刷新。
+
+## 本轮真实测试结果
+
+环境为 Windows、Python 3.12、Node v24.15.0、Playwright 1.59.1。Chromium 147.0.7727.15、Microsoft Edge 157.0.4341.60、WebKit 26.4。桌面视口 1440×1000，窄屏 390×844，另测 390×360 和 1440×300 的矮窗口。
+
+| 测试 | 本轮结果 | 覆盖 |
+|---|---|---|
+| `python -m pytest -q` | 249 passed | 现有接口、模型协议、部署、题库、PWA 资源及模块入口契约 |
+| `npm test` | 13 passed | 复习算法 |
+| `npm run test:browser` | 完成，退出码 0 | 11 组浏览器回归、真实 PWA 下载及学习集成 |
+| `browser_check.js` | 82 项通过 | 问答、纠错、引用、复制、参考答案、保存与恢复 |
+| `browser_ai.js` | 69 项通过 | 配置、流式、取消、错误与安全，模型上游使用 MockTransport |
+| `browser_map_files.js` | 60 项通过 | 地图与本地 R 文件 |
+| `browser_glass_ui.js` | 58 项通过 | 现有玻璃界面、导航与滚动 |
+| `browser_mobile_map.js` | 15 项通过 | 触摸与移动地图仿真 |
+| `browser_scene_probe.js` | `passed=true` | 视角拖动、释放与标签测量 |
+| `browser_scene_motion.js` | 45 项通过 | 公转、导航与减少动画 |
+| `browser_offline.js` | 2 项通过 | 服务断开与按钮恢复 |
+| `browser_learning_layout.js` | 三个浏览器各 53 项通过 | 四页签坐标、刷新、前后退、键盘与各类导出 |
+| `browser_export_glass.js` | 三个浏览器各 64 项通过 | 三入口相同数据、恢复、失败重试、磨砂弹窗、窄屏、焦点与键盘 |
+| `browser_menu_fixed.js` | 三个浏览器各 39 项通过 | 真实背景滚动、旧样式覆盖、固定坐标与菜单独立滚动 |
+| `browser_learning_center.js` | Edge 76 项通过 | 真实存储和算法，离线接口使用专项替身 |
+| `browser_pwa.js --integrated` | Chromium 27 项通过 | 完整离线资源下载、更新失败回退与 API 实时网络 |
+| `browser_integration.cjs` | Chromium 24 项通过，另含 39 项存储检查 | 实际模块、断网学习、完整档案下载与导入 |
+
+另通过 Playwright CLI 在有界面的 Edge 中执行了导出与菜单的 64 项专项。已实际查看 1440px 和 390px 导出弹窗截图。浏览器测试均使用独立数据上下文。
+
+第一次 Edge 补充检查中浏览器进程意外退出，改为各专项独立启动浏览器后通过。WebKit 在初始页面尚未初始化完成时立即刷新发生导航超时；测试改为先等待应用就绪，再刷新并再次等待就绪，53 项检查通过。该调整不跳过刷新或页面功能检查。历史失败信息保留在补充报告中。
+
+移动端结果来自真实桌面浏览器的窄屏与触摸仿真，未代表 Android/iOS 真机或 macOS Safari 已验收。
+
+## 复验入口与产物
+
+在 `ai_tutor/` 中运行 `./start.ps1 -Port 8000`，访问 `http://127.0.0.1:8000/#/history`。本轮服务保留在 8000 端口。首页、`/api/health`、`/docs`、`/openapi.json` 在交付前逐项检查。
+
+常规复验命令为 `.venv/Scripts/python.exe -m pytest -q`、`npm test` 和 `npm run test:browser`。最后一项自行启动隔离测试服务并在完成后停止其子进程，不依赖保留的 8000 服务。
+
+报告和截图位于 `ai_tutor/output/playwright/`，按现有规则忽略提交。
+
+- `regression-results.json`、`pwa-results.json`、`chromium-integration-results.json`、`learning-ui-results.json`
+- `restored-learning-ui-results.json` 包含 Edge、WebKit 专项和三引擎学习页签结果
+- `restored-export-edge-1440.png`、`restored-export-edge-390.png`、`restored-export-webkit-1440.png`、`restored-export-webkit-390.png`
+- `menu-fixed-1440-current.png`、`menu-fixed-390-current.png` 及对应旧样式检查截图
+
 # 学习功能集成验收 · 2026年11月16日
 
 本轮结果适用于 `.worktrees/learning-integration` 中的 `codex/learning-integration`。按顺序合并本地已提交分支 `codex/learning-core` 的 `b738f7b`、`codex/learning-ui` 的 `dcb2136`、`codex/offline-pwa` 的 `fc746f2`。三个来源工作树中的未提交截图与测试产物由原工作树保留。祖先目录、仓库及项目适用路径未找到AGENTS.md，执行依据为 `docs/handoff/learning-plan/00-coordination.md` 与本轮用户要求。

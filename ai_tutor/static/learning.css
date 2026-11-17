@@ -239,7 +239,7 @@ body[data-view="knowledge"] #main-nav a[aria-current="page"] {
 body[data-view="knowledge"] .mock-tag { color:#b7c8dc; background:#ffffff08; border-color:#ffffff20; }
 body[data-view="knowledge"] #more-toggle:hover,
 body[data-view="knowledge"] #nav-toggle:hover { background:#ffffff12; }
-body[data-view="knowledge"] .popover { color:#edf5ff; background:rgba(18,30,46,.94); border-color:#c6ddff24; }
+body[data-view="knowledge"] .popover { color:#edf5ff; background:rgba(18,30,46,.76); border-color:#c6ddff24; }
 body[data-view="knowledge"] .popover a,
 body[data-view="knowledge"] .popover button { color:#dce9f8; }
 body[data-view="knowledge"] .popover a:hover,

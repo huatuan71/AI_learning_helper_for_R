@@ -1,8 +1,5 @@
 /* Keep long and short learning tabs centered in the same viewport. */
-html.learning-history { scrollbar-gutter:stable; scroll-behavior:auto; }
-@supports not (scrollbar-gutter:stable) {
-  html.learning-history { overflow-y:scroll; }
-}
+html.learning-history { overflow-y:scroll; scroll-behavior:auto; }
 #history-view { max-width:1120px; padding-top:calc(var(--header) + 28px); padding-bottom:64px; }
 #history-view .page-heading { text-align:left; padding:0; margin:0 0 24px; }
 #history-view h1 { font-size:40px; margin:0; letter-spacing:-.04em; }

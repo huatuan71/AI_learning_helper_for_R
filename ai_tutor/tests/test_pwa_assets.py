@@ -104,7 +104,11 @@ def test_bootstrap_contract():
     bootstrap = (ROOT / 'static/bootstrap.js').read_text(encoding='utf-8')
     assert 'void registerOffline()' in bootstrap
     assert bootstrap.index('void registerOffline()') < bootstrap.index('await import(')
-    assert "await import('./app.js?v=ascii-v1')" in bootstrap
+    html = (ROOT / 'static/index.html').read_text(encoding='utf-8')
+    build = re.search(r'/static/bootstrap\.js\?v=([^"\s]+)', html).group(1)
+    assert f"await import('./app.js?v={build}')" in bootstrap
+    assert f'/static/style.css?v={build}' in html
+    assert f'/static/learning-center.css?v={build}' in html
     assert 'window.' not in bootstrap
     app = (ROOT / 'static/app.js').read_text(encoding='utf-8')
     assert 'new window.' not in app

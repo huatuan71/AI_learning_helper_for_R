@@ -43,8 +43,9 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
   };
   try {
     await page.setViewportSize({width:1440, height:1000});
-    await page.goto(baseUrl + '/#/history');
-    await page.reload();
+    await page.goto(baseUrl + '/#/history', {waitUntil:'domcontentloaded'});
+    await ready();
+    await page.reload({waitUntil:'domcontentloaded'});
     await ready();
     check(await page.evaluate(() => history.scrollRestoration === 'manual'), 'hash router controls browser scroll restoration');
     // This suite runs in an isolated browser context, as do the other regression suites.
@@ -103,8 +104,14 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     const menuExport = await captureExport(async () => {
       await page.locator('#more-toggle').click();
       await page.locator('#export').click();
+      await page.locator('#export-format-conversations').check();
+      await page.locator('#export-download').click();
     });
-    const recordsExport = await captureExport(() => page.locator('#history-export').click());
+    const recordsExport = await captureExport(async () => {
+      await page.locator('#history-export').click();
+      await page.locator('#export-format-conversations').check();
+      await page.locator('#export-download').click();
+    });
     check(JSON.stringify(menuExport.data) === JSON.stringify(recordsExport.data), 'more-menu and records-tab exports share the same conversation payload');
     check(menuExport.data.records.length === 1 && menuExport.name === 'r-tutor-conversations.json', 'conversation export contains the saved conversation');
     await page.locator('[data-learning-tab="summary"]').click();
@@ -114,7 +121,10 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     check(/^r-tutor-weekly-report_\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}\.txt$/.test(weeklyExport.name), 'weekly report uses an ASCII filename');
     check(weeklyExport.data.includes('学习小结'), 'weekly report retains Chinese learning content');
     await page.locator('#learning-tools').evaluate(node => { node.open = true; });
-    const archiveExport = await captureExport(() => page.getByRole('button', {name:'导出完整档案', exact:true}).click());
+    const archiveExport = await captureExport(async () => {
+      await page.locator('#learning-tools-content').getByRole('button', {name:'导出学习档案', exact:true}).click();
+      await page.locator('#export-download').click();
+    });
     check(archiveExport.name === 'r-tutor-learning-archive.json', 'full archive uses an ASCII filename');
     check(archiveExport.data.app === 'r-language-tutor' && archiveExport.data.schemaVersion === 1, 'full archive has the versioned restore format');
     check(archiveExport.data.data.conversations.length === 1 && archiveExport.data.data.events.length > 0 &&

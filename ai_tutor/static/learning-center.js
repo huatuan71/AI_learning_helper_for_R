@@ -49,8 +49,8 @@ export function downloadText(value, filename, type = 'text/plain;charset=utf-8')
 }
 
 export class LearningCenter {
-  constructor({units, openKnowledge, openConversation, api, codeBlock, onSnapshot, notify}) {
-    Object.assign(this, {units, openKnowledge, openConversation, api, codeBlock, onSnapshot, notify});
+  constructor({units, openKnowledge, openConversation, openExport, api, codeBlock, onSnapshot, notify}) {
+    Object.assign(this, {units, openKnowledge, openConversation, openExport, api, codeBlock, onSnapshot, notify});
     this.tab = 'overview';
     this.catalog = [];
     this.bank = [];
@@ -123,6 +123,10 @@ export class LearningCenter {
   async exportConversations() {
     const data = await learningStore.snapshot();
     downloadText(JSON.stringify({version:'1.2.1', records:data.conversations.map(item => item.record)}, null, 2), 'r-tutor-conversations.json', 'application/json;charset=utf-8');
+  }
+  async exportArchive() {
+    const data = await learningStore.exportArchive();
+    downloadText(JSON.stringify(data,null,2),'r-tutor-learning-archive.json','application/json;charset=utf-8');
   }
   async visit(id) { return this.run(() => learningStore.recordVisit(id)); }
   async enroll(id) {
@@ -532,10 +536,7 @@ export class LearningCenter {
         this.feedback(`${selected.name} · 导入 ${result.imported} 项，重复 ${result.duplicates} 项。`);
       } finally { file.value=''; }
     });
-    archive.append(action('导出完整档案', () => this.run(async () => {
-      const data = await learningStore.exportArchive();
-      downloadText(JSON.stringify(data,null,2),'r-tutor-learning-archive.json','application/json;charset=utf-8');
-    })),file);
+    archive.append(action('导出学习档案', event => this.openExport(event.currentTarget)),file);
 
     const reset = disclosure('重置个人学习档案');
     reset.append(node('p','将清除对话、学习事件、复习、收藏和个人设置。'));
