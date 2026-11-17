@@ -1,5 +1,5 @@
 /* Update RESOURCE_VERSION with an incompatible shell release. Public resources only. */
-const RESOURCE_VERSION = 'model-notice-v1';
+const RESOURCE_VERSION = 'ai-summary-v1';
 const CACHE_PREFIX = 'r-language-tutor-offline:';
 const COMMIT_PATH = '/__r_tutor_offline_commit__';
 const ASSETS = [
@@ -22,6 +22,8 @@ const ASSETS = [
   '/static/learning-store.js',
   '/static/review-scheduler.js',
   '/static/learning-center.js',
+  '/static/learning-summary-data.js',
+  '/static/learning-summary-ui.js',
   '/static/vendor/three/three.module.min.js',
   '/static/vendor/marked/marked.js',
   '/static/vendor/dompurify/purify.js',

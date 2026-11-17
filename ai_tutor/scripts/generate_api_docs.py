@@ -1,6 +1,7 @@
 """Generate handoff documentation from the running app's actual OpenAPI schema."""
 import json
 import os
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.request import urlopen
@@ -35,11 +36,143 @@ def table(schema, name):
     return '\n'.join(lines)
 
 
+def summary_reference(schema):
+    models = [
+        ('请求', 'LearningSummaryRequest'), ('日期范围', 'SummaryPeriod'),
+        ('本地统计', 'SummaryMetrics'), ('摘录覆盖', 'SummaryCoverage'),
+        ('证据', 'SummaryEvidence'), ('作答信号', 'AttemptSignals'),
+        ('响应', 'LearningSummaryResponse'), ('总结正文', 'LearningSummary'),
+        ('主题观察', 'SummaryTopic'), ('复习优先项', 'SummaryPriority'),
+        ('下一步建议', 'SummaryAction'),
+    ]
+    fields = '\n\n'.join(f'### {heading}\n\n{table(schema, name)}' for heading, name in models)
+    request = {
+        'schema_version': 1, 'input_fingerprint': '0' * 64,
+        'period': {'start_date': '2026-11-17', 'end_date': '2026-11-17', 'time_zone': 'Asia/Shanghai'},
+        'metrics': {'topic_count': 1, 'study_event_count': 1, 'attempt_count': 0,
+                    'independent_self_rated_count': 0, 'conversation_count': 0},
+        'coverage': {'total_evidence_count': 1, 'included_evidence_count': 1, 'truncated': False,
+                     'policy_version': 'learning-summary-evidence-v1'},
+        'evidence': [{'id': 'e:visit-example', 'source_id': 'visit-example', 'kind': 'event',
+                      'at': '2026-11-17T08:00:00.000Z', 'knowledge_ids': ['K06'],
+                      'text': '浏览知识点，仅表明访问'}],
+    }
+    response = {
+        'request_id': 'example-request', 'status': 'ok', 'mode': 'ai',
+        'provider': 'deepseek', 'model': 'configured-model', 'prompt_version': 'learning-summary-v1',
+        'input_fingerprint': request['input_fingerprint'], 'generated_at': '2026-11-17T08:01:00.000Z',
+        'period': request['period'], 'coverage': request['coverage'],
+        'usage': {'input_tokens': 100, 'output_tokens': 80, 'total_tokens': 180}, 'duration_ms': 1200,
+        'summary': {'overview': '本期记录显示浏览了缺失值相关知识，掌握程度需验证。',
+                    'topics': [{'knowledge_id': 'K06', 'observation': '有一次知识点访问记录。',
+                                'evidence_ids': ['e:visit-example']}],
+                    'review_priorities': [],
+                    'next_actions': [{'knowledge_id': 'K06', 'action': '独立完成一次缺失值练习。',
+                                      'reason': '现有证据只有浏览记录，建议检测理解情况。',
+                                      'evidence_ids': ['e:visit-example']}],
+                    'uncertainties': ['浏览记录不足以验证独立作答能力。']},
+    }
+    empty = {**response, 'status': 'no_data', 'mode': 'local', 'provider': None, 'model': None,
+             'coverage': {**request['coverage'], 'total_evidence_count': 0, 'included_evidence_count': 0},
+             'usage': {}, 'duration_ms': 0, 'summary': None}
+    return f'''## AI学习总结
+
+`POST /api/learning/summary` 接收本地整理的证据，返回一次JSON响应。提示词版本为 `learning-summary-v1`。
+页面入口为“学习记录 → 小结 → AI总结”。使用当前会话选择的厂商和模型，搜索模式下关闭搜索工具。
+该请求沿用会话并发、Origin检查、60秒普通生成预算和厂商重试规则。输出Token上限取用户设置与4096的较小值。
+请求设置 `cache: 'no-store'`，接口成功及失败响应均设置 `Cache-Control: no-store`。
+
+{fields}
+
+输入版本固定为整数1。日期是有效的YYYY-MM-DD，起止日期均包含在范围内，按显式IANA时区归属自然日。
+证据时间采用UTC ISO格式，来源ID最多200字符，证据ID为类型前缀 `c:`、`a:` 或 `e:` 加来源ID。
+最多50条证据，单条摘录最多1200个Unicode字符，请求原始JSON最多120 KiB UTF-8。
+知识ID限课程K01至K43，知识列表去重。统计为非负整数，独立自评次数不得超过作答次数。
+覆盖数量须与证据和本地统计相符，遗漏记录必须标记truncated。作答必须包含signals，其他类型省略signals。
+grade取again、hinted、good、easy，question_type取concept或application，两种提示标志均为布尔值。
+前端排除专用代码字段、个人备注和密钥，使用同一输入对象进行预览和发送。
+输入指纹是归一化输入的SHA-256，排除指纹字段自身与界面临时状态。
+
+overview最多1200字符，三个具体建议数组及uncertainties分别最多10项。
+observation、reason、action和单条uncertainty最多600字符，每项具体建议引用1至10个不重复证据。
+后端核对知识和证据属于本次输入，且知识点与对应证据关联。无效JSON、未知引用和超长输出返回502 STRUCTURED_OUTPUT_INVALID。
+模型处理学习记录时将原对话与旧AI回答视为数据。总结解释自评和提示的局限，掌握等级与复习时间继续由现有规则计算。
+
+### 请求示例
+
+示例指纹使用64个0表示占位，实际页面由 `buildSummaryInput` 计算。
+
+```json
+{json.dumps(request, ensure_ascii=False, indent=2)}
+```
+
+### 成功示例
+
+示例中的用量和耗时用于说明字段。运行时取厂商实际返回的usage与本次处理耗时。
+
+```json
+{json.dumps(response, ensure_ascii=False, indent=2)}
+```
+
+空范围在模型调用前返回200，响应包含 `status: "no_data"`、`mode: "local"` 和 `summary: null`。
+此时无需配置模型，也不会产生模型调用。
+
+```json
+{json.dumps(empty, ensure_ascii=False, indent=2)}
+```
+
+未配置模型返回409 CONFIG_REQUIRED，会话失效返回409 SESSION_EXPIRED。
+请求超过120 KiB返回413 REQUEST_TOO_LARGE，字段或日期无效返回422 VALIDATION_ERROR。
+取消、超时、上游故障和配置变更使用下文统一错误结构。
+
+```json
+{{"request_id":"example-request","error":{{"code":"STRUCTURED_OUTPUT_INVALID","message":"模型总结格式或来源校验失败，请重新生成。","retryable":true}}}}
+```
+
+### 浏览器调用
+
+```javascript
+const {{buildSummaryInput}} = await import('/static/learning-summary-data.js?v=ai-summary-v1');
+const {{learningStore}} = await import('/static/learning-store.js?v=learning-v1');
+const input = await buildSummaryInput(await learningStore.snapshot(), {{
+  start_date: '2026-11-17', end_date: '2026-11-17', time_zone: 'Asia/Shanghai'
+}});
+const controller = new AbortController();
+const response = await fetch('/api/learning/summary', {{
+  method: 'POST', credentials: 'include', cache: 'no-store',
+  headers: {{'Content-Type': 'application/json'}},
+  body: JSON.stringify(input), signal: controller.signal
+}});
+const result = await response.json();
+if (!response.ok) throw new Error(result.error.message);
+if (result.status === 'ok') await learningStore.saveSummary(result, input);
+// 取消按钮调用 controller.abort()。
+```
+
+### 保存、恢复与离线更新
+
+IndexedDB版本为2，完整档案schemaVersion为2，新增summaries数组。支持导入schemaVersion 1，旧档案的总结按空数组处理。
+缓存保留有效响应和证据定位元数据，最多100条，按生成时间保留最近结果。
+缓存键包含日期、时区、输入指纹、厂商、模型及提示词版本，同一输入主动重新生成后原子更新。
+合并相同总结ID时保留较晚的有效结果，时间相同按归一化内容确定顺序，档案整体上限20 MiB。
+清空对话会在同一事务中清理引用该对话的总结，重置个人档案会清理全部总结。
+界面可复制、导出文本、打印及跳转来源，原始证据缺失时显示提示并禁用失效跳转。
+已保存总结可离线查看。资源版本为 `ai-summary-v1`，旧离线包用户联网点击“更新离线资料”，成功后刷新。
+
+更新记录为2026年11月17日，新增手动学习总结、取消、证据校验、缓存与档案兼容。
+
+'''
+
+
 def main():
     health, schema = read('/api/health'), read('/openapi.json')
     if health['version'] != '1.2.1':
         raise RuntimeError('请先重启至1.2.1再生成接口说明')
     timestamp = datetime.now(timezone(timedelta(hours=8))).isoformat(timespec='seconds')
+    operation_count = sum(method in {'get', 'post', 'put', 'delete'}
+                          for operations in schema['paths'].values() for method in operations)
+    worker = (ROOT / 'static/service-worker.js').read_text(encoding='utf-8')
+    asset_count = len(re.findall(r"'([^']+)'", worker.split('const ASSETS = [', 1)[1].split('];', 1)[0]))
     routes = ['| 方法 | 路径 | 用途 |', '|---|---|---|']
     for path, operations in schema['paths'].items():
         for method, operation in operations.items():
@@ -65,7 +198,7 @@ def main():
 
 ## 学习与PWA公共资源
 
-以下资源使用同源GET访问，返回200，两个根资源使用 `include_in_schema=False`。OpenAPI仍有10条路径与12个操作。
+以下资源使用同源GET访问，返回200，两个根资源使用 `include_in_schema=False`。OpenAPI包含{len(schema['paths'])}条路径与{operation_count}个操作。
 
 | 路径 | 内容与访问方式 |
 |---|---|
@@ -75,7 +208,7 @@ def main():
 | `/static/review-bank.json` | 94道带来源的本地复习题 |
 | `/static/icons/icon-192.png`、`icon-512.png`、`apple-touch-icon.png` | 图标均位于 `/static/icons/` |
 
-`/sw.js` 和 `/offline-course.json` 使用 `Cache-Control: no-cache, no-store, must-revalidate`。离线缓存由用户点击保存建立完整26项公开资源包。配置、Key、所有API、模型POST和SSE通过实时网络请求。
+`/sw.js` 和 `/offline-course.json` 使用 `Cache-Control: no-cache, no-store, must-revalidate`。离线缓存由用户点击保存建立完整{asset_count}项公开资源包。配置、Key、所有API、模型POST和SSE通过实时网络请求。
 
 学习档案存于设备IndexedDB，通过页面导出JSON和合并导入。学习概览、收藏、小结和复习排程由浏览器模块处理。
 学习入口为 `/#/history`，复习为 `/#/history/review`，小结为 `/#/history/summary`，对话为 `/#/history/records`。
@@ -148,6 +281,8 @@ POST `/api/chat/stream` 和 `/api/review/stream` 使用相同的ChatRequest，�
 预览标记待校验，模型内部思考内容过滤，最终成功事件到达后保存记录。
 已输出内容的流式连接发生故障时，由页面提示用户手动重试。
 
+{summary_reference(schema)}
+
 ## 会话、限额和错误
 
 Cookie名称为r_tutor_session，随机生成，启用HttpOnly与SameSite=Strict，公网启用Secure。
@@ -171,6 +306,7 @@ Cookie名称为r_tutor_session，随机生成，启用HttpOnly与SameSite=Strict
 | 403 | ORIGIN_FORBIDDEN |
 | 404 | NOT_FOUND |
 | 409 | SESSION_EXPIRED、CONFIG_REQUIRED、CONFIG_CHANGED |
+| 413 | REQUEST_TOO_LARGE，总结输入超过120 KiB |
 | 422 | VALIDATION_ERROR、CONFIG_REQUIRED、SEARCH_UNSUPPORTED、CONTENT_REFUSED |
 | 429 | SESSION_BUSY、SERVICE_BUSY、RATE_LIMITED、PROVIDER_RATE_LIMITED |
 | 499 | REQUEST_CANCELLED |

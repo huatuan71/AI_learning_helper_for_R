@@ -23,7 +23,7 @@ def test_routes():
     assert client.get('/static/app.js').status_code==200
     assert client.get('/docs').status_code==200
     schema=client.get('/openapi.json').json()
-    assert len([p for p in schema['paths'] if p.startswith('/api/')])==10
+    assert len([p for p in schema['paths'] if p.startswith('/api/')])==11
 
 
 @pytest.mark.parametrize('case', DATA['questions'], ids=lambda q:q['id'])

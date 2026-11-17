@@ -1,4 +1,4 @@
-"""Public PWA endpoints preserve the existing ten-path OpenAPI contract."""
+"""Public PWA assets and the learning-summary HTTP contract stay in sync."""
 import json
 import re
 import struct
@@ -34,10 +34,11 @@ def test_public_endpoints():
     assert response.headers['x-content-type-options'] == 'nosniff'
 
 
-def test_openapi_unchanged():
+def test_openapi_includes_learning_summary():
     schema = client.get('/openapi.json').json()
     assert schema['info']['version'] == '1.2.1'
-    assert len(schema['paths']) == 10
+    assert len(schema['paths']) == 11
+    assert 'post' in schema['paths']['/api/learning/summary']
     assert all(path.startswith('/api/') for path in schema['paths'])
     assert client.get('/api/health').json()['version'] == '1.2.1'
 

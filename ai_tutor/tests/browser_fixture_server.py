@@ -13,6 +13,7 @@ import uvicorn
 from app.main import app
 from app.ai.sessions import SessionStore
 from support.provider_fakes import streamed_wire, teaching, wire
+from support.summary_fakes import summary_result
 
 
 async def fake_upstream(request):
@@ -34,6 +35,15 @@ async def fake_upstream(request):
                                             search='无需搜索' not in text))
     if text == '只回复OK':
         return httpx.Response(200, json=wire(provider, 'OK'))
+    if '你是R语言学习记录分析助手' in messages[0]['content']:
+        data = json.loads(messages[-1]['content'])
+        item = next((item for item in data['evidence'] if item['knowledge_ids']), None)
+        result = summary_result(item['id'], item['knowledge_ids'][0]) if item else {
+            'overview': '本期仅有未关联知识点的对话，建议先补充独立练习记录。',
+            'topics': [], 'review_priorities': [], 'next_actions': [],
+            'uncertainties': ['现有记录不足以验证掌握程度。'],
+        }
+        return httpx.Response(200, json=wire(provider, json.dumps(result, ensure_ascii=False)))
     result = teaching()
     current = messages[-1]['content']
     if current.startswith('{"task_type"') and json.loads(current).get('question') == 'NA长回答测试':
