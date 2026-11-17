@@ -1,7 +1,7 @@
 import {learningStore} from './learning-store.js?v=learning-v1';
 import {buildReviewQueue} from './review-scheduler.js?v=learning-v1';
 import {getOfflineStatus, downloadOffline, getOfflineCourse} from './offline.js?v=learning-v1';
-import {AIExerciseUI} from './ai-exercise-ui.js?v=ai-exercise-v3';
+import {AIExerciseUI} from './ai-exercise-ui.js?v=r-highlighting-v1';
 import {LearningSummaryUI} from './learning-summary-ui.js?v=ai-summary-v1';
 
 const $ = id => document.getElementById(id);
@@ -193,6 +193,7 @@ export class LearningCenter {
     const root = $('learning-content');
     $('learning-records').hidden = this.tab !== 'records';
     root.hidden = this.tab === 'records';
+    this.exerciseUI.releaseEditors();
     root.replaceChildren();
     if (this.tab === 'overview') this.renderOverview(root);
     if (this.tab === 'review') await this.renderReview(root);
@@ -316,7 +317,7 @@ export class LearningCenter {
     panel.dataset.questionId = question.id;
     panel.append(node('p',`${task.card.type === 'concept' ? '概念回忆' : '应用练习'} · ${this.session.index+1} / ${this.session.tasks.length}`,'lc-caption muted'),
       node('p',task.reason,'lc-reason'),node('h3',question.prompt));
-    if (question.code) this.codeBlock(panel,question.code,'题目代码',true);
+    if (question.code) this.codeBlock(panel,question.code,'题目代码',true,'r');
     if (task.submission) {
       panel.append(node('p',task.submission.answerText || '本次未填写答案。'),
         node('p',`待保存评级 · ${GRADES[task.submission.grade]}`),
@@ -370,7 +371,7 @@ export class LearningCenter {
       const part = disclosure('完成变式，验证熟练程度');
       part.open = task.variantChoice !== null;
       part.append(node('p',variant.prompt));
-      if (variant.code) this.codeBlock(part,variant.code,'变式代码',true);
+      if (variant.code) this.codeBlock(part,variant.code,'变式代码',true,'r');
       variant.choices.forEach((choice,index) => {
         const b = action(choice,() => {
           task.variantChoice=index;task.variantPassed=index===variant.correctIndex;this.persistSession();this.render();
@@ -499,7 +500,7 @@ export class LearningCenter {
       const records=conversations.filter(item=>item.record.response.related_knowledge?.[0]===id);
       for(const item of records) part.append(action('返回对话 · '+(item.record.display_question||item.record.request.question||'代码纠错'),()=>this.openConversation(item.id)));
       part.append(node('h3','课程要点'),node('p',k?.fields?.['解释'] || '课程详情暂不可用，请更新离线资料。'));
-      if(k?.fields?.['运行示例']) {const code=disclosure('典型代码 · 未运行验证');this.codeBlock(code,k.fields['运行示例'],'课程示例',true);part.append(code);}
+      if(k?.fields?.['运行示例']) {const code=disclosure('典型代码 · 未运行验证');this.codeBlock(code,k.fields['运行示例'],'课程示例',true,'r');part.append(code);}
       part.append(node('h3','主要易错点'),node('p',k?.fields?.['易错提醒']||'该条目暂缺课程易错说明。'));
       const failed=attempts.filter(item=>item.cardId.startsWith(id+':')&&!independent(item));
       part.append(node('p',`本范围 ${attempts.filter(item=>item.cardId.startsWith(id+':')).length} 次作答，${failed.length} 次需继续巩固。`,'muted'));

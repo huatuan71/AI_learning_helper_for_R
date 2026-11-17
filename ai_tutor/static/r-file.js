@@ -1,7 +1,8 @@
 /* Read local text only. The existing review API receives JSON, never a File/FormData. */
 'use strict';
 export class RFileInput {
-  constructor() {
+  constructor({onCodeChange = () => {}} = {}) {
+    this.onCodeChange = onCodeChange;
     this.$=id=>document.getElementById(id);this.sequence=0;this.pending=null;this.reading=false;this.locked=false;
     this.$('file-pick').onclick=()=>this.$('r-file').click();
     this.$('r-file').onchange=()=>{const files=[...this.$('r-file').files];this.$('r-file').value='';this.accept(files);};
@@ -15,7 +16,7 @@ export class RFileInput {
     });
     drop.addEventListener('keydown',e=>{if(e.target===drop && ['Enter',' '].includes(e.key)){e.preventDefault();this.$('file-pick').click();}});
     this.$('file-remove').onclick=()=>{this.sequence++;this.pending=null;this.reading=false;this.detach();this.feedback('已移除文件关联，编辑区代码已保留。');};
-    this.$('code-clear').onclick=()=>{this.sequence++;this.pending=null;this.reading=false;this.detach();this.$('code').value='';this.count();this.feedback();};
+    this.$('code-clear').onclick=()=>{this.sequence++;this.pending=null;this.reading=false;this.detach();this.$('code').value='';this.onCodeChange();this.count();this.feedback();};
     this.$('code').addEventListener('input',()=>this.count());
     const dialog=this.$('replace-file-dialog');
     const cancelReplacement=()=>{
@@ -38,7 +39,7 @@ export class RFileInput {
     return size;
   }
   detach(){this.$('file-info').hidden=true;this.$('file-name').textContent='';this.$('file-size').textContent='';}
-  apply(file,text){this.$('code').value=text;this.$('file-name').textContent=file.name;this.$('file-size').textContent=file.size<1024?file.size+' B':(file.size/1024).toFixed(1)+' KB';this.$('file-info').hidden=false;
+  apply(file,text){this.$('code').value=text;this.onCodeChange();this.$('file-name').textContent=file.name;this.$('file-size').textContent=file.size<1024?file.size+' B':(file.size/1024).toFixed(1)+' KB';this.$('file-info').hidden=false;
     this.feedback(this.count()>10000?'已读取，但超过10000字符。请精简代码后再发送。':'已在本地读取，可编辑后发送。',this.count()>10000);}
   async accept(files) {
     if(this.locked){this.feedback('正在分析，请稍后再选择文件。',true);return;}

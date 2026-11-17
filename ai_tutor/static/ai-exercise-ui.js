@@ -1,3 +1,5 @@
+import {enhanceRTextarea} from './r-code-editor.js?v=r-highlighting-v1';
+import {rCodeFragment} from './r-highlighter.js?v=r-highlighting-v1';
 import {requestJson} from './api-client.js?v=ascii-v1';
 import {learningStore} from './learning-store.js?v=learning-v1';
 import {buildExerciseRequest, recommendExerciseKnowledge} from './ai-exercise-data.js?v=ai-exercise-v1';
@@ -109,7 +111,7 @@ export class AIExerciseUI {
     this.options={mode:'knowledge',knowledgeIds:[],count:3,difficulty:'basic',formats:Object.keys(FORMATS)};
     try {const saved=JSON.parse(localStorage.getItem('r-tutor-ai-exercise-options')||'null');if(saved)this.options={...this.options,...saved};} catch {}
     this.pending = Promise.resolve();this.failedDrafts=[]; this.rows=[];this.message='';
-    window.addEventListener('hashchange',()=>{if(!location.hash.startsWith('#/history/review'))this.cancel();});
+    window.addEventListener('hashchange',()=>{if(!location.hash.startsWith('#/history/review/ai')) {this.cancel();this.releaseEditors();}});
   }
   refreshConfig() {this.cancel();this.paintStatus();}
   open(id) {
@@ -119,7 +121,12 @@ export class AIExerciseUI {
   cancel() {
     if (this.job) {this.job.controller.abort();this.job=null;this.message='已取消，可以再次出题。';this.paintStatus();}
   }
+  releaseEditors() {
+    for (const editor of this.codeEditors || []) editor.destroy();
+    this.codeEditors = [];
+  }
   async mount(root,snapshot) {
+    this.releaseEditors();
     this.root=root;this.snapshot=snapshot;
     this.rows=await learningStore.listAIExercises();
     if(!root.isConnected||this.root!==root)return;
@@ -322,6 +329,7 @@ export class AIExerciseUI {
     const result=this.results;
     const attempts=await learningStore.listAIExerciseAttempts();
     if(result!==this.results||!result.isConnected)return;
+    this.releaseEditors();
     this.results.replaceChildren();
     this.results.append(el('p',`已保存 ${this.rows.length} 题 · 练习 ${attempts.length} 次 · 主题 ${new Set(this.rows.flatMap(row=>row.knowledge_ids)).size} 个`,'muted'));
     if(attempts.length) {
@@ -333,7 +341,7 @@ export class AIExerciseUI {
       const panel=el('article',undefined,'lc-paper lc-ai-question');panel.dataset.questionId=row.id;
       const draft=row.draft;const locked=draft.phase!=='draft';
       panel.append(el('span','AI生成','lc-ai-badge'),el('h3',`${row.knowledge_ids.join('、')} · ${FORMATS[row.format]}`),el('p',row.prompt));
-      if(row.code){this.codeBlock(panel,row.code,'题目代码',true);}
+      if(row.code){this.codeBlock(panel,row.code,'题目代码',true,'r');}
       if(row.format==='choice') {
         const choices=el('fieldset');choices.append(el('legend','选择答案'));
         row.choices.forEach((text,index)=>{
@@ -343,6 +351,9 @@ export class AIExerciseUI {
       }
       const answer=el('textarea');answer.placeholder='写下你的答案或推理';answer.setAttribute('aria-label','我的答案');answer.value=draft.answerText;answer.disabled=locked;answer.maxLength=6000;
       answer.oninput=()=>this.saveDraft(row.id,{answerText:answer.value});panel.append(answer);
+      if (row.format === 'code_fix') {
+        answer.placeholder = '写下修正后的R代码';
+      }
       const controls=el('div',undefined,'lc-ai-actions');
       controls.append(button('解题提示',()=>this.run(async()=>{
         await learningStore.saveAIExerciseDraft(row.id,{hintUsed:true},draft.attemptId);
@@ -352,7 +363,7 @@ export class AIExerciseUI {
       if(!locked)controls.append(button('锁定答案',()=>this.run(()=>learningStore.lockAIExercise(row.id,draft.attemptId)),'primary'));
       if(draft.answerRevealed) {
         const reference=el('section',undefined,'lc-ai-reference');reference.append(el('h4','AI参考答案'),el('p',row.reference_answer),el('p',row.explanation));
-        if(row.solution_code){this.codeBlock(reference,row.solution_code,'参考代码',true);}
+        if(row.solution_code){this.codeBlock(reference,row.solution_code,'参考代码',true,'r');}
         if(locked&&row.format==='choice')reference.append(el('p',draft.selectedIndex===row.correct_index?'与AI参考选项一致':'与AI参考选项不一致'));
         panel.append(reference);
       }
@@ -371,6 +382,7 @@ export class AIExerciseUI {
       controls.append(button('导出练习',()=>this.download([row.prompt,row.code||'',...row.choices,'参考答案',row.reference_answer,row.solution_code||'',row.explanation,'代码未运行验证'].join('\n\n'),'r-tutor-ai-exercise.txt')),
         button('删除练习',()=>this.run(()=>learningStore.deleteAIExercise(row.id))));
       panel.append(controls);this.results.append(panel);
+      if (row.format === 'code_fix') this.codeEditors.push(enhanceRTextarea(answer, {renderCode:rCodeFragment}));
       await this.mutate(()=>learningStore.recordAIExerciseView(row.id));
     }
   }
