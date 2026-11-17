@@ -193,6 +193,7 @@ export class LearningCenter {
     const root = $('learning-content');
     $('learning-records').hidden = this.tab !== 'records';
     root.hidden = this.tab === 'records';
+    this.exerciseUI.releaseEditors();
     root.replaceChildren();
     if (this.tab === 'overview') this.renderOverview(root);
     if (this.tab === 'review') await this.renderReview(root);

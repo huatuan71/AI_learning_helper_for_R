@@ -150,7 +150,6 @@ function liveAnswer(question, review) {
     remove: () => { cancelAnimationFrame(frame); card.remove(); },
     update(event, data) {
       const scroll = currentView === 'review' ? document.scrollingElement : $('conversation-scroll');
-      const follow = scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 100;
       if (event === 'status') {
         label.textContent = ({searching:'正在检索网络来源…',preparing:'正在准备…',generating:'生成中 · 待校验',validating:'正在校验回答和引用…',repairing:'正在修复回答结构…'})[data.stage] || '生成中 · 待校验';
       } else if (event === 'reset') fields = {};
@@ -159,11 +158,12 @@ function liveAnswer(question, review) {
       }
       if (frame !== null) return;
       frame = requestAnimationFrame(() => {
-      frame = null;
-      const steps = Object.keys(fields).filter(key => key.startsWith('steps.'))
-        .sort((a,b) => Number(a.slice(6)) - Number(b.slice(6))).map(key => fields[key]);
-      renderTeachingBody(body, {...fields, steps}, []);
-      if (follow && card.isConnected) scroll.scrollTop = scroll.scrollHeight;
+        frame = null;
+        const follow = scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 100;
+        const steps = Object.keys(fields).filter(key => key.startsWith('steps.'))
+          .sort((a,b) => Number(a.slice(6)) - Number(b.slice(6))).map(key => fields[key]);
+        renderTeachingBody(body, {...fields, steps}, []);
+        if (follow && card.isConnected) scroll.scrollTop = scroll.scrollHeight;
       });
     }
   };
