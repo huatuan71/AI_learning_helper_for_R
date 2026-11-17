@@ -216,7 +216,7 @@ export class KnowledgeMap {
       links('先修知识',n.k.prerequisites);links('相关知识',[...new Set(related)].filter(key=>!n.k.prerequisites.includes(key)));
       const actions=this.node('div',undefined,'detail-actions');
       const explain=this.action('在AI问答中讲解',()=>{this.close(false);this.explain(id);},'primary');
-      const practice=this.action('给我一道练习',()=>{this.close(false);this.exercise(id);});
+      const practice=this.action('AI出题',()=>{this.close(false);this.exercise(id);});
       explain.dataset.request='true';practice.dataset.request='true';actions.append(explain,practice);root.append(actions);
       actions.append(this.action('加入复习',async event=>{const target=event.currentTarget;if(await this.enroll?.(id))target.textContent='已加入复习';}),
         this.action('收藏',async event=>{const target=event.currentTarget;if(await this.bookmark?.(id))target.textContent='已收藏';}));

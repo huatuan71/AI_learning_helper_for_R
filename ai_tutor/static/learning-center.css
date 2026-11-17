@@ -119,3 +119,23 @@ progress { accent-color:var(--blue); }
   .lc-report button { display:none; }
   .lc-report pre { font-size:10pt; }
 }
+/* AI practice follows the existing 16px text, muted blue controls and glass paper surfaces. */
+.lc-ai-actions { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+.lc-ai-actions button, .lc-ai-exercises summary, .lc-ai-exercises select { min-height:44px; }
+.lc-ai-actions button[aria-pressed=true] { color:var(--blue); background:rgba(0,113,227,.08); }
+.lc-ai-exercises { min-width:0; }
+.lc-ai-exercises label { display:flex; align-items:center; gap:8px; min-height:44px; }
+.lc-ai-exercises select { max-width:100%; margin-left:8px; }
+.lc-ai-knowledge { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); max-height:240px; overflow:auto; padding:8px; }
+.lc-ai-knowledge label { padding:4px; font-size:14px; }
+.lc-ai-exercises input[type=checkbox], .lc-ai-exercises input[type=radio] { flex:0 0 auto; width:18px; height:18px; }
+.lc-ai-exercises fieldset { border:0; padding:4px 0; margin:12px 0; min-width:0; }
+.lc-ai-exercises pre { white-space:pre-wrap; overflow-wrap:anywhere; max-width:100%; }
+.lc-ai-question { margin:24px 0; overflow-wrap:anywhere; }
+.lc-ai-question textarea { display:block; width:100%; min-height:110px; resize:vertical; margin:12px 0; }
+.lc-ai-question h3 { margin:12px 0!important; }
+.lc-ai-badge { display:inline-block; color:var(--blue); background:rgba(0,113,227,.09); padding:4px 10px; border-radius:8px; font-size:13px; }
+.lc-ai-reference { padding:12px 0; border-block:1px solid var(--line); }
+.lc-ai-hint { padding:12px; background:rgba(0,113,227,.05); border-radius:12px; }
+.lc-ai-question details button { display:block; text-align:left; max-width:100%; white-space:normal; min-height:44px; }
+@media(max-width:600px) { .lc-ai-knowledge { grid-template-columns:minmax(0,1fr); } .lc-ai-exercises label { flex-wrap:wrap; } }
