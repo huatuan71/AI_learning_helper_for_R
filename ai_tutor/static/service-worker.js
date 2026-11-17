@@ -1,5 +1,5 @@
 /* Update RESOURCE_VERSION with an incompatible shell release. Public resources only. */
-const RESOURCE_VERSION = 'ai-exercise-v3';
+const RESOURCE_VERSION = 'r-highlighting-v1';
 const CACHE_PREFIX = 'r-language-tutor-offline:';
 const COMMIT_PATH = '/__r_tutor_offline_commit__';
 const ASSETS = [
@@ -14,6 +14,10 @@ const ASSETS = [
   '/static/app.js',
   '/static/api-client.js',
   '/static/answer-renderer.js',
+  '/static/r-highlighter.js',
+  '/static/r-code-editor.js',
+  '/static/r-code-editor.css',
+  '/static/r-code-theme.css',
   '/static/knowledge-map.js',
   '/static/liquid-scene.js',
   '/static/r-file.js',

@@ -1,4 +1,5 @@
 import {markdownFragment} from './answer-markdown.js?v=learning-v1';
+import {rCodeFragment} from './r-highlighter.js?v=r-highlighting-v1';
 
 function el(tag, text, cls) {
   const node = document.createElement(tag);
@@ -19,7 +20,7 @@ export function firstSentence(text) {
 }
 
 export function createAnswerRenderer(notify) {
-  function codeBlock(parent, text, label, unverified = false) {
+  function codeBlock(parent, text, label, unverified = false, language = '') {
     if (!text) return;
     const wrap = el('div', undefined, 'code-wrap');
     const heading = el('div', undefined, 'code-heading');
@@ -29,7 +30,13 @@ export function createAnswerRenderer(notify) {
       try { await navigator.clipboard.writeText(text); copy.textContent = '已复制'; }
       catch { notify('复制失败，请手动选中代码复制。', true); }
     }, 'copy');
-    heading.append(copy); wrap.append(heading, el('pre', text)); parent.append(wrap);
+    const pre = el('pre');
+    pre.dataset.language = language;
+    if (language.toLowerCase() === 'r') {
+      pre.className = 'r-code';
+      pre.append(rCodeFragment(text));
+    } else pre.textContent = text;
+    heading.append(copy); wrap.append(heading, pre); parent.append(wrap);
   }
 
   function appendProse(node, text, sources = []) {
@@ -62,7 +69,7 @@ export function createAnswerRenderer(notify) {
         const language = code?.className.match(/\blanguage-([\w+-]+)/)?.[1] || '';
         const holder = el('div');
         const label = language.toLowerCase() === 'r' ? 'R代码' : (language ? language + '代码' : '代码');
-        codeBlock(holder, (code || pre).textContent.replace(/\n$/, ''), label, true);
+        codeBlock(holder, (code || pre).textContent.replace(/\n$/, ''), label, true, language);
         pre.replaceWith(...holder.childNodes);
       }
       return;
@@ -76,7 +83,7 @@ export function createAnswerRenderer(notify) {
         (issue.line == null ? '' : ' · 第' + issue.line + '行');
       node.append(appendProse(el('p'), label + '。' + issue.reason, sources));
     }
-    codeBlock(node, answer.corrected_code || answer.example_code, answer.corrected_code ? '参考修正' : '代码讲解', true);
+    codeBlock(node, answer.corrected_code || answer.example_code, answer.corrected_code ? '参考修正' : '代码讲解', true, 'r');
   }
   return {codeBlock, renderTeachingBody};
 }

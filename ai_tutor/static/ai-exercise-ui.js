@@ -1,3 +1,5 @@
+import {enhanceRTextarea} from './r-code-editor.js?v=r-highlighting-v1';
+import {rCodeFragment} from './r-highlighter.js?v=r-highlighting-v1';
 import {requestJson} from './api-client.js?v=ascii-v1';
 import {learningStore} from './learning-store.js?v=learning-v1';
 import {buildExerciseRequest, recommendExerciseKnowledge} from './ai-exercise-data.js?v=ai-exercise-v1';
@@ -322,6 +324,8 @@ export class AIExerciseUI {
     const result=this.results;
     const attempts=await learningStore.listAIExerciseAttempts();
     if(result!==this.results||!result.isConnected)return;
+    for (const editor of this.codeEditors || []) editor.destroy();
+    this.codeEditors = [];
     this.results.replaceChildren();
     this.results.append(el('p',`已保存 ${this.rows.length} 题 · 练习 ${attempts.length} 次 · 主题 ${new Set(this.rows.flatMap(row=>row.knowledge_ids)).size} 个`,'muted'));
     if(attempts.length) {
@@ -333,7 +337,7 @@ export class AIExerciseUI {
       const panel=el('article',undefined,'lc-paper lc-ai-question');panel.dataset.questionId=row.id;
       const draft=row.draft;const locked=draft.phase!=='draft';
       panel.append(el('span','AI生成','lc-ai-badge'),el('h3',`${row.knowledge_ids.join('、')} · ${FORMATS[row.format]}`),el('p',row.prompt));
-      if(row.code){this.codeBlock(panel,row.code,'题目代码',true);}
+      if(row.code){this.codeBlock(panel,row.code,'题目代码',true,'r');}
       if(row.format==='choice') {
         const choices=el('fieldset');choices.append(el('legend','选择答案'));
         row.choices.forEach((text,index)=>{
@@ -343,6 +347,10 @@ export class AIExerciseUI {
       }
       const answer=el('textarea');answer.placeholder='写下你的答案或推理';answer.setAttribute('aria-label','我的答案');answer.value=draft.answerText;answer.disabled=locked;answer.maxLength=6000;
       answer.oninput=()=>this.saveDraft(row.id,{answerText:answer.value});panel.append(answer);
+      if (row.format === 'code_fix') {
+        answer.placeholder = '写下修正后的R代码';
+        this.codeEditors.push(enhanceRTextarea(answer, {renderCode:rCodeFragment}));
+      }
       const controls=el('div',undefined,'lc-ai-actions');
       controls.append(button('解题提示',()=>this.run(async()=>{
         await learningStore.saveAIExerciseDraft(row.id,{hintUsed:true},draft.attemptId);
@@ -352,7 +360,7 @@ export class AIExerciseUI {
       if(!locked)controls.append(button('锁定答案',()=>this.run(()=>learningStore.lockAIExercise(row.id,draft.attemptId)),'primary'));
       if(draft.answerRevealed) {
         const reference=el('section',undefined,'lc-ai-reference');reference.append(el('h4','AI参考答案'),el('p',row.reference_answer),el('p',row.explanation));
-        if(row.solution_code){this.codeBlock(reference,row.solution_code,'参考代码',true);}
+        if(row.solution_code){this.codeBlock(reference,row.solution_code,'参考代码',true,'r');}
         if(locked&&row.format==='choice')reference.append(el('p',draft.selectedIndex===row.correct_index?'与AI参考选项一致':'与AI参考选项不一致'));
         panel.append(reference);
       }

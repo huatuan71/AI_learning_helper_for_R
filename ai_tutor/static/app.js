@@ -1,9 +1,11 @@
+import {rCodeFragment} from './r-highlighter.js?v=r-highlighting-v1';
+import {enhanceRTextarea} from './r-code-editor.js?v=r-highlighting-v1';
 'use strict';
 import {requestJson as api, streamAnswer as streamApi} from './api-client.js?v=ascii-v1';
-import {createAnswerRenderer, firstSentence} from './answer-renderer.js?v=ascii-v1';
+import {createAnswerRenderer, firstSentence} from './answer-renderer.js?v=r-highlighting-v1';
 import {LiquidKnowledgeScene} from './liquid-scene.js?v=knowledge-camera-v1';
 import {ModelSettings} from './model-settings.js?v=model-notice-v1';
-import {RFileInput} from './r-file.js?v=ascii-v1';
+import {RFileInput} from './r-file.js?v=r-highlighting-v1';
 
 const {codeBlock, renderTeachingBody} = createAnswerRenderer(status);
 const $ = id => document.getElementById(id);
@@ -143,8 +145,9 @@ function liveAnswer(question, review) {
   content.append(label,body); card.append(content); $('messages').append(card);
   $('welcome').hidden = true; $('review-empty').hidden = true;
   let fields = {};
+  let frame = null;
   return {
-    remove: () => card.remove(),
+    remove: () => { cancelAnimationFrame(frame); card.remove(); },
     update(event, data) {
       const scroll = currentView === 'review' ? document.scrollingElement : $('conversation-scroll');
       const follow = scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 100;
@@ -154,10 +157,14 @@ function liveAnswer(question, review) {
       else if (event === 'delta' && typeof data.text === 'string' && /^(content_markdown|summary|corrected_code|example_code|expected_output|steps\.\d+)$/.test(data.field)) {
         fields[data.field] = (fields[data.field] || '') + data.text;
       }
+      if (frame !== null) return;
+      frame = requestAnimationFrame(() => {
+      frame = null;
       const steps = Object.keys(fields).filter(key => key.startsWith('steps.'))
         .sort((a,b) => Number(a.slice(6)) - Number(b.slice(6))).map(key => fields[key]);
       renderTeachingBody(body, {...fields, steps}, []);
-      if (follow) scroll.scrollTop = scroll.scrollHeight;
+      if (follow && card.isConnected) scroll.scrollTop = scroll.scrollHeight;
+      });
     }
   };
 }
@@ -184,6 +191,7 @@ function setCode(value) {
   if (currentView === 'review') value = true;
   codeOpen = value;
   $('code-panel').hidden = !value;
+  if (value) codeEditor.refresh();
   $('code-toggle').textContent = value ? '收起代码' : '添加代码';
   $('code-toggle').setAttribute('aria-expanded', String(value));
 }
@@ -240,7 +248,7 @@ function renderRecords() {
     user.append(el('p', record.display_question || record.request.question || '审查提交的R代码', 'question'));
     if (record.request.code || record.request.error_message) {
       const submitted = details('提交内容', 'user-code');
-      codeBlock(submitted, record.request.code, '提交的代码');
+      codeBlock(submitted, record.request.code, '提交的代码', false, 'r');
       if (record.request.error_message) submitted.append(el('pre', record.request.error_message));
       user.append(submitted);
     }
@@ -517,7 +525,15 @@ const modelSettings = new ModelSettings((...args) => {
   learningCenter?.summaryUI.refreshConfig();
   learningCenter?.exerciseUI.refreshConfig();
 });
-const fileInput = new RFileInput();
+const codeEditor = enhanceRTextarea($('code'), {renderCode:rCodeFragment});
+const fileInput = new RFileInput({onCodeChange:() => codeEditor.refresh()});
+for (const code of document.querySelectorAll('[data-r-code]')) {
+  code.classList.add('r-code');
+  const walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT);
+  const texts = [];
+  while (walker.nextNode()) texts.push(walker.currentNode);
+  for (const text of texts) text.replaceWith(rCodeFragment(text.textContent));
+}
 const composer = document.querySelector('.composer-dock');
 new ResizeObserver(() => {
   if (currentView === 'chat') {
@@ -628,13 +644,13 @@ document.querySelectorAll('[data-example]').forEach(b => {
 });
 $('debug-example').dataset.request = 'true';
 $('debug-example').onclick = () => {
-  navigate('review'); setCode(true); $('code').value = 'x <- c(1, NA, 3)\nx[x == NA]'; fileInput.detach(); fileInput.count(); $('error-message').value = '';
+  navigate('review'); setCode(true); codeEditor.setValue('x <- c(1, NA, 3)\nx[x == NA]'); fileInput.detach(); fileInput.count(); $('error-message').value = '';
   send('为什么不能用x == NA判断缺失？');
 };
 renderRecords(); renderHistory(); route(false);
 async function startLearning() {
   try {
-    const {LearningCenter} = await import('./learning-center.js?v=ai-exercise-v3');
+    const {LearningCenter} = await import('./learning-center.js?v=r-highlighting-v1');
     learningCenter = new LearningCenter({units:UNITS, api:courseApi, codeBlock, notify:status,
       getModelConfig:() => modelSettings.config,
       refreshModelConfig:() => modelSettings.refresh(),

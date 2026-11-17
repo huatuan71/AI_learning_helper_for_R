@@ -1,0 +1,54 @@
+/* Existing glass surfaces and spacing are retained. Code uses the project
+   monospace stack at 14px/1.7 with Microsoft YaHei for Chinese comments. */
+:root {
+  --r-code-font:Consolas,"SFMono-Regular","Microsoft YaHei",monospace;
+  --r-code-plain:#202631;
+  --r-code-caret:#202631;
+  --r-code-selection:#b7d8fa;
+  --r-code-placeholder:#596474;
+  --r-keyword:#714095;
+  --r-function:#165b9f;
+  --r-string:#24643c;
+  --r-number:#805221;
+  --r-comment:#516457;
+  --r-operator:#435a70;
+}
+#knowledge-view #map-detail {
+  --r-code-plain:#eef5ff;
+  --r-keyword:#d9b3f6;
+  --r-function:#85c5ff;
+  --r-string:#a4d6ab;
+  --r-number:#e8c18d;
+  --r-comment:#a2b6a8;
+  --r-operator:#b2c6da;
+}
+.r-code {
+  color:var(--r-code-plain);
+  font-family:var(--r-code-font);
+}
+pre.r-code {
+  min-width:0;
+  max-width:100%;
+  white-space:pre;
+  overflow-wrap:normal;
+  overflow:auto;
+  tab-size:4;
+  font-size:14px;
+  line-height:1.7;
+}
+.r-token-keyword { color:var(--r-keyword); }
+.r-token-function { color:var(--r-function); }
+.r-token-string { color:var(--r-string); }
+.r-token-number { color:var(--r-number); }
+.r-token-comment { color:var(--r-comment); }
+.r-token-operator { color:var(--r-operator); }
+.r-token-punctuation { color:var(--r-code-plain); }
+.r-code ::selection { background:var(--r-code-selection); color:#172332; }
+.r-code .code-wrong { color:inherit; text-decoration:underline wavy #a73131; text-underline-offset:4px; }
+@media (forced-colors:active) {
+  .r-code, .r-code [class^="r-token-"] { color:CanvasText; }
+}
+@media print {
+  .r-code, .r-code [class^="r-token-"] { color:#000; }
+  pre.r-code { white-space:pre-wrap; overflow-wrap:anywhere; }
+}

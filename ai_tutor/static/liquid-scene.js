@@ -7,7 +7,7 @@
 'use strict';
 
 import * as THREE from './vendor/three/three.module.min.js';
-import {KnowledgeMap as StaticKnowledgeMap} from './knowledge-map.js?v=ascii-v1';
+import {KnowledgeMap as StaticKnowledgeMap} from './knowledge-map.js?v=r-highlighting-v1';
 
 const CONFIG = Object.freeze({
   camera: {

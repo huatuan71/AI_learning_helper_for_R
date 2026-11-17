@@ -207,7 +207,7 @@ export class KnowledgeMap {
       const fields=k.fields || {};
       const section=(label,text)=>{if(!text)return;const part=this.node('section');part.append(this.node('h3',label),this.node('p',text));root.append(part);};
       section('概念讲解',fields['解释']);section('函数语法',fields['函数语法']);section('参数说明',fields['参数说明']);
-      this.codeBlock(root,fields['运行示例'],'示例代码',true);section('易错点',fields['易错提醒']);
+      this.codeBlock(root,fields['运行示例'],'示例代码',true,'r');section('易错点',fields['易错提醒']);
       const sources=this.node('details');sources.append(this.node('summary','内容来源'));
       (k.sources||[]).forEach(c=>sources.append(this.node('p',c.file+' · '+c.locator)));root.append(sources);
       const related=this.edges.filter(e=>e.from===id || e.to===id).map(e=>e.from===id?e.to:e.from);
