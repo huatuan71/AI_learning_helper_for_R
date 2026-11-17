@@ -356,7 +356,7 @@ export async function runBrowserTests(page, baseUrl = 'http://127.0.0.1:8765', b
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
-      const database = await open(3);
+      const database = await open(4);
       const names = [...database.objectStoreNames];
       database.close();
       let rejected = false;
@@ -370,10 +370,10 @@ export async function runBrowserTests(page, baseUrl = 'http://127.0.0.1:8765', b
       const snapshot = await learningStore.snapshot();
       return { names, rejected, empty: snapshot.events.length === 0 };
     });
-    assert.equal(upgrade.names.length, 8);
+    assert.equal(upgrade.names.length, 10);
     assert.equal(upgrade.rejected, true);
     assert.equal(upgrade.empty, true);
-    checks.push('新库八表建表、versionchange关闭连接、更高版本拒绝及失败后重试');
+    checks.push('新库十表建表、versionchange关闭连接、更高版本拒绝及失败后重试');
     assert.deepEqual(errors, []);
     return { browserName, checks, count: checks.length };
   } finally {

@@ -55,7 +55,7 @@ async function run(browser, baseUrl) {
       window.summaryResponse = response;
       await store.ready();
       let snap = await store.snapshot();
-      check(snap.events.length === 1 && snap.settings.dailyLimit === 9 && snap.summaries.length === 0, 'v1真实数据库升级v2保留旧事件与设置');
+      check(snap.events.length === 1 && snap.settings.dailyLimit === 9 && snap.summaries.length === 0, 'v1真实数据库升级v3保留旧事件与设置');
       let input = await data.buildSummaryInput(snap, period);
       window.summaryInput = input;
       const saved = await store.saveSummary(response(input), input);
@@ -99,11 +99,11 @@ async function run(browser, baseUrl) {
       }
       await store.saveSummary(privateFields, input);
       const archive = await store.exportArchive();
-      check(archive.schemaVersion === 2 && archive.data.summaries.length === 1, 'v2完整档案导出总结');
+      check(archive.schemaVersion === 3 && archive.data.summaries.length === 1, 'v3完整档案导出保留总结');
       await store.resetLearningData();
       check((await store.snapshot()).summaries.length === 0, '重置档案清除全部总结');
       await store.importArchive(archive);
-      check(stable((await store.snapshot()).summaries) === stable(archive.data.summaries), 'v2完整档案恢复总结');
+      check(stable((await store.snapshot()).summaries) === stable(archive.data.summaries), 'v3完整档案恢复总结');
       const repeated = await store.importArchive(archive);
       check(repeated.imported === 0 && (await store.listSummaries()).length === 1, '重复导入稳定去重');
       const older = structuredClone(archive);
@@ -242,7 +242,7 @@ async function blockedMigration(browser, baseUrl) {
 }
 
 async function main() {
-  const modules = ['learning-store.js', 'learning-summary-data.js', 'review-scheduler.js'];
+  const modules = ['learning-store.js', 'learning-summary-data.js', 'review-scheduler.js', 'ai-exercise-data.js'];
   const server = http.createServer((request, response) => {
     const url = new URL(request.url, 'http://127.0.0.1');
     if (url.pathname.startsWith('/static/') && modules.includes(url.pathname.slice(8))) {

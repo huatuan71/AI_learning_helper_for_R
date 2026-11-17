@@ -1,0 +1,57 @@
+{
+  "passed": 39,
+  "checks": [
+    "empty range generates no saved summary",
+    "unconfigured model opens keyboard-focused settings",
+    "fixture model configured",
+    "preview displays actual normalized evidence and fingerprint",
+    "preview and request use the same input",
+    "real HTTP and MockTransport chain renders provider metadata",
+    "validated response persists in IndexedDB",
+    "saved evidence contains location metadata",
+    "refresh restores saved summary",
+    "cached result offers explicit regeneration",
+    "fixture model configuration clears",
+    "clearing model configuration preserves saved summary",
+    "fixture model configured",
+    "copy includes summary metadata and evidence locations",
+    "AI summary exports as readable text",
+    "weekly report includes current AI summary",
+    "print entry remains available",
+    "failed regeneration preserves previous summary",
+    "failure restores generation button",
+    "format failure keeps saved result",
+    "CONFIG_REQUIRED response offers model settings",
+    "expired configuration offers model settings",
+    "duplicate generation is disabled",
+    "cancel keeps the previous cache and only sends one request",
+    "new evidence marks the summary as stale",
+    "range change hides the unrelated summary",
+    "late result is saved under its original period",
+    "model content renders as safe text",
+    "evidence location is keyboard-operable disclosure",
+    "source link opens the original conversation",
+    "390px layout has no document overflow",
+    "generation target is at least 44px",
+    "saved regenerated summary restores after reload",
+    "offline refresh restores saved summary and new modules",
+    "clearing source conversations removes referenced summaries",
+    "imported historical summary disables missing evidence locations",
+    "missing source cannot open an unrelated conversation",
+    "late result after source deletion preserves the local validation message",
+    "browser has no uncaught JavaScript errors"
+  ],
+  "errors": [],
+  "browser": {
+    "desktop": {
+      "width": 1440,
+      "height": 1000
+    },
+    "narrow": {
+      "width": 390,
+      "height": 844
+    },
+    "timezone": "Asia/Shanghai",
+    "version": "157.0.8103.51"
+  }
+}

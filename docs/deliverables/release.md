@@ -11,3 +11,10 @@
 - 公网地址、正式二维码、手机蜂窝扫码、学校网络及两设备并发验收均待完成。
 
 取得正式HTTPS地址后，按 `model-setup.md` 部署与核验，再运行发布脚本更新本文件和二维码。
+
+## AI出题本地交付
+
+2026年11月17日完成AI出题接口、练习流程、离线题目与作答、档案v3兼容。
+集成分支为 `codex/ai-exercise-ui`，位于 `.worktrees/ai-exercise-ui`。
+本次保留的实际应用服务为 `http://127.0.0.1:8026/#/history/review/ai`，配置模型后可生成题目。
+操作、迁移、推荐规则及验证范围见 `ai_tutor/docs/ai-exercises.md`，最终验收见本目录 `test-records.md` 的AI出题章节。

@@ -152,7 +152,7 @@ if (result.status === 'ok') await learningStore.saveSummary(result, input);
 
 ### 保存、恢复与离线更新
 
-IndexedDB版本为2，完整档案schemaVersion为2，新增summaries数组。支持导入schemaVersion 1，旧档案的总结按空数组处理。
+IndexedDB版本为3，完整档案schemaVersion为3，包含summaries、aiExercises和aiExerciseAttempts数组。支持导入schemaVersion 1、2，旧档案缺失的新增集合按空数组处理。
 缓存保留有效响应和证据定位元数据，最多100条，按生成时间保留最近结果。
 缓存键包含日期、时区、输入指纹、厂商、模型及提示词版本，同一输入主动重新生成后原子更新。
 合并相同总结ID时保留较晚的有效结果，时间相同按归一化内容确定顺序，档案整体上限20 MiB。
@@ -162,6 +162,48 @@ IndexedDB版本为2，完整档案schemaVersion为2，新增summaries数组。�
 
 更新记录为2026年11月17日，新增手动学习总结、取消、证据校验、缓存与档案兼容。
 
+'''
+
+
+def exercise_reference(schema):
+    models = [('请求', 'ExerciseRequest'), ('响应', 'ExerciseResponse'),
+              ('题目', 'ExerciseQuestion'), ('课程出处', 'ExerciseSource')]
+    fields = '\n\n'.join(f'### {heading}\n\n{table(schema, name)}' for heading, name in models)
+    return f'''## AI出题与离线练习
+
+`POST /api/learning/exercises` 使用当前模型会话，一次返回整批题目、提示和参考答案。
+入口位于“学习记录 → 复习 → AI练习”，知识详情和总结建议可带知识ID打开。
+
+{fields}
+
+knowledge_ids包含1至3个唯一真实课程ID，count为1至5，默认3。
+difficulty取basic、standard、advanced，默认basic。
+formats从choice、short_answer、code_reading、code_fix中选择1至4种不重复题型。
+recent_prompts最多10条，每条最多300个Unicode码点，原始请求最多32 KiB UTF-8，额外字段拒绝。
+
+服务端分配题型和知识覆盖，从课程正文与错误案例提取有界上下文。
+返回题目数量、难度、范围和分配结果均经过结构校验，批内规范化题干与代码去重。
+单选恰好4个唯一选项，correct_index为0至3，其他题型为null。
+题目ID使用aiq前缀，批次ID、课程出处由服务端生成，execution_status固定为not_executed。
+提示词版本为learning-exercise-v1，搜索工具关闭，输出预算取用户设置与8192的较小值。
+使用已有会话并发、取消、断连和有界请求预算，成功及失败响应均为no-store。
+
+```json
+{{"schema_version":1,"knowledge_ids":["K06"],"count":3,"difficulty":"basic","formats":["choice","short_answer","code_reading","code_fix"],"recent_prompts":[]}}
+```
+
+未配置或会话到期分别返回CONFIG_REQUIRED、SESSION_EXPIRED，界面提供配置模型入口。
+超限返回REQUEST_TOO_LARGE，字段错误返回VALIDATION_ERROR，模型结构错误返回STRUCTURED_OUTPUT_INVALID。
+其余上游、并发和取消错误沿用统一结构，实际边界及验证范围见AI出题交付记录。
+
+IndexedDB和完整档案schemaVersion均升级为3，新增aiExercises与aiExerciseAttempts。
+旧档案1、2可导入，缺失新增集合视为空，已有summaries保留。
+题目上限200，作答上限2000，档案继续限制20 MiB。达到上限后可导出或删除旧练习。
+作答按草稿、锁定、自评、保存推进，刷新恢复阶段，保存重试复用原作答ID和载荷。
+同ID跨标签页提交幂等，作答写入与草稿更新采用一个事务。
+提前使用提示或参考答案保留辅助标志，选择题使用ai_reference_match，主观题使用self。
+AI作答单独统计，课程掌握等级沿用现有调度。首次显示题目按知识ID记录稳定exercise_view事件。
+保存及导入后的题目可离线作答、对照参考答案和自评，代码显示未运行验证。
 '''
 
 
@@ -283,6 +325,8 @@ POST `/api/chat/stream` 和 `/api/review/stream` 使用相同的ChatRequest，�
 已输出内容的流式连接发生故障时，由页面提示用户手动重试。
 
 {summary_reference(schema)}
+
+{exercise_reference(schema)}
 
 ## 会话、限额和错误
 

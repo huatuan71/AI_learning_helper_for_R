@@ -34,7 +34,8 @@ async function run(page,baseUrl,outputDir) {
   await page.waitForFunction(()=>document.querySelectorAll('.lc-ai-question').length===4);
   check(await page.locator('.lc-ai-badge').count()===4,'all four formats carry AI labels');
   check(new Set((await store(store=>store.listAIExercises())).map(row=>row.format)).size===4,'generated batch covers all four requested formats');
-  const first=page.locator('.lc-ai-question').first();
+  const choiceId = validResponse.questions.find(question => question.format === 'choice').id;
+  const first = page.locator('.lc-ai-question').filter({has:page.locator(`input[name="${choiceId}"]`)});
   await first.locator('input[type=radio]').first().check();
   await first.locator('textarea').fill('我的推理 <script>window.bad=true</script>');
   await first.getByRole('button',{name:'解题提示',exact:true}).click();
@@ -42,7 +43,7 @@ async function run(page,baseUrl,outputDir) {
   await first.getByRole('button',{name:'锁定答案',exact:true}).click();
   await first.getByLabel('自评',{exact:true}).waitFor();
   check(await first.locator('textarea').isDisabled(),'locked answer becomes read-only');
-  await page.reload();await page.locator('.lc-ai-question').first().getByLabel('自评',{exact:true}).waitFor();
+  await page.reload();await first.getByLabel('自评',{exact:true}).waitFor();
   check(await first.locator('textarea').inputValue()==='我的推理 <script>window.bad=true</script>','refresh restores locked answer safely');
   await first.getByRole('button',{name:'参考答案',exact:true}).click();
   await first.locator('.lc-ai-reference').waitFor();
@@ -53,7 +54,7 @@ async function run(page,baseUrl,outputDir) {
   });
   await first.getByRole('button',{name:'保存作答',exact:true}).click();
   await page.waitForFunction(()=>document.getElementById('ai-exercise-status').textContent.length>0);
-  const retryId=(await store(store=>store.listAIExercises()))[0].draft.attemptId;
+  const retryId=(await store(store=>store.listAIExercises())).find(question => question.id === choiceId).draft.attemptId;
   await first.getByRole('button',{name:'保存作答',exact:true}).click();
   await first.getByRole('button',{name:'重新作答',exact:true}).waitFor();
   check((await store(store=>store.listAIExerciseAttempts()))[0].id===retryId,'save failure retry keeps stable attempt ID');

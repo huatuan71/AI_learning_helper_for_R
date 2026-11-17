@@ -459,3 +459,50 @@ Render配置已交付，二维码工具的URL核验及生成过程已通过模�
 4. Excel与Word的核验记录存在范围差异，导入报告保留“39条已运行、4条包扩展待实测”说明；本应用没有重新运行R样例。
 5. 课程回答仍为检索及模板拼接，不支持任意自由问答、任意代码修复。来源定位保留原文，未逐页复核PDF。
 6. 模型API、公网部署、R执行沙箱和跨设备账号均未接入。FastAPI默认Swagger页面静态资源需联网，原始openapi.json可离线访问。
+
+## 2026年11月17日 AI出题集成验收
+
+本节记录当前AI出题版本的实际验证，前文为历史阶段记录。
+共同基线为fb0ee11，后端14d3a0e、数据1ba9277与1851fbb、界面5b97a2b已合入codex/ai-exercise-ui，测试可读性后续合入e763920。
+本地实际应用为 `http://127.0.0.1:8026/#/history/review/ai`。
+
+| 测试 | 实际结果 |
+|---|---|
+| 全量pytest | 391 passed，含67项出题专项及课程离线来源清单同步检查 |
+| npm test | 30 passed，含6项范围推荐及输入校验专项 |
+| 既有界面回归 | browser_regression.cjs的12套检查通过 |
+| AI练习真实浏览器 | Chrome 157下22项通过，0 pageerror |
+| AI练习存储迁移 | Chromium 147下真实v1、v2数据库各27项通过 |
+| AI总结界面 | 39项通过，包含离线刷新、来源清理与迟到响应 |
+| AI总结存储 | Chromium及Windows WebKit分别46项通过 |
+| 集成PWA | Chromium下27项通过 |
+| 课程与离线集成 | Chromium 147与Windows WebKit 26.4分别24项及39项核心检查通过 |
+
+主要命令在集成工作树ai_tutor目录执行。
+
+```powershell
+python -m pytest -q
+npm test
+node scripts/test_browser.cjs --suite regression
+node tests/browser_ai_exercises.js
+node tests/browser_summary_storage.cjs
+node tests/browser_exercise_storage.cjs
+node scripts/test_browser.cjs --suite pwa
+node scripts/test_browser.cjs --suite integration
+node scripts/test_browser.cjs --suite integration --browser webkit
+```
+
+回归中的API路径数量、档案版本、数据库表数和未来版本测试随真实契约更新。
+导出故障注入同步新的模块资源标记，出题专项按服务端实际单选题ID定位，避免批次内随机ID排序造成测试误判。
+全量运行发现问题后分别重跑受影响的专项及后续套件，以上结果按最终通过的组成套件记录。
+本机复用根目录ai_tutor中的虚拟环境和Playwright依赖，独立工作树运行时通过--python与PLAYWRIGHT_MODULE指定绝对路径。
+受限沙箱中的本地服务调用停滞，升级为正常本机执行后通过。
+
+迁移与存储测试覆盖旧档案1、2导入，新档案3恢复、辅助标志、跨题作答ID冲突、旧标签页隔离、双页幂等、事务故障回滚、离线读取、容量200题与2000次作答、20 MiB限制、删除和重置。
+UI覆盖四题型、未配置、会话失效、取消迟到、提示锁定、保存失败重试、刷新、独立作答统计、代码复制、文本导出、知识与总结入口和离线刷新。
+布局检查使用1440×1000桌面与390×844窄屏，已人工查看最终截图。
+
+三家厂商均使用MockTransport上游，无真实付费模型调用。人工教学核对限K06四型模拟题，其他知识范围的假数据用于结构与交互。
+代码未运行验证，Android、iOS、macOS真机尚未执行。
+来源按钮打开知识详情并展示文件与定位。离线来源采用内置课程清单，并用新增pytest检查与当前course.json同步。
+操作及迁移说明位于 `ai_tutor/docs/ai-exercises.md`，截图及可检查报告位于 `ai_tutor/docs/evidence/ai-exercise-v1/`。
