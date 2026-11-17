@@ -1,6 +1,7 @@
 import {learningStore} from './learning-store.js?v=learning-v1';
 import {buildReviewQueue} from './review-scheduler.js?v=learning-v1';
 import {getOfflineStatus, downloadOffline, getOfflineCourse} from './offline.js?v=learning-v1';
+import {LearningSummaryUI} from './learning-summary-ui.js?v=ai-summary-v1';
 
 const $ = id => document.getElementById(id);
 const SESSION_KEY = 'r-tutor-review-session-v1';
@@ -49,7 +50,8 @@ export function downloadText(value, filename, type = 'text/plain;charset=utf-8')
 }
 
 export class LearningCenter {
-  constructor({units, openKnowledge, openConversation, openExport, api, codeBlock, onSnapshot, notify}) {
+  constructor({units, openKnowledge, openConversation, openExport, api, codeBlock, onSnapshot, notify,
+    getModelConfig, refreshModelConfig, openModelSettings}) {
     Object.assign(this, {units, openKnowledge, openConversation, openExport, api, codeBlock, onSnapshot, notify});
     this.tab = 'overview';
     this.catalog = [];
@@ -58,6 +60,10 @@ export class LearningCenter {
     this.summaryRange = {mode:'week', start:day(Date.now()-6*86400000), end:day(Date.now())};
     this.saving = false;
     this.renderToken = 0;
+    this.summaryUI = new LearningSummaryUI({getModelConfig, refreshModelConfig, openModelSettings, notify,
+      openKnowledge, openConversation, download:downloadText,
+      title:id => this.catalog.find(item => item.id === id)?.title || null,
+      practice:async id => {if (await this.enroll(id)) location.hash = '/history/review';}});
     window.addEventListener('beforeprint', () => {
       this.printDetails = [...document.querySelectorAll('#learning-report details')].map(item => [item,item.open]);
       this.printDetails.forEach(([item]) => {item.open=true;});
@@ -471,6 +477,10 @@ export class LearningCenter {
     const output=node('div',undefined,'lc-actions lc-no-print');
     output.append(action('导出文本周报',()=>downloadText(report.innerText,`r-tutor-weekly-report_${start}_${end}.txt`)),action('打印',()=>window.print()));
     root.append(output,report);
+    await this.summaryUI.mount({controls, root, before:output, report, snapshot:this.data,
+      period:{start_date:start, end_date:end, time_zone:Intl.DateTimeFormat().resolvedOptions().timeZone},
+      isCurrent:() => token === this.renderToken});
+    if(token!==this.renderToken)return;
     if(!ids.length) report.append(node('p','这段时间还没有学习事件或作答。'),link('浏览知识地图 →','#/knowledge'));
     const details=await Promise.all(ids.map(id=>this.detail(id)));
     if(token!==this.renderToken)return;

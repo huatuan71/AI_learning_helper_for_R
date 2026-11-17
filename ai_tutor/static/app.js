@@ -464,7 +464,10 @@ function renderHistory() {
     root.append(row);
   }
 }
-const modelSettings = new ModelSettings(status);
+const modelSettings = new ModelSettings((...args) => {
+  status(...args);
+  learningCenter?.summaryUI.refreshConfig();
+});
 const fileInput = new RFileInput();
 const composer = document.querySelector('.composer-dock');
 new ResizeObserver(() => {
@@ -582,8 +585,11 @@ $('debug-example').onclick = () => {
 renderRecords(); renderHistory(); route(false);
 async function startLearning() {
   try {
-    const {LearningCenter} = await import('./learning-center.js?v=learning-ui-v2');
+    const {LearningCenter} = await import('./learning-center.js?v=ai-summary-v1');
     learningCenter = new LearningCenter({units:UNITS, api:courseApi, codeBlock, notify:status,
+      getModelConfig:() => modelSettings.config,
+      refreshModelConfig:() => modelSettings.refresh(),
+      openModelSettings:trigger => modelSettings.open(trigger),
       openExport:openExportDialog,
       openKnowledge:id => {navigate('knowledge');setTimeout(() => mapUI.select(id),120);},
       openConversation:id => {
