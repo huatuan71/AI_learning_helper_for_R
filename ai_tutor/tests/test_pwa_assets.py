@@ -37,7 +37,7 @@ def test_public_endpoints():
 def test_openapi_includes_learning_summary():
     schema = client.get('/openapi.json').json()
     assert schema['info']['version'] == '1.2.1'
-    assert len(schema['paths']) == 11
+    assert len(schema['paths']) == 12
     assert 'post' in schema['paths']['/api/learning/summary']
     assert all(path.startswith('/api/') for path in schema['paths'])
     assert client.get('/api/health').json()['version'] == '1.2.1'
