@@ -206,7 +206,9 @@ export class KnowledgeMap {
       root.append(this.node('p',n.k.chapter,'eyebrow'));const title=this.node('h2',k.id+' · '+k.title);title.id='detail-title';root.append(title);
       const fields=k.fields || {};
       const section=(label,text)=>{if(!text)return;const part=this.node('section');part.append(this.node('h3',label),this.node('p',text));root.append(part);};
-      section('概念讲解',fields['解释']);section('函数语法',fields['函数语法']);section('参数说明',fields['参数说明']);
+      section('概念讲解',fields['解释']);
+      this.codeBlock(root,fields['函数语法'],'函数语法',true,'r');
+      section('参数说明',fields['参数说明']);
       this.codeBlock(root,fields['运行示例'],'示例代码',true,'r');section('易错点',fields['易错提醒']);
       const sources=this.node('details');sources.append(this.node('summary','内容来源'));
       (k.sources||[]).forEach(c=>sources.append(this.node('p',c.file+' · '+c.locator)));root.append(sources);

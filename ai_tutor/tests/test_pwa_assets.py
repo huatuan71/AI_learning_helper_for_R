@@ -114,4 +114,4 @@ def test_bootstrap_contract():
     app = (ROOT / 'static/app.js').read_text(encoding='utf-8')
     assert 'new window.' not in app
     assert "from './api-client.js?v=ascii-v1'" in app
-    assert "from './answer-renderer.js?v=ascii-v1'" in app
+    assert "from './answer-renderer.js?v=r-highlighting-v1'" in app

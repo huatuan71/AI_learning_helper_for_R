@@ -129,6 +129,11 @@ async function main() {
       await page.locator('#detail-close').click();
     }
     check(true,'all 43 knowledge details open offline');
+    check(await page.locator('#detail-body .r-token-function').count()>0,'offline knowledge examples retain R tokens');
+    await page.evaluate(() => {location.hash='/review';});
+    await page.locator('#code').fill('x <- mean(1:5)');
+    await page.waitForFunction(() => document.querySelector('.r-code-editor__highlight .r-token-function'));
+    check(await page.locator('#code').inputValue()==='x <- mean(1:5)','offline editor retains raw R source and highlighting');
     await page.evaluate(async () => {await (await import('/static/learning-store.js?v=learning-v1')).learningStore.enroll('K02');location.hash='/history/review';});
     await question.waitFor(); await question.getByRole('button',{name:'未掌握，进入重学',exact:true}).click();
     await page.waitForFunction(async () => (await (await import('/static/learning-store.js?v=learning-v1')).learningStore.snapshot()).attempts.length===3);

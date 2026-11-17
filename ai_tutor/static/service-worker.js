@@ -15,6 +15,7 @@ const ASSETS = [
   '/static/api-client.js',
   '/static/answer-renderer.js',
   '/static/r-highlighter.js',
+  '/static/vendor/prism/prism.js',
   '/static/r-code-editor.js',
   '/static/r-code-editor.css',
   '/static/r-code-theme.css',

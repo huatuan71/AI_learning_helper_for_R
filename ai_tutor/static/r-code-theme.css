@@ -52,3 +52,5 @@ pre.r-code {
   .r-code, .r-code [class^="r-token-"] { color:#000; }
   pre.r-code { white-space:pre-wrap; overflow-wrap:anywhere; }
 }
+
+#knowledge-view #map-detail #detail-body pre.r-code { font-size:14px; }

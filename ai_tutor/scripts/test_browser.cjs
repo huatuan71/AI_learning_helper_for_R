@@ -136,6 +136,7 @@ async function main() {
     if (['all', 'regression'].includes(args.suite)) {
       env.AI_BASE_URL = await startServer(python, 'tests/browser_fixture_server.py');
       await runSuite('tests/browser_regression.cjs', [], env);
+      await runSuite('tests/browser_r_highlighting.cjs', [], env);
       await runSuite('tests/browser_learning_summary.js', [], {...env, BASE_URL: env.AI_BASE_URL});
       await runSuite('tests/browser_ai_exercises.js', [], {...env, BASE_URL: env.AI_BASE_URL});
       await runSuite('tests/browser_summary_storage.cjs', [], env);
