@@ -1,7 +1,7 @@
 import {learningStore} from './learning-store.js?v=learning-v1';
 import {buildReviewQueue} from './review-scheduler.js?v=learning-v1';
 import {getOfflineStatus, downloadOffline, getOfflineCourse} from './offline.js?v=learning-v1';
-import {AIExerciseUI} from './ai-exercise-ui.js?v=ai-exercise-v2';
+import {AIExerciseUI} from './ai-exercise-ui.js?v=ai-exercise-v3';
 import {LearningSummaryUI} from './learning-summary-ui.js?v=ai-summary-v1';
 
 const $ = id => document.getElementById(id);

@@ -143,12 +143,15 @@ export class AIExerciseUI {
     const settings=details('出题设置');settings.className='lc-ai-settings';
     settings.append(select('题目数量',[1,2,3,4,5].map(value=>[String(value),`${value}题`]),String(this.options.count),value=>{this.cancel();this.options.count=Number(value);this.renderPreview();}),
       select('难度',[['basic','基础'],['standard','标准'],['advanced','进阶']],this.options.difficulty,value=>{this.cancel();this.options.difficulty=value;this.renderPreview();}));
-    const formats=el('fieldset');formats.append(el('legend','题型'));
+    const formats=el('fieldset');formats.className='lc-ai-formats';formats.append(el('legend','题型'));
+    const formatGrid=el('div',undefined,'lc-ai-format-grid');
     for(const [format,text] of Object.entries(FORMATS)) {
-      const label=el('label');const check=el('input');check.type='checkbox';check.checked=this.options.formats.includes(format);
+      const label=el('label',undefined,'lc-ai-choice-option');const check=el('input');check.type='checkbox';check.value=format;check.checked=this.options.formats.includes(format);
       check.onchange=()=>{this.cancel();this.options.formats=Object.keys(FORMATS).filter(key=>key===format?check.checked:this.options.formats.includes(key));this.renderPreview();};
-      label.append(check,el('span',text));formats.append(label);
+      const mark=el('span',undefined,'lc-ai-option-mark');mark.setAttribute('aria-hidden','true');
+      label.append(check,el('span',text,'lc-ai-option-title'),mark);formatGrid.append(label);
     }
+    formats.append(formatGrid);
     settings.append(formats);root.append(settings);
     this.preview=details('发送内容');this.preview.id='ai-exercise-preview';root.append(this.preview);
     this.model=el('p',undefined,'muted lc-caption');this.status=el('p');this.status.setAttribute('role','status');this.status.id='ai-exercise-status';
@@ -210,7 +213,7 @@ export class AIExerciseUI {
     };
 
     for (const item of this.owner.catalog) {
-      const label = el('label', undefined, 'lc-ai-knowledge-option');
+      const label = el('label', undefined, 'lc-ai-knowledge-option lc-ai-choice-option');
       const check = el('input');
       check.type = 'checkbox';
       check.value = item.id;
