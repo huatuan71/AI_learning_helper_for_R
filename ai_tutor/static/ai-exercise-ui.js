@@ -16,10 +16,89 @@ function button(text, handler, className = '') {
   return node;
 }
 function select(label, values, current, change) {
-  const wrap = el('label',label);
-  const node = el('select'); node.setAttribute('aria-label',label);
-  for (const [value,text] of values) {const option=el('option',text);option.value=value;node.append(option);}
-  node.value = current; node.onchange = () => change(node.value); wrap.append(node);
+  const wrap = el('div', undefined, 'lc-ai-select');
+  const caption = el('span', label, 'lc-ai-select-label');
+  const trigger = button(values.find(([value]) => value === current)?.[1] || '', undefined, 'lc-ai-select-trigger');
+  const menu = el('div', undefined, 'lc-ai-select-menu');
+  const id = `exercise-select-${crypto.randomUUID()}`;
+  caption.id = `${id}-label`;
+  trigger.id = `${id}-trigger`;
+  trigger.setAttribute('role', 'combobox');
+  trigger.setAttribute('aria-label', label);
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.setAttribute('aria-haspopup', 'listbox');
+  trigger.setAttribute('aria-controls', id);
+  menu.id = id;
+  menu.popover = 'auto';
+  menu.setAttribute('role', 'listbox');
+  menu.setAttribute('aria-labelledby', caption.id);
+  trigger.popoverTargetElement = menu;
+  let activeValue = current;
+  let listeners;
+  let openingIndex = null;
+  const options = values.map(([value, text]) => {
+    const option = button(text, () => {
+      activeValue = value;
+      trigger.textContent = text;
+      options.forEach(item => item.setAttribute('aria-selected', String(item === option)));
+      menu.hidePopover();
+      trigger.focus({preventScroll:true});
+      change(value);
+    }, 'lc-ai-select-option');
+    option.setAttribute('role', 'option');
+    option.setAttribute('aria-selected', String(value === current));
+    option.tabIndex = -1;
+    menu.append(option);
+    return option;
+  });
+  const positionMenu = () => {
+    const rect = trigger.getBoundingClientRect();
+    const width = Math.min(Math.max(rect.width, 224), innerWidth - 24);
+    const below = innerHeight - rect.bottom - 20;
+    const above = rect.top - 20;
+    const upwards = below < Math.min(menu.scrollHeight, 240) && above > below;
+    menu.style.width = `${width}px`;
+    menu.style.maxHeight = `${Math.max(44, Math.min(320, upwards ? above : below))}px`;
+    menu.style.left = `${Math.max(12, Math.min(rect.left, innerWidth - width - 12))}px`;
+    menu.style.top = upwards ? 'auto' : `${rect.bottom + 8}px`;
+    menu.style.bottom = upwards ? `${innerHeight - rect.top + 8}px` : 'auto';
+  };
+  menu.addEventListener('toggle', event => {
+    const open = event.newState === 'open';
+    trigger.setAttribute('aria-expanded', String(open));
+    listeners?.abort();
+    if (open) {
+      positionMenu();
+      options[openingIndex ?? values.findIndex(([value]) => value === activeValue)]?.focus();
+      openingIndex = null;
+      listeners = new AbortController();
+      window.addEventListener('resize', positionMenu, {signal:listeners.signal});
+      window.addEventListener('scroll', event => {
+        if (!menu.contains(event.target)) positionMenu();
+      }, {capture:true, signal:listeners.signal});
+    }
+  });
+  trigger.onkeydown = event => {
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+      event.preventDefault();
+      openingIndex = event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1 : null;
+      menu.showPopover();
+    }
+  };
+  menu.onkeydown = event => {
+    const index = options.indexOf(document.activeElement);
+    const destinations = {ArrowDown:(index + 1) % options.length,
+      ArrowUp:(index - 1 + options.length) % options.length, Home:0, End:options.length - 1};
+    if (Object.hasOwn(destinations, event.key)) {
+      event.preventDefault();
+      options[destinations[event.key]].focus();
+    } else if (event.key === 'Escape' || event.key === 'Tab') {
+      if (event.key === 'Escape') event.preventDefault();
+      menu.hidePopover();
+      trigger.focus({preventScroll:true});
+    }
+  };
+  wrap.append(caption, trigger, menu);
   return wrap;
 }
 function details(label) {const node=el('details');node.append(el('summary',label));return node;}
@@ -47,30 +126,14 @@ export class AIExerciseUI {
     root.replaceChildren();root.classList.add('lc-ai-exercises');root.id='learning-ai-exercises';
     root.append(el('h2','AI练习'));
     const scope=el('div',undefined,'lc-ai-scope');
-    scope.append(select('选题范围',[['knowledge','选择知识点'],['unit','课程单元'],['recent','近期需巩固'],['comprehensive','综合练习']],this.options.mode,value=>{
-      this.cancel();this.options.mode=value;this.mount(root,this.snapshot);
+    scope.append(select('选题范围',[['knowledge','选择知识点'],['unit','课程单元'],['recent','近期需巩固'],['comprehensive','综合练习']],this.options.mode,async value=>{
+      this.cancel();this.options.mode=value;await this.mount(root,this.snapshot);
+      if(root.isConnected)root.querySelector('[role="combobox"]')?.focus({preventScroll:true});
     }));
     if(this.options.mode==='unit') scope.append(select('课程单元',this.owner.units.map(unit=>[unit,unit]),this.options.unitId||this.owner.units[0],value=>{this.cancel();this.options.unitId=value;this.renderPreview();}));
     if(this.options.mode==='unit'&&!this.options.unitId)this.options.unitId=this.owner.units[0];
     if(['knowledge','comprehensive'].includes(this.options.mode)) {
-      const choose=details('知识点（最多3个）');choose.open=true;
-      const grid=el('div',undefined,'lc-ai-knowledge');
-      for(const item of this.owner.catalog) {
-        const label=el('label');const check=el('input');check.type='checkbox';check.value=item.id;
-        check.checked=this.options.knowledgeIds.includes(item.id);
-        check.onchange=()=>{
-          this.cancel();
-          const ids=[...this.options.knowledgeIds.filter(id=>id!==item.id),...(check.checked?[item.id]:[])];
-          if(ids.length>3){check.checked=false;this.message='每批最多选择3个知识点。';this.paintStatus();return;}
-          this.options.knowledgeIds=ids;this.renderPreview();
-        };
-        label.append(check,el('span',`${item.id} · ${item.title}`));grid.append(label);
-      }
-      choose.append(grid);scope.append(choose);
-      requestAnimationFrame(()=>{
-        const selected=grid.querySelector('input:checked')?.closest('label');
-        if(selected&&grid.isConnected)grid.scrollTop=selected.offsetTop-grid.firstElementChild.offsetTop;
-      });
+      scope.append(this.knowledgePicker());
     }
     if(this.options.mode==='recent') {
       const recommendations=recommendExerciseKnowledge(snapshot,this.options);
@@ -95,6 +158,93 @@ export class AIExerciseUI {
     this.configureButton=button('配置模型',event=>this.openModelSettings(event.currentTarget));this.configureButton.id='ai-exercise-configure';
     actions.append(this.generateButton,this.cancelButton,this.configureButton);root.append(this.model,actions,this.status);
     this.results=el('div');root.append(this.results);this.renderPreview();await this.renderSaved();this.paintStatus();
+  }
+  knowledgePicker() {
+    const picker = details('选择知识点');
+    picker.className = 'lc-ai-picker';
+    picker.open = true;
+    const summary = picker.querySelector('summary');
+    const count = el('span', undefined, 'lc-ai-picker-count');
+    count.setAttribute('aria-live', 'polite');
+    summary.append(count);
+
+    const content = el('div', undefined, 'lc-ai-picker-content');
+    const selected = el('div', undefined, 'lc-ai-selected');
+    selected.setAttribute('role', 'group');
+    selected.setAttribute('aria-label', '已选知识点');
+    const searchLabel = el('label', undefined, 'lc-ai-search');
+    const search = el('input');
+    search.type = 'search';
+    search.placeholder = '搜索知识点或编号';
+    search.setAttribute('aria-label', '搜索知识点或编号');
+    searchLabel.append(search);
+    const grid = el('div', undefined, 'lc-ai-knowledge');
+    const empty = el('p', '没有找到匹配的知识点', 'lc-ai-picker-empty');
+    empty.hidden = true;
+    const choices = [];
+
+    const updateSelection = () => {
+      const ids = this.options.knowledgeIds;
+      count.textContent = `已选 ${ids.length} / 3`;
+      selected.replaceChildren();
+      selected.hidden = ids.length === 0;
+      for (const id of ids) {
+        const item = this.owner.catalog.find(item => item.id === id);
+        const chip = button('', () => {
+          this.cancel();
+          this.options.knowledgeIds = this.options.knowledgeIds.filter(value => value !== id);
+          updateSelection();
+          this.renderPreview();
+          search.focus({preventScroll:true});
+        }, 'lc-ai-selected-chip');
+        chip.setAttribute('aria-label', `移除 ${id} ${item?.title || ''}`);
+        const remove = el('span', '×', 'lc-ai-chip-remove');
+        remove.setAttribute('aria-hidden', 'true');
+        chip.append(el('span', `${id} · ${item?.title || id}`), remove);
+        selected.append(chip);
+      }
+      for (const {item, check} of choices) {
+        check.checked = ids.includes(item.id);
+        check.disabled = ids.length === 3 && !check.checked;
+      }
+    };
+
+    for (const item of this.owner.catalog) {
+      const label = el('label', undefined, 'lc-ai-knowledge-option');
+      const check = el('input');
+      check.type = 'checkbox';
+      check.value = item.id;
+      check.onchange = () => {
+        this.cancel();
+        const ids = this.options.knowledgeIds.filter(id => id !== item.id);
+        if (check.checked && ids.length < 3) ids.push(item.id);
+        this.options.knowledgeIds = ids;
+        updateSelection();
+        this.renderPreview();
+      };
+      const mark = el('span', undefined, 'lc-ai-option-mark');
+      mark.setAttribute('aria-hidden', 'true');
+      label.append(check, el('span', item.id, 'lc-ai-option-id'),
+        el('span', item.title, 'lc-ai-option-title'), mark);
+      choices.push({item, label, check});
+      grid.append(label);
+    }
+    search.oninput = () => {
+      const query = search.value.trim().toLocaleLowerCase();
+      for (const {item, label} of choices) {
+        label.hidden = !`${item.id} ${item.title}`.toLocaleLowerCase().includes(query);
+      }
+      empty.hidden = choices.some(({label}) => !label.hidden);
+      grid.hidden = !empty.hidden;
+    };
+    updateSelection();
+    content.append(selected, searchLabel, grid, empty);
+    picker.append(content);
+    requestAnimationFrame(() => {
+      const active = grid.querySelector('input:checked')?.closest('label');
+      if (active && grid.isConnected) grid.scrollTop = active.offsetTop - grid.firstElementChild.offsetTop;
+    });
+    return picker;
   }
   renderPreview() {
     if(!this.preview)return;

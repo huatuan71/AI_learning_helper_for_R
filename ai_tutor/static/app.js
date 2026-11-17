@@ -634,7 +634,7 @@ $('debug-example').onclick = () => {
 renderRecords(); renderHistory(); route(false);
 async function startLearning() {
   try {
-    const {LearningCenter} = await import('./learning-center.js?v=ai-exercise-v1');
+    const {LearningCenter} = await import('./learning-center.js?v=ai-exercise-v2');
     learningCenter = new LearningCenter({units:UNITS, api:courseApi, codeBlock, notify:status,
       getModelConfig:() => modelSettings.config,
       refreshModelConfig:() => modelSettings.refresh(),
