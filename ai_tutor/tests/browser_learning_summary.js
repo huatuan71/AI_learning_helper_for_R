@@ -15,7 +15,7 @@ async function run(page, baseUrl, outputDir) {
   const snapshot = () => store(store => store.snapshot());
   const ready = async () => {
     await page.waitForFunction(() => document.body.dataset.learningReady === 'true');
-    await page.locator('#ai-summary-generate:not([disabled])').waitFor();
+    await page.locator('#ai-summary-input').waitFor({state:'attached'});
   };
   const summary = async () => {
     await page.evaluate(() => {location.hash = '/history/summary';});
@@ -48,7 +48,7 @@ async function run(page, baseUrl, outputDir) {
   await reload();
   await page.locator('#ai-summary-generate').click();
   await page.locator('#model-dialog').waitFor({state:'visible'});
-  check(await page.locator('#model-mode').isFocused(), 'unconfigured model opens keyboard-focused settings');
+  check(await page.locator('#model-mode').evaluate(node => node === document.activeElement), 'unconfigured model opens keyboard-focused settings');
   await page.locator('#model-close').click();
   await configure();
 
@@ -66,9 +66,18 @@ async function run(page, baseUrl, outputDir) {
   const originalText = await page.locator('#learning-ai-summary').textContent();
   const saved = (await snapshot()).summaries[0];
   check(saved.evidence.every(item => !Object.hasOwn(item, 'text')), 'saved evidence contains location metadata');
+  await page.screenshot({path:path.join(outputDir, 'ai-summary-desktop.png'), fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.screenshot({path:path.join(outputDir, 'ai-summary-mobile.png'), fullPage:true});
+  await page.setViewportSize({width:1440,height:1000});
   await reload();
   check((await page.locator('#learning-ai-summary').textContent()).includes(saved.response.summary.overview), 'refresh restores saved summary');
   check(await page.locator('#ai-summary-generate').textContent() === '重新生成', 'cached result offers explicit regeneration');
+  const clearedConfig = await page.context().request.delete(baseUrl + '/api/ai/config');
+  check(clearedConfig.ok(), 'fixture model configuration clears');
+  await reload();
+  check((await page.locator('#learning-ai-summary').textContent()).includes(saved.response.summary.overview), 'clearing model configuration preserves saved summary');
+  await configure();
 
   await page.evaluate(() => {
     window.summaryCopies = [];
@@ -107,6 +116,10 @@ async function run(page, baseUrl, outputDir) {
       await route.fulfill({status:409, json:{error:{code:'SESSION_EXPIRED',message:'测试会话过期'}}});
       return;
     }
+    if (responseMode === 'required') {
+      await route.fulfill({status:409, json:{error:{code:'CONFIG_REQUIRED',message:'测试模型配置缺失'}}});
+      return;
+    }
     if (responseMode === 'invalid') {
       await route.fulfill({status:502, json:{error:{code:'STRUCTURED_OUTPUT_INVALID',message:'测试输出格式错误'}}});
       return;
@@ -131,6 +144,13 @@ async function run(page, baseUrl, outputDir) {
   await page.locator('#ai-summary-generate').click();
   await page.getByText('测试输出格式错误', {exact:true}).waitFor();
   check((await snapshot()).summaries.length === 1, 'format failure keeps saved result');
+  responseMode = 'required';
+  await page.locator('#ai-summary-generate').click();
+  await page.getByText('测试模型配置缺失', {exact:true}).first().waitFor();
+  await page.locator('#ai-summary-configure').click();
+  await page.locator('#model-dialog').waitFor({state:'visible'});
+  check(await page.locator('#model-dialog').isVisible(), 'CONFIG_REQUIRED response offers model settings');
+  await page.locator('#model-close').click();
   responseMode = 'expired';
   await page.locator('#ai-summary-generate').click();
   await page.getByText('测试会话过期', {exact:true}).first().waitFor();
@@ -171,7 +191,7 @@ async function run(page, baseUrl, outputDir) {
   await page.getByText('<img src=x onerror=window.summaryAttack=true> 安全文本', {exact:true}).waitFor();
   check(await page.evaluate(() => !window.summaryAttack && !document.querySelector('#learning-ai-summary img')), 'model content renders as safe text');
   await page.setViewportSize({width:1440,height:1000});
-  await page.screenshot({path:path.join(outputDir, 'ai-summary-desktop.png'), fullPage:true});
+  await page.screenshot({path:path.join(outputDir, 'ai-summary-safety-desktop.png'), fullPage:true});
   await page.locator('.lc-ai-source summary').first().click();
   const original = await snapshot();
   const source = original.summaries.find(item => item.input_fingerprint !== saved.input_fingerprint)?.evidence[0];
@@ -183,16 +203,33 @@ async function run(page, baseUrl, outputDir) {
   await page.setViewportSize({width:390,height:844});
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), '390px layout has no document overflow');
   check(await page.locator('#ai-summary-generate').evaluate(node => node.getBoundingClientRect().height >= 44), 'generation target is at least 44px');
-  await page.screenshot({path:path.join(outputDir, 'ai-summary-mobile.png'), fullPage:true});
+  await page.screenshot({path:path.join(outputDir, 'ai-summary-safety-mobile.png'), fullPage:true});
 
-  await page.context().setOffline(true);
-  check((await page.locator('#learning-ai-summary').textContent()).includes('安全文本'), 'offline view retains saved summary');
-  await page.context().setOffline(false);
   await page.unroute('**/api/learning/summary', handler);
   await reload();
   check((await page.locator('#learning-ai-summary').textContent()).includes('安全文本'), 'saved regenerated summary restores after reload');
+  await page.evaluate(async () => {
+    const {downloadOffline} = await import('/static/offline.js?v=learning-v1');
+    const {learningStore} = await import('/static/learning-store.js?v=learning-v1');
+    const result = await downloadOffline();
+    await learningStore.saveCourse(result.course);
+  });
+  await reload();
+  await page.context().setOffline(true);
+  await reload();
+  check((await page.locator('#learning-ai-summary').textContent()).includes('安全文本'), 'offline refresh restores saved summary and new modules');
+  await page.context().setOffline(false);
+  const archive = await store(store => store.exportArchive());
   await store(store => store.clearConversations());
   check((await snapshot()).summaries.length === 0, 'clearing source conversations removes referenced summaries');
+  archive.data.conversations = [];
+  await page.evaluate(async archive => {
+    const {learningStore} = await import('/static/learning-store.js?v=learning-v1');
+    await learningStore.importArchive(archive);
+  }, archive);
+  await page.locator('.lc-ai-missing').first().waitFor();
+  check(await page.locator('.lc-ai-missing').first().isDisabled(), 'imported historical summary disables missing evidence locations');
+  check(await page.locator('#learning-ai-summary').getByRole('button', {name:'返回对话', exact:true}).count() === 0, 'missing source cannot open an unrelated conversation');
   check(errors.length === 0, 'browser has no uncaught JavaScript errors');
   return {passed:checks.length, checks, errors, browser:{desktop:{width:1440,height:1000}, narrow:{width:390,height:844}, timezone:'Asia/Shanghai'}};
 }

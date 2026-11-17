@@ -164,6 +164,7 @@ export class LearningSummaryUI {
       return;
     }
     const job = {input:context.input, controller:new AbortController(), cancelled:false};
+    this.notify?.();
     this.job = job;
     this.paint();
     try {
