@@ -11,16 +11,19 @@ const fixture = `<!doctype html><meta charset="utf-8">
 <form><label for="code">R代码</label><textarea id="code" wrap="soft"></textarea><button type="button" id="next">Next</button></form>
 <script type="module">
 import {enhanceRTextarea} from '/r-code-editor.js';
+import {rCodeFragment} from '/r-highlighter.js';
 window.enhance=enhanceRTextarea;
+window.renderR=rCodeFragment;
 window.code=document.querySelector('textarea');
-window.editor=enhanceRTextarea(code,{renderCode: source=>document.createTextNode(source)});
+window.editor=enhanceRTextarea(code,{renderCode:rCodeFragment});
 window.ready=true;
 </script>`;
 
 async function main() {
   const server = http.createServer((req, res) => {
     if (req.url === '/') { res.setHeader('Content-Type', 'text/html'); res.end(fixture); return; }
-    const filename = path.join(staticRoot, path.basename(req.url));
+    const filename = path.resolve(staticRoot, '.' + new URL(req.url, 'http://localhost').pathname);
+    if (!filename.startsWith(staticRoot + path.sep)) { res.writeHead(403); res.end(); return; }
     if (!fs.existsSync(filename)) { res.writeHead(404); res.end(); return; }
     res.setHeader('Content-Type', filename.endsWith('.css') ? 'text/css' : 'text/javascript');
     res.end(fs.readFileSync(filename));
@@ -40,6 +43,7 @@ async function main() {
     await page.locator('#code').focus();
     await page.keyboard.insertText('x <- c(1, 2)');
     await page.waitForFunction(() => document.querySelector('pre code').textContent === code.value);
+    assert.equal(await page.locator('pre .r-token-function').count(),1);
     await page.keyboard.press('Control+z');
     assert.equal(await page.locator('#code').inputValue(), '');
     await page.keyboard.press('Control+Shift+z');
@@ -97,6 +101,18 @@ async function main() {
     await page.emulateMedia({forcedColors:'active'});
     assert.equal(await page.locator('pre').isVisible(), false);
     await page.emulateMedia({forcedColors:'none'});
+    await page.evaluate(() => {document.querySelector('link').disabled=true;editor.refresh();});
+    assert.equal(await page.locator('.r-code-editor').evaluate(el => el.classList.contains('r-code-editor--ready')),false);
+    await page.evaluate(() => {document.querySelector('link').disabled=false;editor.refresh();});
+    await page.evaluate(() => {
+      const panel=document.createElement('div');
+      const input=document.createElement('textarea');
+      input.id='detached-code';input.value='mean(x)';panel.append(input);
+      window.detachedEditor=enhance(input,{renderCode:renderR});
+      document.body.append(panel);
+    });
+    await page.waitForFunction(() => document.querySelector('#detached-code').parentElement.classList.contains('r-code-editor--ready'));
+    await page.evaluate(() => {const panel=document.querySelector('#detached-code').parentElement.parentElement;detachedEditor.destroy();panel.remove();});
     await page.evaluate(() => {editor.destroy();editor.destroy();});
     assert.equal(await page.locator('.r-code-editor').count(),0);
     assert.equal(await page.locator('#code').getAttribute('wrap'),'soft');
@@ -112,7 +128,7 @@ async function main() {
     assert.equal(await touchPage.locator('#code').inputValue(),'触摸 <- 1');
     await touchContext.close();
     const performance=await page.evaluate(() => {
-      editor=enhance(code);
+      editor=enhance(code,{renderCode:renderR});
       const start=performance.now();
       for(let i=0;i<20;i++) editor.setValue('x'.repeat(102400));
       const ms=(performance.now()-start)/20;
@@ -121,7 +137,7 @@ async function main() {
     });
     assert.deepEqual(failures,[]);
     console.log('PASS native editing, clipboard copy/paste, undo/redo, selection, setValue, composition events, scrolling, 390px touch emulation, readonly/disabled, Tab, forced colors, lifecycle, renderer fallback');
-    console.log(`100KB plain-text setValue mean over 20 runs: ${performance.toFixed(2)}ms`);
+    console.log(`100KB real-renderer setValue mean over 20 runs: ${performance.toFixed(2)}ms`);
   } finally {
     await browser?.close();
     await new Promise(resolve => server.close(resolve));
