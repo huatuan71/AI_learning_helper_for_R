@@ -1,6 +1,7 @@
 import {learningStore} from './learning-store.js?v=learning-v1';
 import {buildReviewQueue} from './review-scheduler.js?v=learning-v1';
 import {getOfflineStatus, downloadOffline, getOfflineCourse} from './offline.js?v=learning-v1';
+import {AIExerciseUI} from './ai-exercise-ui.js?v=ai-exercise-v3';
 import {LearningSummaryUI} from './learning-summary-ui.js?v=ai-summary-v1';
 
 const $ = id => document.getElementById(id);
@@ -60,10 +61,12 @@ export class LearningCenter {
     this.summaryRange = {mode:'week', start:day(Date.now()-6*86400000), end:day(Date.now())};
     this.saving = false;
     this.renderToken = 0;
+    this.aiPractice = false;
+    this.exerciseUI = new AIExerciseUI({owner:this,getModelConfig,refreshModelConfig,openModelSettings,openKnowledge,codeBlock,download:downloadText});
     this.summaryUI = new LearningSummaryUI({getModelConfig, refreshModelConfig, openModelSettings, notify,
       openKnowledge, openConversation, download:downloadText,
       title:id => this.catalog.find(item => item.id === id)?.title || null,
-      practice:async id => {if (await this.enroll(id)) location.hash = '/history/review';}});
+      practice:id => this.exerciseUI.open(id)});
     window.addEventListener('beforeprint', () => {
       this.printDetails = [...document.querySelectorAll('#learning-report details')].map(item => [item,item.open]);
       this.printDetails.forEach(([item]) => {item.open=true;});
@@ -99,7 +102,7 @@ export class LearningCenter {
     } catch { this.session = null; }
     learningStore.subscribe(() => this.run(async () => {
       this.data = await learningStore.snapshot();
-      const archiveReset = !this.data.events.length && !this.data.cards.length && !this.data.attempts.length;
+      const archiveReset = !this.data.events.length && !this.data.cards.length && !this.data.attempts.length && !(this.data.aiExercises || []).length && !(this.data.aiExerciseAttempts || []).length;
       if (archiveReset) {
         this.session = null;
         this.persistSession();
@@ -109,7 +112,7 @@ export class LearningCenter {
       const limit=$('learning-tools-content').querySelector('select');
       if(limit)limit.value=this.data.settings.dailyLimit||6;
       const editing = $('learning-content').contains(document.activeElement) && document.activeElement.matches('textarea,input');
-      if (!this.saving && (archiveReset || !editing) && document.body.dataset.view === 'history') await this.render();
+      if (!this.saving && (archiveReset || !(this.tab === 'review' && this.aiPractice)) && (archiveReset || !editing) && document.body.dataset.view === 'history') await this.render();
     }));
     this.route();
     this.renderTools();
@@ -160,6 +163,7 @@ export class LearningCenter {
     if (!location.hash.startsWith('#/history')) return;
     const requested = location.hash.split('/')[2] || 'overview';
     this.tab = TABS.includes(requested) ? requested : 'overview';
+    this.aiPractice = location.hash.split('/')[3] === 'ai';
     document.querySelectorAll('[data-learning-tab]').forEach((tab, index, tabs) => {
       const selected = tab.dataset.learningTab === this.tab;
       if (selected) tab.setAttribute('aria-current', 'page');
@@ -191,7 +195,7 @@ export class LearningCenter {
     root.hidden = this.tab === 'records';
     root.replaceChildren();
     if (this.tab === 'overview') this.renderOverview(root);
-    if (this.tab === 'review') this.renderReview(root);
+    if (this.tab === 'review') await this.renderReview(root);
     if (this.tab === 'summary') await this.renderSummary(root, token);
     if (this.tab === 'records') this.renderConversationList();
   }
@@ -275,7 +279,12 @@ export class LearningCenter {
     this.session = {version:1, day:day(Date.now()), tasks, index:0};
     this.persistSession();
   }
-  renderReview(root) {
+  async renderReview(root) {
+    const tabs=node('div',undefined,'lc-ai-actions');
+    tabs.append(action('今日复习',()=>{this.exerciseUI.cancel();this.aiPractice=false;location.hash='/history/review';this.render();}),action('AI练习',()=>{this.aiPractice=true;location.hash='/history/review/ai';this.render();}));
+    for (const tab of tabs.children) tab.setAttribute('aria-pressed',String(tab.textContent === (this.aiPractice?'AI练习':'今日复习')));
+    root.append(tabs);
+    if (this.aiPractice) {const panel=node('section');root.append(panel);await this.exerciseUI.mount(panel,this.data);return;}
     const intro = node('div',undefined,'lc-row');
     intro.append(node('h2','今日复习'),node('span',`每次 ${this.data.settings.dailyLimit || 6} 题`,'muted'));
     root.append(intro);

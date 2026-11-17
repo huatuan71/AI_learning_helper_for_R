@@ -515,6 +515,7 @@ function renderHistory() {
 const modelSettings = new ModelSettings((...args) => {
   status(...args);
   learningCenter?.summaryUI.refreshConfig();
+  learningCenter?.exerciseUI.refreshConfig();
 });
 const fileInput = new RFileInput();
 const composer = document.querySelector('.composer-dock');
@@ -537,7 +538,7 @@ const mapUI = new LiquidKnowledgeScene({api:courseApi, codeBlock, units:UNITS,
   enroll: id => learningCenter?.enroll(id),
   bookmark: id => learningCenter?.bookmark({knowledgeId:id,title:id+' · '+knowledge.find(item => item.id===id)?.title}),
   explain: id => explainKnowledge(id),
-  exercise: id => { if(busy)return; navigate('chat');setCode(false);send('给我练习',{knowledgeId:id,useComposer:false,taskType:'exercise',displayQuestion:'练习'}); }
+  exercise: id => learningCenter?.exerciseUI.open(id)
 });
 $('topic-clear').onclick = () => {selectTopic(null); freshContext=true; $('question').focus();};
 document.querySelector('.skip-link').onclick = e => { e.preventDefault(); $('main-content').focus(); };
@@ -633,7 +634,7 @@ $('debug-example').onclick = () => {
 renderRecords(); renderHistory(); route(false);
 async function startLearning() {
   try {
-    const {LearningCenter} = await import('./learning-center.js?v=ai-summary-v1');
+    const {LearningCenter} = await import('./learning-center.js?v=ai-exercise-v3');
     learningCenter = new LearningCenter({units:UNITS, api:courseApi, codeBlock, notify:status,
       getModelConfig:() => modelSettings.config,
       refreshModelConfig:() => modelSettings.refresh(),

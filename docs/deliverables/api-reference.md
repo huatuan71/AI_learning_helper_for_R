@@ -1,11 +1,11 @@
 # R语言AI助教接口说明
 
-应用版本为1.2.1，核对时间为2026-11-17T11:31:58+08:00。
+应用版本为1.2.1，核对时间为2026-11-17T15:42:22+08:00。
 接口表和数据类型取自当前运行服务的OpenAPI。模型适配测试使用模拟上游，真实账号与公网验收状态见测试记录。
 
 ## 启动与接入
 
-运行 `ai_tutor/start.cmd` 使用默认8000端口。本轮集成服务为 `http://127.0.0.1:8016/`。
+运行 `ai_tutor/start.cmd` 使用默认8000端口。本轮集成服务为 `http://127.0.0.1:8026/`。
 交互文档为 `/docs`，完整字段约束为 `/openapi.json`。
 同域页面使用相对路径，JavaScript请求设置 `credentials: 'include'`。
 
@@ -26,13 +26,14 @@
 | POST | `/api/chat/stream` | Chat Stream |
 | POST | `/api/review/stream` | Review Stream |
 | POST | `/api/learning/summary` | Learning Summary |
+| POST | `/api/learning/exercises` | Learning Exercises |
 
 目录接口返回43个知识点和95条关系，详情接口返回成员一课程字段、来源定位和先修知识。
 健康接口报告应用能力与版本，读取健康状态无需模型调用。
 
 ## 学习与PWA公共资源
 
-以下资源使用同源GET访问，返回200，两个根资源使用 `include_in_schema=False`。OpenAPI包含11条路径与13个操作。
+以下资源使用同源GET访问，返回200，两个根资源使用 `include_in_schema=False`。OpenAPI包含12条路径与14个操作。
 
 | 路径 | 内容与访问方式 |
 |---|---|
@@ -42,7 +43,7 @@
 | `/static/review-bank.json` | 94道带来源的本地复习题 |
 | `/static/icons/icon-192.png`、`icon-512.png`、`apple-touch-icon.png` | 图标均位于 `/static/icons/` |
 
-`/sw.js` 和 `/offline-course.json` 使用 `Cache-Control: no-cache, no-store, must-revalidate`。离线缓存由用户点击保存建立完整30项公开资源包。配置、Key、所有API、模型POST和SSE通过实时网络请求。
+`/sw.js` 和 `/offline-course.json` 使用 `Cache-Control: no-cache, no-store, must-revalidate`。离线缓存由用户点击保存建立完整32项公开资源包。配置、Key、所有API、模型POST和SSE通过实时网络请求。
 
 学习档案存于设备IndexedDB，通过页面导出JSON和合并导入。学习概览、收藏、小结和复习排程由浏览器模块处理。
 学习入口为 `/#/history`，复习为 `/#/history/review`，小结为 `/#/history/summary`，对话为 `/#/history/records`。
@@ -457,7 +458,7 @@ if (result.status === 'ok') await learningStore.saveSummary(result, input);
 
 ### 保存、恢复与离线更新
 
-IndexedDB版本为2，完整档案schemaVersion为2，新增summaries数组。支持导入schemaVersion 1，旧档案的总结按空数组处理。
+IndexedDB版本为3，完整档案schemaVersion为3，包含summaries、aiExercises和aiExerciseAttempts数组。支持导入schemaVersion 1、2，旧档案缺失的新增集合按空数组处理。
 缓存保留有效响应和证据定位元数据，最多100条，按生成时间保留最近结果。
 缓存键包含日期、时区、输入指纹、厂商、模型及提示词版本，同一输入主动重新生成后原子更新。
 合并相同总结ID时保留较晚的有效结果，时间相同按归一化内容确定顺序，档案整体上限20 MiB。
@@ -467,6 +468,99 @@ IndexedDB版本为2，完整档案schemaVersion为2，新增summaries数组。�
 
 更新记录为2026年11月17日，新增手动学习总结、取消、证据校验、缓存与档案兼容。
 
+
+
+## AI出题与离线练习
+
+`POST /api/learning/exercises` 使用当前模型会话，一次返回整批题目、提示和参考答案。
+入口位于“学习记录 → 复习 → AI练习”，知识详情和总结建议可带知识ID打开。
+
+### 请求
+
+| 字段 | 类型 | 必填 | 默认值 |
+|---|---|---|---|
+| `schema_version` | integer | 是 | null |
+| `knowledge_ids` | array<string> | 是 | null |
+| `count` | integer | 是 | null |
+| `difficulty` | string | 是 | null |
+| `formats` | array<string> | 是 | null |
+| `recent_prompts` | array<string> | 是 | null |
+
+### 响应
+
+| 字段 | 类型 | 必填 | 默认值 |
+|---|---|---|---|
+| `request_id` | string | 是 | null |
+| `status` | string | 是 | null |
+| `mode` | string | 是 | null |
+| `generation_id` | string | 是 | null |
+| `generated_at` | string | 是 | null |
+| `provider` | string | 是 | null |
+| `model` | string | 是 | null |
+| `prompt_version` | string | 是 | null |
+| `knowledge_version` | string | 是 | null |
+| `usage` | object | 是 | null |
+| `duration_ms` | integer | 是 | null |
+| `questions` | array<ExerciseQuestion> | 是 | null |
+
+### 题目
+
+| 字段 | 类型 | 必填 | 默认值 |
+|---|---|---|---|
+| `knowledge_ids` | array<string> | 是 | null |
+| `learning_type` | string | 是 | null |
+| `format` | string | 是 | null |
+| `difficulty` | string | 是 | null |
+| `prompt` | string | 是 | null |
+| `code` | string | 否 | "" |
+| `choices` | array<string> | 是 | null |
+| `correct_index` | integer / null | 是 | null |
+| `hints` | array<string> | 是 | null |
+| `reference_answer` | string | 是 | null |
+| `solution_code` | string | 否 | "" |
+| `explanation` | string | 是 | null |
+| `id` | string | 是 | null |
+| `source_refs` | array<ExerciseSource> | 是 | null |
+| `execution_status` | string | 是 | null |
+
+### 课程出处
+
+| 字段 | 类型 | 必填 | 默认值 |
+|---|---|---|---|
+| `knowledge_id` | string | 是 | null |
+| `title` | string | 是 | null |
+| `source_id` | string | 是 | null |
+| `file` | string | 是 | null |
+| `locator` | string | 是 | null |
+
+knowledge_ids包含1至3个唯一真实课程ID，count为1至5，默认3。
+difficulty取basic、standard、advanced，默认basic。
+formats从choice、short_answer、code_reading、code_fix中选择1至4种不重复题型。
+recent_prompts最多10条，每条最多300个Unicode码点，原始请求最多32 KiB UTF-8，额外字段拒绝。
+
+服务端分配题型和知识覆盖，从课程正文与错误案例提取有界上下文。
+返回题目数量、难度、范围和分配结果均经过结构校验，批内规范化题干与代码去重。
+单选恰好4个唯一选项，correct_index为0至3，其他题型为null。
+题目ID使用aiq前缀，批次ID、课程出处由服务端生成，execution_status固定为not_executed。
+提示词版本为learning-exercise-v1，搜索工具关闭，输出预算取用户设置与8192的较小值。
+使用已有会话并发、取消、断连和有界请求预算，成功及失败响应均为no-store。
+
+```json
+{"schema_version":1,"knowledge_ids":["K06"],"count":3,"difficulty":"basic","formats":["choice","short_answer","code_reading","code_fix"],"recent_prompts":[]}
+```
+
+未配置或会话到期分别返回CONFIG_REQUIRED、SESSION_EXPIRED，界面提供配置模型入口。
+超限返回REQUEST_TOO_LARGE，字段错误返回VALIDATION_ERROR，模型结构错误返回STRUCTURED_OUTPUT_INVALID。
+其余上游、并发和取消错误沿用统一结构，实际边界及验证范围见AI出题交付记录。
+
+IndexedDB和完整档案schemaVersion均升级为3，新增aiExercises与aiExerciseAttempts。
+旧档案1、2可导入，缺失新增集合视为空，已有summaries保留。
+题目上限200，作答上限2000，档案继续限制20 MiB。达到上限后可导出或删除旧练习。
+作答按草稿、锁定、自评、保存推进，刷新恢复阶段，保存重试复用原作答ID和载荷。
+同ID跨标签页提交幂等，作答写入与草稿更新采用一个事务。
+提前使用提示或参考答案保留辅助标志，选择题使用ai_reference_match，主观题使用self。
+AI作答单独统计，课程掌握等级沿用现有调度。首次显示题目按知识ID记录稳定exercise_view事件。
+保存及导入后的题目可离线作答、对照参考答案和自评，代码显示未运行验证。
 
 
 ## 会话、限额和错误

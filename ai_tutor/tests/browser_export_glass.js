@@ -92,7 +92,7 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     check(await page.locator('#export-dialog').isHidden() && await page.locator('#history-export').evaluate(node => node === document.activeElement), 'Escape closes the export dialog and restores focus');
 
     await page.evaluate(async () => {
-      const {LearningCenter} = await import('/static/learning-center.js?v=ai-summary-v1');
+      const {LearningCenter} = await import('/static/learning-center.js?v=ai-exercise-v3');
       window.__originalArchiveExport = LearningCenter.prototype.exportArchive;
       LearningCenter.prototype.exportArchive = async () => { throw Error('测试导出失败'); };
     });
@@ -101,7 +101,7 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
     await page.waitForFunction(() => document.querySelector('#export-feedback').textContent.includes('测试导出失败'));
     check(await page.locator('#export-dialog').isVisible() && await page.locator('#export-download').isEnabled(), 'failed export preserves the dialog and re-enables retry');
     await page.evaluate(async () => {
-      const {LearningCenter} = await import('/static/learning-center.js?v=ai-summary-v1');
+      const {LearningCenter} = await import('/static/learning-center.js?v=ai-exercise-v3');
       LearningCenter.prototype.exportArchive = window.__originalArchiveExport;
       delete window.__originalArchiveExport;
     });

@@ -126,7 +126,7 @@ async (page, baseUrl = 'http://127.0.0.1:8000') => {
       await page.locator('#export-download').click();
     });
     check(archiveExport.name === 'r-tutor-learning-archive.json', 'full archive uses an ASCII filename');
-    check(archiveExport.data.app === 'r-language-tutor' && archiveExport.data.schemaVersion === 2, 'full archive has the versioned restore format');
+    check(archiveExport.data.app === 'r-language-tutor' && archiveExport.data.schemaVersion === 3, 'full archive has the versioned restore format');
     check(archiveExport.data.data.conversations.length === 1 && archiveExport.data.data.events.length > 0 &&
       archiveExport.data.data.cards.length === 2 && Array.isArray(archiveExport.data.data.attempts) &&
       Array.isArray(archiveExport.data.data.bookmarks) && archiveExport.data.data.settings.dailyLimit === 6,

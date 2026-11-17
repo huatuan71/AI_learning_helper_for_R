@@ -44,8 +44,9 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     await page.locator('#question').fill('factor中的levels有什么作用？');await page.locator('#send').click();await ready();
     check(requests.at(-1).body.knowledge_id===null && requests.at(-1).body.history.length===0,'closed topic starts fresh retrieval');
     await route('knowledge');await detail('K06');
-    await page.getByRole('button',{name:'给我一道练习',exact:true}).click();await ready();
-    check(requests.at(-1).body.knowledge_id==='K06' && requests.at(-1).body.question==='给我练习','map exercise uses existing rule');
+    await page.getByRole('button',{name:'AI出题',exact:true}).click();
+    await page.locator('#ai-exercise-generate').waitFor();
+    check(await page.locator('.lc-ai-knowledge input[value="K06"]').isChecked(),'map exercise opens selected knowledge range');
     await route('review');
     check(await page.locator('#sidebar,#catalog,#catalog-toggle').count()===0,'no sidebar in review');
     await page.locator('#question').fill('为什么不能用x == NA判断缺失？');await page.locator('#code').fill('x <- c(1,NA,3)\nx[x == NA]');

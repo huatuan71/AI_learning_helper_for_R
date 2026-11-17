@@ -1,0 +1,29 @@
+{
+  "passed": 22,
+  "checks": [
+    "unconfigured generation opens model settings",
+    "mock upstream model configured",
+    "actual request uses selected knowledge and count",
+    "all four formats carry AI labels",
+    "generated batch covers all four requested formats",
+    "locked answer becomes read-only",
+    "refresh restores locked answer safely",
+    "save failure retry keeps stable attempt ID",
+    "AI attempt is separate from course scheduling",
+    "hint assistance survives save",
+    "answer renders as safe text",
+    "390px layout fits viewport",
+    "text export uses safe stable filename",
+    "copy code writes actual code",
+    "source navigates to actual course knowledge",
+    "knowledge detail carries selected knowledge into same practice entry",
+    "cancelled late response preserves saved question batch",
+    "expired session retains previous questions",
+    "summary recommendation opens same selected knowledge range",
+    "offline refresh restores saved questions with complete PWA modules",
+    "offline restart creates editable attempt",
+    "delete removes associated attempts"
+  ],
+  "errors": [],
+  "browser": "157.0.8103.51"
+}

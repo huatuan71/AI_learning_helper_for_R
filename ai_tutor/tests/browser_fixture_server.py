@@ -14,6 +14,7 @@ from app.main import app
 from app.ai.sessions import SessionStore
 from support.provider_fakes import streamed_wire, teaching, wire
 from support.summary_fakes import summary_result
+from support.exercise_fakes import exercise_result
 
 
 async def fake_upstream(request):
@@ -35,6 +36,10 @@ async def fake_upstream(request):
                                             search='无需搜索' not in text))
     if text == '只回复OK':
         return httpx.Response(200, json=wire(provider, 'OK'))
+    if '你是R语言课程出题助手' in messages[0]['content']:
+        data = json.loads(messages[-1]['content'])
+        body = {key: data[key] for key in ['schema_version', 'knowledge_ids', 'count', 'difficulty', 'formats', 'recent_prompts']}
+        return httpx.Response(200, json=wire(provider, json.dumps(exercise_result(body), ensure_ascii=False)))
     if '你是R语言学习记录分析助手' in messages[0]['content']:
         data = json.loads(messages[-1]['content'])
         item = next((item for item in data['evidence'] if item['knowledge_ids']), None)
