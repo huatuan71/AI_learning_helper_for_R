@@ -1,4 +1,4 @@
-import { buildExerciseRequest, newExerciseDraft, validateAIExercise, validateExerciseDraft, validateAIExerciseAttempt } from './ai-exercise-data.js?v=ai-exercise-v1';
+import { EXERCISE_COURSE_SOURCES, buildExerciseRequest, newExerciseDraft, validateAIExercise, validateExerciseDraft, validateAIExerciseAttempt } from './ai-exercise-data.js?v=ai-exercise-v1';
 import {
   createCard, scheduleReview, normalizeAttempt, normalizeTime, assertKnowledgeId, compareAttempts, localDay,
 } from './review-scheduler.js?v=learning-v1';
@@ -426,19 +426,20 @@ function rebuild(data) {
   data.attempts = attempts;
 }
 
-function exerciseById(rows, id) {
+function exerciseById(rows, id, expectedAttemptId) {
   const question = rows.aiExercises.find(item => item.id === id);
   if (!question) throw new TypeError('练习题目不存在');
+  if (expectedAttemptId !== undefined && question.draft.attemptId !== expectedAttemptId) throw new TypeError('作答已在其他页面更新，请刷新后继续');
   return question;
 }
 function exerciseCapacity(rows) {
   if (rows.aiExercises.length > LIMITS.aiExercises || rows.aiExerciseAttempts.length > LIMITS.aiExerciseAttempts) throw new RangeError('AI练习容量已满，请先导出或删除旧练习');
 }
 function validateExerciseSources(questions, course) {
-  if (!course) return;
+  const catalog = course?.knowledge || EXERCISE_COURSE_SOURCES;
   for (const question of questions) {
     for (const ref of question.source_refs) {
-      const knowledge = course.knowledge.find(item => item.id === ref.knowledge_id);
+      const knowledge = catalog.find(item => item.id === ref.knowledge_id);
       if (!knowledge || ref.title !== knowledge.title || !knowledge.sources.some(source =>
         ref.source_id === source.source_id && ref.file === source.file && ref.locator === source.locator)) throw new TypeError('课程来源与本地课程不符');
     }
@@ -450,7 +451,14 @@ function validateExerciseLinks(questions, attempts) {
     if (ids.has(question.draft.attemptId)) throw new TypeError('草稿作答ID重复');
     ids.add(question.draft.attemptId);
     const attempt = attempts.find(item => item.id === question.draft.attemptId);
-    if (question.draft.phase === 'saved' && (!attempt || attempt.questionId !== question.id || attempt.answerText !== question.draft.answerText || attempt.selectedIndex !== question.draft.selectedIndex || attempt.rating !== question.draft.rating)) throw new TypeError('已保存草稿与作答不符');
+    if (attempt && question.draft.phase !== 'saved') throw new TypeError('草稿阶段与已有作答不符');
+    if (question.draft.phase === 'saved') {
+      const draft = question.draft;
+      if (!attempt || attempt.questionId !== question.id || attempt.answerText !== draft.answerText ||
+          attempt.selectedIndex !== draft.selectedIndex || attempt.rating !== draft.rating ||
+          attempt.at !== draft.at || attempt.timeZone !== draft.timeZone || attempt.assistedAtLock !== draft.assistedAtLock ||
+          (attempt.hintUsed && !draft.hintUsed) || (attempt.answerRevealed && !draft.answerRevealed)) throw new TypeError('已保存草稿与作答不符');
+    }
   }
 }
 
@@ -720,9 +728,9 @@ export const learningStore = Object.freeze({
   async listAIExerciseAttempts(questionId = null) {
     return transaction('readonly', rows => rows.aiExerciseAttempts.filter(item => !questionId || item.questionId === questionId).sort(compareAttempts));
   },
-  async saveAIExerciseDraft(id, patch) {
+  async saveAIExerciseDraft(id, patch, expectedAttemptId) {
     return transaction('readwrite', rows => {
-      const question = exerciseById(rows, id);
+      const question = exerciseById(rows, id, expectedAttemptId);
       const draft = question.draft;
       for (const key of Object.keys(patch)) if (!['answerText', 'selectedIndex', 'hintUsed', 'answerRevealed', 'rating'].includes(key)) throw new TypeError('草稿字段无效');
       if (draft.phase !== 'draft' && ((patch.answerText !== undefined && patch.answerText !== draft.answerText) || (patch.selectedIndex !== undefined && patch.selectedIndex !== draft.selectedIndex))) throw new TypeError('答案已锁定');
@@ -737,9 +745,9 @@ export const learningStore = Object.freeze({
       return question;
     });
   },
-  async lockAIExercise(id) {
+  async lockAIExercise(id, expectedAttemptId) {
     return transaction('readwrite', rows => {
-      const question = exerciseById(rows, id);
+      const question = exerciseById(rows, id, expectedAttemptId);
       if (question.draft.phase !== 'draft') return question;
       const at = new Date().toISOString();
       question.draft = validateExerciseDraft({ ...question.draft, phase: 'locked', at, updatedAt: at,
@@ -747,9 +755,9 @@ export const learningStore = Object.freeze({
       return question;
     });
   },
-  async submitAIExerciseAttempt(id, rating) {
+  async submitAIExerciseAttempt(id, rating, expectedAttemptId) {
     return transaction('readwrite', rows => {
-      const question = exerciseById(rows, id);
+      const question = exerciseById(rows, id, expectedAttemptId);
       const draft = question.draft;
       const saved = rows.aiExerciseAttempts.find(item => item.id === draft.attemptId);
       if (saved) return saved;
@@ -767,9 +775,9 @@ export const learningStore = Object.freeze({
       return attempt;
     });
   },
-  async restartAIExercise(id) {
+  async restartAIExercise(id, expectedAttemptId) {
     return transaction('readwrite', rows => {
-      const question = exerciseById(rows, id);
+      const question = exerciseById(rows, id, expectedAttemptId);
       question.draft = newExerciseDraft();
       return question;
     });

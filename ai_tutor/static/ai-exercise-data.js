@@ -144,3 +144,595 @@ export function validateAIExerciseAttempt(value, question) {
   } else if (!result.answerText.trim() || result.selectedIndex !== null || result.assessment_source !== 'self' || result.referenceMatch !== null) throw new TypeError('主观题作答无效');
   return result;
 }
+
+// Offline reference allowlist extracted from the bundled course. Keep aligned with data/course.json.
+export const EXERCISE_COURSE_SOURCES = Object.freeze([
+  {
+    "id": "K01",
+    "title": "R、RStudio与脚本执行",
+    "sources": [
+      {
+        "source_id": "S1",
+        "file": "r-installation-ch11.pdf",
+        "locator": "PDF  4–20"
+      },
+      {
+        "source_id": "S2",
+        "file": "r-installation-ch12.pdf",
+        "locator": "PDF  1–7"
+      }
+    ]
+  },
+  {
+    "id": "K02",
+    "title": "安装、加载与命名空间",
+    "sources": [
+      {
+        "source_id": "S1",
+        "file": "r-installation-ch11.pdf",
+        "locator": "PDF 21–29"
+      },
+      {
+        "source_id": "S2",
+        "file": "r-installation-ch12.pdf",
+        "locator": "PDF 8–10"
+      }
+    ]
+  },
+  {
+    "id": "K03",
+    "title": "帮助与可复现记录",
+    "sources": [
+      {
+        "source_id": "S1",
+        "file": "r-installation-ch11.pdf",
+        "locator": "PDF 28–42"
+      }
+    ]
+  },
+  {
+    "id": "K04",
+    "title": "类型、类与类型转换",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 9–14"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第15章 PDF 230–247"
+      }
+    ]
+  },
+  {
+    "id": "K05",
+    "title": "逻辑运算与条件筛选",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 14、72"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第14章 PDF 219–222"
+      }
+    ]
+  },
+  {
+    "id": "K06",
+    "title": "缺失、NaN与无穷值",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 11、73"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第15章 PDF 233–234"
+      }
+    ]
+  },
+  {
+    "id": "K07",
+    "title": "普通因子与有序因子",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 15–19"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第11章 PDF 183–188"
+      }
+    ]
+  },
+  {
+    "id": "K08",
+    "title": "日期、时间与格式",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 20–27"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第12章 PDF 189–204"
+      }
+    ]
+  },
+  {
+    "id": "K09",
+    "title": "创建向量与随机抽样",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 30–31"
+      },
+      {
+        "source_id": "S2",
+        "file": "r-installation-ch12.pdf",
+        "locator": "PDF 1–5"
+      }
+    ]
+  },
+  {
+    "id": "K10",
+    "title": "向量索引与定位",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 32"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第15章 PDF 237–239"
+      }
+    ]
+  },
+  {
+    "id": "K11",
+    "title": "向量运算与循环补齐",
+    "sources": [
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第15章 PDF 235–237"
+      },
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 34"
+      }
+    ]
+  },
+  {
+    "id": "K12",
+    "title": "集合、匹配与成员判断",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 33、38"
+      }
+    ]
+  },
+  {
+    "id": "K13",
+    "title": "数值汇总",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 34"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第3章 汇总"
+      }
+    ]
+  },
+  {
+    "id": "K14",
+    "title": "sort、order与rank",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 35–37"
+      }
+    ]
+  },
+  {
+    "id": "K15",
+    "title": "cut分组与区间边界",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 38–39"
+      }
+    ]
+  },
+  {
+    "id": "K16",
+    "title": "字符长度与截取",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 40–41"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第10章 PDF 160–163"
+      }
+    ]
+  },
+  {
+    "id": "K17",
+    "title": "paste与paste0",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 42–44"
+      }
+    ]
+  },
+  {
+    "id": "K18",
+    "title": "查找、替换与正则",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 45–47"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第10章 PDF 164–181"
+      }
+    ]
+  },
+  {
+    "id": "K19",
+    "title": "创建矩阵与保留维度",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 48–52"
+      }
+    ]
+  },
+  {
+    "id": "K20",
+    "title": "矩阵绑定、命名与转置",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 51–55"
+      }
+    ]
+  },
+  {
+    "id": "K21",
+    "title": "矩阵乘法与线性方程",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 53–56"
+      }
+    ]
+  },
+  {
+    "id": "K22",
+    "title": "特征分解与SVD",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 54–57"
+      }
+    ]
+  },
+  {
+    "id": "K23",
+    "title": "稀疏矩阵",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 58–62"
+      }
+    ]
+  },
+  {
+    "id": "K24",
+    "title": "数组与apply",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 63–65、82"
+      }
+    ]
+  },
+  {
+    "id": "K25",
+    "title": "数据框创建与检查",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 66–69"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第6章"
+      }
+    ]
+  },
+  {
+    "id": "K26",
+    "title": "数据框取列、筛选与增列",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 70、72"
+      }
+    ]
+  },
+  {
+    "id": "K27",
+    "title": "数据框排序与合并",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 71、74"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第9章 PDF 143–159"
+      }
+    ]
+  },
+  {
+    "id": "K28",
+    "title": "缺失处理与异常值策略",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 73"
+      }
+    ]
+  },
+  {
+    "id": "K29",
+    "title": "长宽表转换：基础R",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 75–78"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第8章 PDF 125–142"
+      }
+    ]
+  },
+  {
+    "id": "K30",
+    "title": "分组汇总：基础R",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 79–82"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第3章"
+      }
+    ]
+  },
+  {
+    "id": "K31",
+    "title": "列表创建、索引与嵌套",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 83–87"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第15章 PDF 239–243"
+      }
+    ]
+  },
+  {
+    "id": "K32",
+    "title": "lapply、sapply与vapply",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 88–90"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第16章 PDF 258–260"
+      }
+    ]
+  },
+  {
+    "id": "K33",
+    "title": "mapply与逐组配对",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 91"
+      }
+    ]
+  },
+  {
+    "id": "K34",
+    "title": "do.call、Reduce与递归处理",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 92–94"
+      },
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 88 扩展函数线索"
+      }
+    ]
+  },
+  {
+    "id": "K35",
+    "title": "自定义函数与参数检查",
+    "sources": [
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第14章 PDF 214–229"
+      }
+    ]
+  },
+  {
+    "id": "K36",
+    "title": "if、else与向量化分支",
+    "sources": [
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第14章 PDF 219–223"
+      }
+    ]
+  },
+  {
+    "id": "K37",
+    "title": "for、while与安全循环",
+    "sources": [
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第16章 PDF 249–255"
+      }
+    ]
+  },
+  {
+    "id": "K38",
+    "title": "文件导入、导出与路径",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 67"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第7章"
+      }
+    ]
+  },
+  {
+    "id": "K39",
+    "title": "综合任务：模拟电影数据清洗",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 3–8、66–82"
+      }
+    ]
+  },
+  {
+    "id": "K40",
+    "title": "dplyr分组与管道",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 80–81"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第3、13章"
+      }
+    ]
+  },
+  {
+    "id": "K41",
+    "title": "tidyr现行长宽表转换",
+    "sources": [
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第8章"
+      }
+    ]
+  },
+  {
+    "id": "K42",
+    "title": "reshape2与plyr课件原写法",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 76–79"
+      }
+    ]
+  },
+  {
+    "id": "K43",
+    "title": "lubridate时间成分",
+    "sources": [
+      {
+        "source_id": "S3",
+        "file": "r-data-operations-ch02.pdf",
+        "locator": "PDF 25"
+      },
+      {
+        "source_id": "S4",
+        "file": "r-for-data-science-zh.pdf",
+        "locator": "第12章"
+      }
+    ]
+  }
+]);
