@@ -71,13 +71,61 @@ function details(title, cls = '') {
   node.append(el('summary', title));
   return node;
 }
+const statusNotice = $('status');
+const STATUS_IDLE_MS = 5000;
+let statusHideTimer = null;
+let statusHovered = false;
+let statusPressed = false;
+
+function pauseStatusDismissal() {
+  clearTimeout(statusHideTimer);
+  statusHideTimer = null;
+}
+function scheduleStatusDismissal() {
+  pauseStatusDismissal();
+  if (statusNotice.hidden || statusHovered || statusPressed || statusNotice.contains(document.activeElement)) return;
+  statusHideTimer = setTimeout(() => {
+    statusHideTimer = null;
+    statusNotice.hidden = true;
+  }, STATUS_IDLE_MS);
+}
+statusNotice.addEventListener('pointerenter', event => {
+  if (event.pointerType === 'touch') return;
+  statusHovered = true;
+  pauseStatusDismissal();
+});
+statusNotice.addEventListener('pointerleave', () => {
+  statusHovered = false;
+  scheduleStatusDismissal();
+});
+statusNotice.addEventListener('pointerdown', () => {
+  statusPressed = true;
+  pauseStatusDismissal();
+});
+function releaseStatusPointer() {
+  if (!statusPressed) return;
+  statusPressed = false;
+  scheduleStatusDismissal();
+}
+window.addEventListener('pointerup', releaseStatusPointer);
+window.addEventListener('pointercancel', releaseStatusPointer);
+window.addEventListener('blur', releaseStatusPointer);
+statusNotice.addEventListener('focusin', pauseStatusDismissal);
+statusNotice.addEventListener('focusout', () => queueMicrotask(scheduleStatusDismissal));
+
 function status(text = '', error = false, action = null) {
+  pauseStatusDismissal();
+  if (statusNotice.hidden) {
+    statusHovered = false;
+    statusPressed = false;
+  }
   $('status-message').textContent = text;
   $('status-action').hidden = !action;
   $('status-action').textContent = action?.label || '';
   $('status-action').onclick = action?.run || null;
   $('status').hidden = !text;
   $('status').classList.toggle('error', error);
+  scheduleStatusDismissal();
 }
 function save() {
   if (learningCenter) return true;

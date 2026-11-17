@@ -8,8 +8,8 @@ async function main() {
   const browser = await chromium.launch({headless:true});
   const results = [];
   try {
-    for (const name of ['browser_check','browser_ai','browser_map_files','browser_glass_ui','browser_mobile_map','browser_scene_probe','browser_scene_motion','browser_offline','browser_learning_layout','browser_export_glass','browser_menu_fixed']) {
-      const context = await browser.newContext({viewport:name==='browser_mobile_map'?{width:390,height:844}:{width:1440,height:1000},hasTouch:name==='browser_mobile_map',isMobile:name==='browser_mobile_map',timezoneId:'Asia/Shanghai'});
+    for (const name of ['browser_check','browser_ai','browser_map_files','browser_glass_ui','browser_mobile_map','browser_scene_probe','browser_scene_motion','browser_offline','browser_learning_layout','browser_export_glass','browser_menu_fixed','browser_status_timer']) {
+      const context = await browser.newContext({viewport:name==='browser_mobile_map'?{width:390,height:844}:{width:1440,height:1000},hasTouch:name==='browser_mobile_map'||name==='browser_status_timer',isMobile:name==='browser_mobile_map',timezoneId:'Asia/Shanghai'});
       const page = await context.newPage();
       page.setDefaultTimeout(15000);
       const base = name === 'browser_ai' ? process.env.AI_BASE_URL || 'http://127.0.0.1:8015' : process.env.BASE_URL || 'http://127.0.0.1:8014';

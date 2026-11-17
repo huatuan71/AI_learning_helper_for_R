@@ -1020,7 +1020,7 @@ summary:hover {
   -webkit-backdrop-filter:blur(24px) saturate(155%);
   z-index:60;
   font-size:14px;
-  pointer-events:none;
+  pointer-events:auto;
 }
 #status.error {
   background:rgba(125,39,31,.84);

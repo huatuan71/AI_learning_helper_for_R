@@ -253,6 +253,7 @@ async (page, baseUrl = 'http://127.0.0.1:8014') => {
     check((await page.locator('#status-message').textContent()).includes('已到期或服务已重启'), 'expired session shows a configuration shortcut on load');
     for (const width of [1440,390]) {
       await page.setViewportSize({width,height:width === 390 ? 844 : 1000});
+      await page.locator('#status-message').hover();
       check(await page.locator('#status').evaluate(node => {
         const style = getComputedStyle(node);
         const alpha = Number(style.backgroundColor.match(/[\d.]+/g).at(-1));
