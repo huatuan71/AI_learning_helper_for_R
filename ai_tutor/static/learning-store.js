@@ -1,3 +1,4 @@
+import { buildExerciseRequest, newExerciseDraft, validateAIExercise, validateExerciseDraft, validateAIExerciseAttempt } from './ai-exercise-data.js?v=ai-exercise-v1';
 import {
   createCard, scheduleReview, normalizeAttempt, normalizeTime, assertKnowledgeId, compareAttempts, localDay,
 } from './review-scheduler.js?v=learning-v1';
@@ -6,13 +7,13 @@ import {
 } from './learning-summary-data.js?v=ai-summary-v1';
 
 const DATABASE = 'r-language-tutor-learning';
-const DATABASE_VERSION = 2;
-const SCHEMA_VERSION = 2;
-const TABLES = ['conversations', 'events', 'cards', 'attempts', 'bookmarks', 'settings', 'course', 'summaries'];
+const DATABASE_VERSION = 3;
+const SCHEMA_VERSION = 3;
+const TABLES = ['conversations', 'events', 'cards', 'attempts', 'bookmarks', 'settings', 'course', 'summaries', 'aiExercises', 'aiExerciseAttempts'];
 const PERSONAL_TABLES = TABLES.filter(name => name !== 'course');
 const LIMITS = Object.freeze({
   archiveBytes: 20 * 1024 * 1024,
-  conversations: 100_000, events: 200_000, cards: 86, attempts: 100_000, bookmarks: 100_043, summaries: 100,
+  conversations: 100_000, events: 200_000, cards: 86, attempts: 100_000, bookmarks: 100_043, summaries: 100, aiExercises: 200, aiExerciseAttempts: 2000,
   text: 100_000, list: 1000, id: 200,
 });
 const DEFAULT_SETTINGS = Object.freeze({ dailyLimit: 6 });
@@ -425,10 +426,38 @@ function rebuild(data) {
   data.attempts = attempts;
 }
 
+function exerciseById(rows, id) {
+  const question = rows.aiExercises.find(item => item.id === id);
+  if (!question) throw new TypeError('练习题目不存在');
+  return question;
+}
+function exerciseCapacity(rows) {
+  if (rows.aiExercises.length > LIMITS.aiExercises || rows.aiExerciseAttempts.length > LIMITS.aiExerciseAttempts) throw new RangeError('AI练习容量已满，请先导出或删除旧练习');
+}
+function validateExerciseSources(questions, course) {
+  if (!course) return;
+  for (const question of questions) {
+    for (const ref of question.source_refs) {
+      const knowledge = course.knowledge.find(item => item.id === ref.knowledge_id);
+      if (!knowledge || ref.title !== knowledge.title || !knowledge.sources.some(source =>
+        ref.source_id === source.source_id && ref.file === source.file && ref.locator === source.locator)) throw new TypeError('课程来源与本地课程不符');
+    }
+  }
+}
+function validateExerciseLinks(questions, attempts) {
+  const ids = new Set();
+  for (const question of questions) {
+    if (ids.has(question.draft.attemptId)) throw new TypeError('草稿作答ID重复');
+    ids.add(question.draft.attemptId);
+    const attempt = attempts.find(item => item.id === question.draft.attemptId);
+    if (question.draft.phase === 'saved' && (!attempt || attempt.questionId !== question.id || attempt.answerText !== question.draft.answerText || attempt.selectedIndex !== question.draft.selectedIndex || attempt.rating !== question.draft.rating)) throw new TypeError('已保存草稿与作答不符');
+  }
+}
+
 async function validateArchive(value) {
   object(value, '档案');
   sizeCheck(value);
-  if (value.app !== 'r-language-tutor' || ![1, SCHEMA_VERSION].includes(value.schemaVersion)) throw new TypeError('档案应用标识或schema版本不兼容');
+  if (value.app !== 'r-language-tutor' || ![1, 2, SCHEMA_VERSION].includes(value.schemaVersion)) throw new TypeError('档案应用标识或schema版本不兼容');
   normalizeTime(value.exportedAt);
   string(value.knowledgeVersion, '知识版本', LIMITS.id, false);
   const source = object(value.data, '学习档案');
@@ -437,7 +466,11 @@ async function validateArchive(value) {
     if (row.id !== normalized.id) throw new TypeError('对话稳定ID校验失败');
     return normalized;
   }));
+  const aiExercises = array(source.aiExercises || [], 'AI练习', LIMITS.aiExercises).map(validateAIExercise);
+  const aiExerciseAttempts = array(source.aiExerciseAttempts || [], 'AI作答', LIMITS.aiExerciseAttempts).map(item => validateAIExerciseAttempt(item, aiExercises.find(question => question.id === item.questionId)));
+  validateExerciseLinks(aiExercises, aiExerciseAttempts);
   return {
+    aiExercises, aiExerciseAttempts,
     conversations,
     events: array(source.events, '事件', LIMITS.events).map(validateEvent),
     cards: array(source.cards, '复习卡', LIMITS.cards).map(validateCard),
@@ -495,7 +528,7 @@ async function openDatabase() {
             database.createObjectStore(name, { keyPath: 'id' });
           const indexes = {
             conversations: ['record.time'], events: ['knowledgeId', 'at'], cards: ['knowledgeId', 'dueAt'],
-            attempts: ['cardId', 'at'], bookmarks: ['conversationId'], settings: [], course: [], summaries: ['generated_at'],
+            attempts: ['cardId', 'at'], bookmarks: ['conversationId'], settings: [], course: [], summaries: ['generated_at'], aiExercises: ['generated_at'], aiExerciseAttempts: ['questionId', 'at'],
           };
           for (const key of indexes[name]) {
             if (!store.indexNames.contains(key)) store.createIndex(key, key);
@@ -564,6 +597,8 @@ function snapshotOf(rows) {
     attempts: rows.attempts.map(publicAttempt).sort(compareAttempts),
     bookmarks: rows.bookmarks.sort((a, b) => a.id.localeCompare(b.id)),
     settings: rows.settings[0]?.value || { ...DEFAULT_SETTINGS }, course: rows.course[0]?.value || null,
+    aiExercises: rows.aiExercises.sort((a, b) => b.generated_at.localeCompare(a.generated_at) || a.id.localeCompare(b.id)),
+    aiExerciseAttempts: rows.aiExerciseAttempts.sort(compareAttempts),
     summaries: rows.summaries.sort((a, b) => b.generated_at.localeCompare(a.generated_at) || a.id.localeCompare(b.id)),
   };
 }
@@ -652,6 +687,109 @@ export const learningStore = Object.freeze({
   async saveSettings(value) {
     const settings = validateSettings(value);
     await transaction('readwrite', rows => { rows.settings = [{ id: 'current', value: settings }]; });
+  },
+  async saveExerciseBatch(response, request) {
+    const normalized = buildExerciseRequest({}, { knowledgeIds: request.knowledge_ids, count: request.count,
+      difficulty: request.difficulty, formats: request.formats });
+    if (response.status !== 'ok' || response.mode !== 'ai' || !Array.isArray(response.questions) || response.questions.length !== normalized.count) throw new TypeError('出题批次无效');
+    const questions = response.questions.map(question => validateAIExercise({ ...question,
+      generation_id: response.generation_id, generated_at: response.generated_at, provider: response.provider,
+      model: response.model, prompt_version: response.prompt_version, knowledge_version: response.knowledge_version,
+      request: { ...normalized, recent_prompts: request.recent_prompts || [] }, draft: newExerciseDraft() }));
+    if (new Set(questions.map(item => item.id)).size !== questions.length || new Set(questions.map(item => (item.prompt + '\n' + item.code).normalize('NFKC').replace(/\s+/g, ' ').trim())).size !== questions.length) throw new TypeError('题目重复');
+    if (request.knowledge_ids.some(id => !questions.some(question => question.knowledge_ids.includes(id)))) throw new TypeError('题目知识覆盖不完整');
+    return transaction('readwrite', rows => {
+      const result = [];
+      for (const question of questions) {
+        const saved = rows.aiExercises.find(item => item.id === question.id);
+        if (saved) {
+          const { draft, ...body } = saved;
+          const { draft: incomingDraft, ...incomingBody } = question;
+          if (canonical(body) !== canonical(incomingBody)) throw new TypeError('题目正文已固定');
+          result.push(saved);
+        } else { rows.aiExercises.push(question); result.push(question); }
+      }
+      exerciseCapacity(rows);
+      validateExerciseSources(questions, rows.course[0]?.value);
+      personalSizeCheck(rows);
+      return result;
+    });
+  },
+  async listAIExercises() { return transaction('readonly', rows => snapshotOf(rows).aiExercises); },
+  async getAIExercise(id) { return transaction('readonly', rows => rows.aiExercises.find(item => item.id === id) || null); },
+  async listAIExerciseAttempts(questionId = null) {
+    return transaction('readonly', rows => rows.aiExerciseAttempts.filter(item => !questionId || item.questionId === questionId).sort(compareAttempts));
+  },
+  async saveAIExerciseDraft(id, patch) {
+    return transaction('readwrite', rows => {
+      const question = exerciseById(rows, id);
+      const draft = question.draft;
+      for (const key of Object.keys(patch)) if (!['answerText', 'selectedIndex', 'hintUsed', 'answerRevealed', 'rating'].includes(key)) throw new TypeError('草稿字段无效');
+      if (draft.phase !== 'draft' && ((patch.answerText !== undefined && patch.answerText !== draft.answerText) || (patch.selectedIndex !== undefined && patch.selectedIndex !== draft.selectedIndex))) throw new TypeError('答案已锁定');
+      if (draft.phase === 'saved' && patch.rating !== undefined && patch.rating !== draft.rating) throw new TypeError('已保存自评不可更改，请重新作答');
+      const updated = { ...draft, ...patch, hintUsed: draft.hintUsed || patch.hintUsed === true,
+        answerRevealed: draft.answerRevealed || patch.answerRevealed === true, updatedAt: new Date().toISOString() };
+      if (updated.rating && draft.phase === 'draft') throw new TypeError('请先锁定答案');
+      if (updated.assistedAtLock && updated.rating === 'independent') updated.rating = 'assisted';
+      if (updated.rating && draft.phase !== 'saved') updated.phase = 'rated';
+      question.draft = validateExerciseDraft(updated, question);
+      personalSizeCheck(rows);
+      return question;
+    });
+  },
+  async lockAIExercise(id) {
+    return transaction('readwrite', rows => {
+      const question = exerciseById(rows, id);
+      if (question.draft.phase !== 'draft') return question;
+      const at = new Date().toISOString();
+      question.draft = validateExerciseDraft({ ...question.draft, phase: 'locked', at, updatedAt: at,
+        assistedAtLock: question.draft.hintUsed || question.draft.answerRevealed }, question);
+      return question;
+    });
+  },
+  async submitAIExerciseAttempt(id, rating) {
+    return transaction('readwrite', rows => {
+      const question = exerciseById(rows, id);
+      const draft = question.draft;
+      const saved = rows.aiExerciseAttempts.find(item => item.id === draft.attemptId);
+      if (saved) return saved;
+      if (!['locked', 'rated'].includes(draft.phase)) throw new TypeError('请先锁定答案');
+      const effectiveRating = draft.assistedAtLock && rating === 'independent' ? 'assisted' : rating;
+      const attempt = validateAIExerciseAttempt({ id: draft.attemptId, questionId: id, at: draft.at,
+        timeZone: draft.timeZone, answerText: draft.answerText, selectedIndex: draft.selectedIndex,
+        hintUsed: draft.hintUsed, answerRevealed: draft.answerRevealed, assistedAtLock: draft.assistedAtLock,
+        rating: draft.rating || effectiveRating, assessment_source: question.format === 'choice' ? 'ai_reference_match' : 'self',
+        referenceMatch: question.format === 'choice' ? draft.selectedIndex === question.correct_index : null }, question);
+      rows.aiExerciseAttempts.push(attempt);
+      question.draft = { ...draft, phase: 'saved', rating: attempt.rating, updatedAt: new Date().toISOString() };
+      exerciseCapacity(rows);
+      personalSizeCheck(rows);
+      return attempt;
+    });
+  },
+  async restartAIExercise(id) {
+    return transaction('readwrite', rows => {
+      const question = exerciseById(rows, id);
+      question.draft = newExerciseDraft();
+      return question;
+    });
+  },
+  async recordAIExerciseView(id) {
+    await transaction('readwrite', rows => {
+      const question = exerciseById(rows, id);
+      for (const knowledgeId of question.knowledge_ids) {
+        const eventId = `exercise:${id}:${knowledgeId}`;
+        if (!rows.events.some(item => item.id === eventId)) rows.events.push(validateEvent({ id: eventId,
+          knowledgeId, kind: 'exercise_view', at: new Date().toISOString() }));
+      }
+      rebuild(rows);
+    });
+  },
+  async deleteAIExercise(id) {
+    await transaction('readwrite', rows => {
+      rows.aiExercises = rows.aiExercises.filter(item => item.id !== id);
+      rows.aiExerciseAttempts = rows.aiExerciseAttempts.filter(item => item.questionId !== id);
+    });
   },
   async saveSummary(response, input) {
     if (!input || canonical(normalizeSummaryPeriod(input.period)) !== canonical(normalizeSummaryPeriod(response.period)) ||
@@ -745,6 +883,25 @@ export const learningStore = Object.freeze({
       rows.summaries = summaries.rows;
       imported += summaries.imported;
       duplicates += summaries.duplicates;
+      for (const question of incoming.aiExercises) {
+        const index = rows.aiExercises.findIndex(item => item.id === question.id);
+        if (index < 0) { rows.aiExercises.push(question); imported += 1; }
+        else {
+          duplicates += 1;
+          const saved = rows.aiExercises[index];
+          const { draft: savedDraft, ...savedBody } = saved;
+          const { draft, ...body } = question;
+          if (canonical(savedBody) !== canonical(body)) throw new TypeError('同一题目ID的正文冲突');
+          if (draft.updatedAt > savedDraft.updatedAt || (draft.updatedAt === savedDraft.updatedAt && canonical(draft) > canonical(savedDraft))) rows.aiExercises[index] = question;
+        }
+      }
+      const aiAttempts = mergeRows(rows.aiExerciseAttempts, incoming.aiExerciseAttempts);
+      rows.aiExerciseAttempts = aiAttempts.rows;
+      imported += aiAttempts.imported;
+      duplicates += aiAttempts.duplicates;
+      exerciseCapacity(rows);
+      validateExerciseLinks(rows.aiExercises, rows.aiExerciseAttempts);
+      validateExerciseSources(rows.aiExercises, rows.course[0]?.value);
       rebuild(rows);
       if (rows.cards.length > LIMITS.cards) throw new RangeError('复习卡数量超过课程上限');
       personalSizeCheck(rows);

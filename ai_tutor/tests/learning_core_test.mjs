@@ -238,7 +238,7 @@ export async function runBrowserTests(page, baseUrl = 'http://127.0.0.1:8765', b
       await store.saveBookmark({ id: 'knowledge:K06', knowledgeId: 'K06', conversationId: null, title: '知识', note: '备注', createdAt: at, updatedAt: at });
       const archive = await store.exportArchive();
       window.coreArchive = archive;
-      check(archive.app === 'r-language-tutor' && archive.schemaVersion === 2 && Array.isArray(archive.data.summaries) && !('course' in archive.data) && archive.data.settings.dailyLimit === 9, '完整档案含总结、设置并记录课程版本');
+      check(archive.app === 'r-language-tutor' && archive.schemaVersion === 3 && Array.isArray(archive.data.summaries) && !('course' in archive.data) && archive.data.settings.dailyLimit === 9, '完整档案含总结、设置并记录课程版本');
       const before = stable(await store.snapshot());
       const result = await store.importArchive(archive);
       const duplicateCount = ['conversations', 'events', 'attempts', 'bookmarks'].reduce((count, key) => count + archive.data[key].length, 0);
@@ -307,7 +307,7 @@ export async function runBrowserTests(page, baseUrl = 'http://127.0.0.1:8765', b
       await store.importArchive(mergedArchive);
       check(stable(await store.snapshot()) === stable(chronological), '不同原始时区与多作答乱序导入排程可复现');
       const seedArchive = structuredClone(archive);
-      seedArchive.data = { conversations: [], events: [], attempts: [], bookmarks: [], summaries: [], settings: { dailyLimit: 6 }, cards: [archive.data.cards[0]] };
+      seedArchive.data = { conversations: [], events: [], attempts: [], bookmarks: [], summaries: [], aiExercises: [], aiExerciseAttempts: [], settings: { dailyLimit: 6 }, cards: [archive.data.cards[0]] };
       await store.resetLearningData();
       const seedImport = await store.importArchive(seedArchive);
       const seedSnapshot = await store.snapshot();
