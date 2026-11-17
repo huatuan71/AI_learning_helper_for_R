@@ -284,8 +284,14 @@ async function main() {
       return (await caches.keys()).filter(name => name.startsWith('r-language-tutor-offline:')).length;
     });
     check(completedCount === 2, 'cleanup retains two complete packages after failures and updates');
+    // Forward the insecure alias to the same local bytes without relying on host DNS or proxies.
+    const insecureOrigin = origin.replace('127.0.0.1', 'r-tutor.test');
+    await context.route(insecureOrigin + '/**', async route => {
+      const response = await route.fetch({url: route.request().url().replace(insecureOrigin, origin)});
+      await route.fulfill({response});
+    });
     const insecure = await context.newPage();
-    await insecure.goto(`http://r-tutor.test:${server.address().port}/`);
+    await insecure.goto(insecureOrigin + '/');
     const insecureState = await call(insecure, 'registerOffline');
     check(!insecureState.supported && await insecure.evaluate(() => !isSecureContext),
       'plain HTTP hostname has no offline capability and returns HTTPS guidance');

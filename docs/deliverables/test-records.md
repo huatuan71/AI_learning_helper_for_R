@@ -1,3 +1,77 @@
+# AI学习总结集成验收 · 2026年11月17日
+
+本轮依据 `docs/handoff/ai-summary-plan/` 四份说明实施。共同基线为 `78f5833`，检查时main工作区干净，既有相机、提示材质和快捷配置成果已包含在该提交。后端、数据与存储、界面由三个子agent在独立工作树并行完成，集成分支为 `codex/ai-summary-ui`。
+
+## 功能及数据核对
+
+- 新增 `POST /api/learning/summary`，使用当前会话模型、密钥、并发和取消管理。搜索配置调用普通生成，输出预算取用户配置与4096的较小值。空数据直接返回no_data。
+- 本地统计和摘录共用预览及请求对象，最多50条证据，每条1200个Unicode码点，原始请求最多120 KiB。证据去重、时区自然日、覆盖截断及SHA-256指纹均由本地代码计算。
+- 后端校验真实课程知识、证据ID及两者关联，拒绝格式错误和超长输出。成功与错误响应均为no-store，日志记录脱敏元数据。
+- IndexedDB升级至2，完整档案schemaVersion升级至2，保留版本1导入。总结缓存最多100条，持久化结果和来源定位，输入摘录在本次请求中使用。清空、重置、导入与总结更新使用原子事务。
+- “学习记录 → 小结”支持手动生成、取消、配置入口、旧结果提示、来源跳转、复制、文本导出及打印。失败后保留已有结果，切换范围的迟到结果保存至原范围。清除来源后的迟到结果会被拒绝保存，并显示准确的本地校验信息。
+- 已实际查看1440×1000和390×844截图，沿用半透明磨砂表面，窄屏无横向溢出。模型正文使用安全文本，历史来源缺失时禁用跳转。
+
+## 运行环境及测试
+
+Windows 10.0.26300，Python 3.12.10，Node v24.15.0，Playwright 1.59.1。浏览器范围为Chromium 147.0.7727.15、Chrome 157.0.8103.51及Windows上的WebKit 26.4。测试使用隔离浏览器档案，时区为Asia/Shanghai。
+
+| 测试 | 本轮结果 | 覆盖范围 |
+|---|---|---|
+| 全量 `pytest -q` | 323 passed | 包含74项新增总结专项与既有接口、厂商、流式、部署及PWA测试 |
+| `npm test` | 24 passed | 13项复习算法及11项总结数据、抽样、指纹和Unicode边界 |
+| `test_browser.cjs --python ...` | 全量运行退出码0 | 11组现有回归、总结、存储、PWA及学习集成顺序完成 |
+| `browser_learning_summary.js` | Chrome 39项通过 | 真实HTTP至服务至MockTransport、两种配置错误入口、取消、重复生成、范围竞态、来源、导出、安全与离线刷新 |
+| `browser_summary_storage.cjs` | Chromium与WebKit各46项通过 | 真实v1数据库迁移、旧档案、完整恢复、去重、原子失败、双标签页、100条上限、Unicode及清空后迟到写回 |
+| `browser_check.js` | 82项通过 | 问答、纠错、导航、导出、恢复和安全文本 |
+| `browser_ai.js` | 87项通过 | 模型配置、流式、长回答、Markdown、搜索、取消及安全 |
+| `browser_map_files.js` | 60项通过 | 既有知识地图与R文件读取 |
+| `browser_glass_ui.js` | 58项通过 | 公共磨砂样式、导航和滚动 |
+| `browser_mobile_map.js` | 15项通过 | 390px触摸仿真与导航 |
+| `browser_scene_probe.js` | passed=true | 相机拖动、释放和标签布局 |
+| `browser_scene_motion.js` | 57项通过 | 圆形布局、相机、公转、快速导航与减少动画 |
+| `browser_offline.js` | 2项通过 | 服务不可用及按钮恢复 |
+| `browser_learning_layout.js` | 53项通过 | 四页签对齐、移动布局、导出和档案版本2 |
+| `browser_export_glass.js` | 64项通过 | 三入口导出、恢复、失败重试、窄屏、键盘和磨砂弹窗 |
+| `browser_menu_fixed.js` | 39项通过 | 固定菜单、背景滚动、旧样式和矮窗口 |
+| `browser_learning_center.js` | Chrome 76项通过 | 真实存储及算法，离线接口使用专项替身 |
+| `browser_pwa.js --integrated` | Chromium 27项通过 | 完整资源包、进程重开、更新失败回退、配额、哈希损坏及API实时请求 |
+| `browser_integration.cjs` | Chromium 24项，另含39项存储检查 | 真实模块、离线复习、43个知识点及档案恢复 |
+| `browser_integration.cjs` WebKit | 24项，另含39项存储检查 | 同一合并模块，代理拒绝连接模拟离线 |
+
+后端三厂商DeepSeek、通义千问和OpenAI均经MockTransport测试，覆盖普通模式和搜索配置下关闭搜索。浏览器总结包含一次真实前后端HTTP链路，其厂商上游仍由MockTransport提供。错误、竞态和攻击样本在浏览器专项中通过请求拦截注入。
+
+回归期间修正了旧导出脚本仍导入旧版LearningCenter的问题。PWA测试中HTTP测试别名受到环境网络502影响，改为由Playwright将该别名转发到相同本地资源字节，浏览器地址仍为不安全HTTP域名，并实际验证registerOffline的HTTPS提示。其余PWA下载、离线刷新及更新流程使用实际合并模块。
+
+总结专项还修正了重新请求后旧配置提示残留，以及本地保存TypeError被误报为网络故障的问题，追加复验均通过。
+
+## 分支、访问与复验
+
+后端来源提交为 `a1819b2`，数据来源提交为 `b833c25`。UI提交为 `c97eb44`，追加浏览器验收和修复为 `b5be3f6`、`1b68646`。已合入集成分支供审阅。
+
+本轮应用服务保留在 [学习小结](http://127.0.0.1:8016/#/history/summary)，API定义可访问 [OpenAPI](http://127.0.0.1:8016/openapi.json)。服务来自 `.worktrees/ai-summary-ui/ai_tutor`，模型配置使用该服务自己的会话内存。
+
+在集成工作树的ai_tutor目录中运行下列命令复验。工作树复用主工作区的Python环境及Playwright安装。
+
+```powershell
+$env:PLAYWRIGHT_MODULE = 'E:/作业2/R语言及其应用/小组作业/ai_tutor/node_modules/playwright'
+& 'E:/作业2/R语言及其应用/小组作业/ai_tutor/.venv/Scripts/python.exe' -m pytest -q
+npm.cmd test
+node scripts/test_browser.cjs --python 'E:/作业2/R语言及其应用/小组作业/ai_tutor/.venv/Scripts/python.exe'
+```
+
+启动命令为 `./start.ps1 -Port 8016 -PythonExe 'E:/作业2/R语言及其应用/小组作业/ai_tutor/.venv/Scripts/python.exe'`，停止使用同一工作树的stop.cmd。
+
+当前离线资源版本为 `ai-summary-v1`，清单包含30项公共资源。旧包用户联网选择“更新离线资料”，成功后刷新。已有学习数据库自动迁移，版本1档案导入时总结数组按空数组处理，版本2完整导出包含总结。
+
+截图、下载样本及机器可读结果位于 `ai_tutor/output/playwright/`，按项目规则忽略提交。
+
+- `summary-agent/ai-summary-desktop.png`、`summary-agent/ai-summary-mobile.png`、`summary-agent/ai-summary-results.json`
+- `ai-summary-results.json`、`ai-summary-export.txt`、`weekly-with-ai.txt`
+- `regression-results.json`、`pwa-results.json`、`chromium-integration-results.json`、`webkit-integration-results.json`
+- `learning-real-core/learning-ui-results.json`
+
+真实付费厂商账号的总结质量及计费尚待用户试用。Android/iOS真机、macOS Safari和PWA实际安装仍待验收，当前移动测试为浏览器视口及触摸仿真。
+
 # 目录迁移后的学习界面修复验收 · 2026年11月17日
 
 本轮针对仓库根目录 `ai_tutor/`，补回目录迁移后缺失的统一导出、学习页签对齐、固定磨砂菜单和导出弹窗。使用迁移后的原生 ES 模块入口与英文下载文件名，未重新建立旧的“成员三”目录。以下是本轮实际执行结果，后面的历史记录保留其原验收范围。

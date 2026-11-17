@@ -137,6 +137,7 @@ async function main() {
       env.AI_BASE_URL = await startServer(python, 'tests/browser_fixture_server.py');
       await runSuite('tests/browser_regression.cjs', [], env);
       await runSuite('tests/browser_learning_summary.js', [], {...env, BASE_URL: env.AI_BASE_URL});
+      await runSuite('tests/browser_summary_storage.cjs', [], env);
     }
     if (['all', 'pwa'].includes(args.suite)) {
       await runSuite('tests/browser_pwa.js', ['--integrated'], env);

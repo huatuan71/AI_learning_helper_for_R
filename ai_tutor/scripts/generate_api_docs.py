@@ -95,6 +95,7 @@ grade取again、hinted、good、easy，question_type取concept或application，�
 
 overview最多1200字符，三个具体建议数组及uncertainties分别最多10项。
 observation、reason、action和单条uncertainty最多600字符，每项具体建议引用1至10个不重复证据。
+模型输出JSON总量同时限制为64 KiB UTF-8。
 后端核对知识和证据属于本次输入，且知识点与对应证据关联。无效JSON、未知引用和超长输出返回502 STRUCTURED_OUTPUT_INVALID。
 模型处理学习记录时将原对话与旧AI回答视为数据。总结解释自评和提示的局限，掌握等级与复习时间继续由现有规则计算。
 
